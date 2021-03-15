@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 
 /**
@@ -93,13 +94,14 @@ public class MainMenu {
         ImageLabel.setSize(100, 100);
         ImageLabel.setLocation(ScoreButtonPosition_X, ScoreButtonPosition_Y+ButtonHeight+10);
      //   ImageLabel.setBackground(Color.red);
-        ImageLabel.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+     //   ImageLabel.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
 
-       // ImageIcon icon = new ImageIcon("src\\gui\\theme_entrance.jpg");
+        ImageIcon icon = new ImageIcon("src\\gui\\themeentrance.jpg");
         //  ImageIcon icon = new ImageIcon("src/gui/theme_entrance.jpg");
 
-      //  ImageLabel.setIcon(icon);
+      //ImageLabel.setIcon(icon);
         Menu.add(ImageLabel);
 
 

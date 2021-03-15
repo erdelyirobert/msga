@@ -31,19 +31,25 @@ public class MainMenu {
     JFrame Menu = new JFrame("Main menu");
     JButton Start = new JButton("Start game");
     JButton ScoreBoard = new JButton("Scoreboard");
+    JLabel ImageLabel = new JLabel();
+
 
 
     /**
      * Instantiates a new Main menu.
      */
     public MainMenu() {
+
+
         Menu.setResizable(false);
         Menu.setSize(WIDTH, HEIGHT);
         Menu.setLayout(null);
         Menu.setLocationRelativeTo(null);
         Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Menu.setVisible(true);
-        Menu.getContentPane().setBackground(Color.green);
+
+        Component add = Menu.add(new JLabel(new ImageIcon("theme_entrance.jpg")));
+       // Menu.getContentPane().setBackground(Color.green);
 
 
         //Start button
@@ -83,6 +89,19 @@ public class MainMenu {
                 throw new UnsupportedOperationException("Not yet");
             }
         });
+
+        ImageLabel.setSize(100, 100);
+        ImageLabel.setLocation(ScoreButtonPosition_X, ScoreButtonPosition_Y+ButtonHeight+10);
+     //   ImageLabel.setBackground(Color.red);
+        ImageLabel.setText("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+
+       // ImageIcon icon = new ImageIcon("src\\gui\\theme_entrance.jpg");
+        //  ImageIcon icon = new ImageIcon("src/gui/theme_entrance.jpg");
+
+      //  ImageLabel.setIcon(icon);
+        Menu.add(ImageLabel);
+
 
     }
 

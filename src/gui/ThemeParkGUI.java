@@ -1,25 +1,25 @@
 package gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ThemeParkGUI{
-    private JFrame frame = new JFrame("Theme park");
+public class ThemeParkGUI {
+    JFrame frame = new JFrame("Theme park");
 
     public ThemeParkGUI(String title){
         frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
         frame.revalidate();
         frame.repaint();
+        frame.getContentPane().setBackground(Color.green);
 
         /*
          * Menu bar
          */
-
         JMenuBar menuBar = new JMenuBar(); // creation of menubar
         frame.setJMenuBar(menuBar); //adding the menubar to the frame
 

@@ -50,7 +50,7 @@ public class MainMenu {
     public MainMenu() {
 
 
-        Menu.setResizable(true);
+        Menu.setResizable(false);
         //Menu.setSize(WIDTH, HEIGHT);
         Menu.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         Menu.setLayout(null);

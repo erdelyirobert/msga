@@ -8,16 +8,17 @@ import java.awt.event.WindowEvent;
 
 public class ThemeParkGUI {
     JFrame frame = new JFrame("Theme park");
-
+    private final int WIDTH = 490;
+    private final int HEIGHT = 600;
     /**
      * Instantiates a new Theme park gui.
      *
      * @param title the title
      */
     public ThemeParkGUI(String title) {
-        frame.setSize(500, 500);
+        frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.revalidate();
         frame.repaint();

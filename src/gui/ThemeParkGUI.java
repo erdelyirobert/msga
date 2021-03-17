@@ -29,15 +29,72 @@ public class ThemeParkGUI {
         JMenuBar menuBar = new JMenuBar(); // creation of menubar
         frame.setJMenuBar(menuBar); //adding the menubar to the frame
 
+
         JMenuBar menub = new JMenuBar();
         JMenu settingsMenu = new JMenu("Settings");
         JMenuItem saveMenuItem = new JMenuItem("Save");
         JMenuItem exitMenuItem = new JMenuItem("Exit");
 
+
         menub.add(settingsMenu);
         menub.add(exitMenuItem);
         settingsMenu.add(saveMenuItem);
         settingsMenu.add(exitMenuItem);
+        //////////////////////////////////////////////////////////////
+        /*
+         * Menu bar
+         * (part of Game)
+         */
+
+
+        JMenu buildGame = new JMenu("Game");
+        JMenuItem wheelMenuItem = new JMenuItem("Wheel");
+        JMenuItem trainMenuItem = new JMenuItem("Train");
+        JMenuItem rollerRoasterMenuItem = new JMenuItem("Roller Coaster");
+        JMenuItem waterParkMenuItem = new JMenuItem("Water Park");
+        JMenuItem slideMenuItem = new JMenuItem("Slide");
+
+
+
+        menub.add(buildGame);
+        menub.add(wheelMenuItem);
+        menub.add(trainMenuItem);
+        menub.add(rollerRoasterMenuItem);
+        menub.add(waterParkMenuItem);
+        menub.add(slideMenuItem);
+        buildGame.add(wheelMenuItem);
+        buildGame.add(trainMenuItem);
+        buildGame.add(rollerRoasterMenuItem);
+        buildGame.add(waterParkMenuItem);
+        buildGame.add(slideMenuItem);
+        /////////////////////////////////////////////////////////////////////////////////////////
+        /*
+         * Menu bar
+         * (part of General Equipment)
+         */
+
+
+
+        JMenu buildGeneralEquipment = new JMenu("General Equipment");
+        JMenuItem restaurantMenuItem = new JMenuItem("Restaurant");
+        JMenuItem treeMenuItem = new JMenuItem("Tree");
+        JMenuItem bushRoasterMenuItem = new JMenuItem("Bush");
+        JMenuItem roadMenuItem = new JMenuItem("Road");
+
+
+
+
+        menub.add(buildGeneralEquipment);
+        menub.add(restaurantMenuItem);
+        menub.add(treeMenuItem);
+        menub.add(bushRoasterMenuItem);
+        menub.add(roadMenuItem);
+        buildGeneralEquipment.add(restaurantMenuItem);
+        buildGeneralEquipment.add(treeMenuItem);
+        buildGeneralEquipment.add(bushRoasterMenuItem);
+        buildGeneralEquipment.add(roadMenuItem);
+
+
 
         this.frame.setJMenuBar(menub);
 
@@ -64,6 +121,80 @@ public class ThemeParkGUI {
                 frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
+        /**
+         * ActionListeners
+         *
+         * Upon clicking on the game option the user can build 5 types of games
+         */
+        wheelMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        trainMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        rollerRoasterMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        waterParkMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        slideMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        /**
+         * ActionListeners
+         *
+         * Upon clicking on the General Equipment option the user can build 5 types of general equipments
+         */
+        restaurantMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        bushRoasterMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        treeMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        roadMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+
 
         /**
          * Sets the preferred size of the window so the contents are in the

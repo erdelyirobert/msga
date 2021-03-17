@@ -8,8 +8,8 @@ import java.awt.event.WindowEvent;
 
 public class ThemeParkGUI {
     JFrame frame = new JFrame("Theme park");
-    private final int WIDTH = 490;
-    private final int HEIGHT = 600;
+    private final int WIDTH = 1000;
+    private final int HEIGHT = 800;
     /**
      * Instantiates a new Theme park gui.
      *

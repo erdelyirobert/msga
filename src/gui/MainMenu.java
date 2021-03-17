@@ -1,10 +1,14 @@
 package gui;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -14,16 +18,20 @@ public class MainMenu {
 
 
     //Sizes
+    private final int WIDTH = 490; //Az egész menu szélessége
+    private final int HEIGHT = 600; //Az egész menu magassása
     private final int ButtonWidth = 250;
     private final int ButtonHeight = 50;
-    private final int WIDTH = 490; //Az egész menu szélessége
-    private final int HEIGHT = 500; //Az egész menu magassása
+    private final int imageLabelWidth = WIDTH - 125;
+    private final int imagelabelHeight = 300;
 
     //Positions
     private final int StartGameButtonPostion_Y = 10;
     private final int ScoreButtonPosition_Y = StartGameButtonPostion_Y + ButtonHeight + 10;
     private final int StartGameButtonPostion_X = (int) (WIDTH / 2.0) - (int) (ButtonWidth / 2.0);
     private final int ScoreButtonPosition_X = (int) (WIDTH / 2.0) - (int) (ButtonWidth / 2.0);
+    private final int imageLabelPosition_X = (int) (WIDTH / 2.0) - (int) (imageLabelWidth / 2.0);
+    private final int imageLabelPosition_Y = ScoreButtonPosition_Y + ButtonHeight + ButtonHeight;
 
     /**
      * The Menu Frame
@@ -31,8 +39,9 @@ public class MainMenu {
     JFrame Menu = new JFrame("Main menu");
     JButton Start = new JButton("Start game");
     JButton ScoreBoard = new JButton("Scoreboard");
-    ImageIcon picture = new ImageIcon("data\\images\\theme_park.png");
-    JLabel imageLabel = new JLabel(picture);
+
+    BufferedImage img = null;
+    JLabel imageLabel = new JLabel();
 
 
     /**
@@ -42,10 +51,12 @@ public class MainMenu {
 
 
         Menu.setResizable(true);
-        Menu.setSize(WIDTH, HEIGHT);
+        //Menu.setSize(WIDTH, HEIGHT);
+        Menu.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         Menu.setLayout(null);
         Menu.setLocationRelativeTo(null);
         Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         Menu.setVisible(true);
 
         Component add = Menu.add(new JLabel(new ImageIcon("theme_entrance.jpg")));
@@ -90,9 +101,26 @@ public class MainMenu {
             }
         });
 
-        imageLabel.setBounds((10) / 2, ScoreButtonPosition_Y+ButtonHeight+10, 1103, 828);
+        try {
+            img = ImageIO.read(new File("data\\images\\theme_park.png"));
+        } catch (IOException e) {
+            System.out.println("error");
+            e.printStackTrace();
+        }
+
+        imageLabel.setBounds(imageLabelPosition_X, imageLabelPosition_Y, imageLabelWidth, imagelabelHeight);
+
+        Image dimg = img.getScaledInstance(imageLabel.getWidth() - 10, imageLabel.getHeight() - 10,
+                Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon(dimg);
+        imageLabel.setIcon(imageIcon);
+
+
         imageLabel.setVisible(true);
         Menu.add(imageLabel);
+
+        //Menu pack for image
+        Menu.pack();
 
     }
 }

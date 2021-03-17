@@ -16,7 +16,6 @@ import java.io.IOException;
  */
 public class MainMenu {
 
-
     //Sizes
     private final int WIDTH = 490; //The whole menu WIDTH
     private final int HEIGHT = 600; //The whole menu HEIGHT
@@ -50,13 +49,11 @@ public class MainMenu {
     public MainMenu() {
 
 
-        Menu.setResizable(true);
-        //Menu.setSize(WIDTH, HEIGHT);
+        Menu.setResizable(false);
         Menu.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         Menu.setLayout(null);
         Menu.setLocationRelativeTo(null);
         Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         Menu.setVisible(true);
         Menu.getContentPane().setBackground(Color.green);
 
@@ -87,7 +84,6 @@ public class MainMenu {
         ScoreBoard.setFont(new Font("Arial", Font.PLAIN, 15));
         ScoreBoard.setBackground(Color.GREEN);
         ScoreBoard.setForeground(Color.blue);
-        //ScoreBoard.setBorder(border);
 
         Menu.add(ScoreBoard);
 

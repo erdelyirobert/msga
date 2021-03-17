@@ -18,17 +18,17 @@ public class MainMenu {
 
 
     //Sizes
-    private final int WIDTH = 490; //Az egész menu szélessége
-    private final int HEIGHT = 600; //Az egész menu magassása
+    private final int WIDTH = 490; //The whole menu WIDTH
+    private final int HEIGHT = 600; //The whole menu HEIGHT
     private final int ButtonWidth = 250;
     private final int ButtonHeight = 50;
     private final int imageLabelWidth = WIDTH - 125;
-    private final int imagelabelHeight = 300;
+    private final int imageLabelHeight = 300;
 
     //Positions
-    private final int StartGameButtonPostion_Y = 10;
-    private final int ScoreButtonPosition_Y = StartGameButtonPostion_Y + ButtonHeight + 10;
-    private final int StartGameButtonPostion_X = (int) (WIDTH / 2.0) - (int) (ButtonWidth / 2.0);
+    private final int StartGameButtonPosition_Y = 10;
+    private final int ScoreButtonPosition_Y = StartGameButtonPosition_Y + ButtonHeight + 10;
+    private final int StartGameButtonPosition_X = (int) (WIDTH / 2.0) - (int) (ButtonWidth / 2.0);
     private final int ScoreButtonPosition_X = (int) (WIDTH / 2.0) - (int) (ButtonWidth / 2.0);
     private final int imageLabelPosition_X = (int) (WIDTH / 2.0) - (int) (imageLabelWidth / 2.0);
     private final int imageLabelPosition_Y = ScoreButtonPosition_Y + ButtonHeight + ButtonHeight;
@@ -58,14 +58,12 @@ public class MainMenu {
         Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Menu.setVisible(true);
-
-        Component add = Menu.add(new JLabel(new ImageIcon("theme_entrance.jpg")));
         Menu.getContentPane().setBackground(Color.green);
 
 
         //Start button
         Start.setSize(ButtonWidth, ButtonHeight);
-        Start.setLocation(StartGameButtonPostion_X, StartGameButtonPostion_Y);
+        Start.setLocation(StartGameButtonPosition_X, StartGameButtonPosition_Y);
         Start.setFont(new Font("Arial", Font.PLAIN, 25));
         Start.setBackground(Color.GREEN);
         Start.setForeground(Color.blue);
@@ -80,7 +78,7 @@ public class MainMenu {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 Menu.setVisible(false);
-                ThemeParkGUI gui = new ThemeParkGUI("x");
+                new ThemeParkGUI("x");
             }
 
         });
@@ -108,11 +106,11 @@ public class MainMenu {
             e.printStackTrace();
         }
 
-        imageLabel.setBounds(imageLabelPosition_X, imageLabelPosition_Y, imageLabelWidth, imagelabelHeight);
+        imageLabel.setBounds(imageLabelPosition_X, imageLabelPosition_Y, imageLabelWidth, imageLabelHeight);
 
-        Image dimg = img.getScaledInstance(imageLabel.getWidth() - 10, imageLabel.getHeight() - 10,
+        Image d_img = img.getScaledInstance(imageLabel.getWidth() - 10, imageLabel.getHeight() - 10,
                 Image.SCALE_SMOOTH);
-        ImageIcon imageIcon = new ImageIcon(dimg);
+        ImageIcon imageIcon = new ImageIcon(d_img);
         imageLabel.setIcon(imageIcon);
 
 

@@ -3,6 +3,7 @@ package gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +25,7 @@ public class MainMenu {
     private final int ButtonHeight = 50;
     private final int imageLabelWidth = WIDTH - 125;
     private final int imageLabelHeight = 300;
+    Color clr1 = new Color(0,153,0);
 
     //Positions
     private final int StartGameButtonPosition_Y = 10;
@@ -58,7 +60,7 @@ public class MainMenu {
         Menu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         Menu.setVisible(true);
-        Menu.getContentPane().setBackground(Color.green);
+        Menu.getContentPane().setBackground(clr1);
 
 
         //Start button
@@ -68,6 +70,7 @@ public class MainMenu {
         Start.setBackground(Color.GREEN);
         Start.setForeground(Color.blue);
         Start.setPreferredSize(new Dimension(10, 10));
+
         Menu.add(Start);
         /*
          *Action listener for button

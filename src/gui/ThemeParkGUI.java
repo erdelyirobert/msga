@@ -10,6 +10,7 @@ public class ThemeParkGUI {
     JFrame frame = new JFrame("Theme park");
     private final int WIDTH = 1000;
     private final int HEIGHT = 800;
+    Color clr1 = new Color(0,153,0);
     /**
      * Instantiates a new Theme park gui.
      *
@@ -22,9 +23,9 @@ public class ThemeParkGUI {
         frame.setLocationRelativeTo(null);
         frame.revalidate();
         frame.repaint();
-        frame.getContentPane().setBackground(Color.green);
+        frame.getContentPane().setBackground(clr1);
 
-        /*
+        /**
          * Menu bar
          */
         JMenuBar menuBar = new JMenuBar(); // creation of menubar
@@ -81,6 +82,7 @@ public class ThemeParkGUI {
         JMenuItem treeMenuItem = new JMenuItem("Tree");
         JMenuItem bushRoasterMenuItem = new JMenuItem("Bush");
         JMenuItem roadMenuItem = new JMenuItem("Road");
+        JMenuItem trashBinMenuItem = new JMenuItem("Trash Bin");
 
 
 
@@ -94,6 +96,7 @@ public class ThemeParkGUI {
         buildGeneralEquipment.add(treeMenuItem);
         buildGeneralEquipment.add(bushRoasterMenuItem);
         buildGeneralEquipment.add(roadMenuItem);
+        buildGeneralEquipment.add(trashBinMenuItem);
 
 
 
@@ -189,6 +192,13 @@ public class ThemeParkGUI {
             }
         });
         roadMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                //todo
+                throw new UnsupportedOperationException("Not defined");
+            }
+        });
+        trashBinMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 //todo

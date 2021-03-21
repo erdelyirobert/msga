@@ -1,5 +1,7 @@
 package gui;
 
+import board.TPBoard;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

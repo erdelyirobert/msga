@@ -1,4 +1,4 @@
-package gui;
+package ThemePark;
 
 public enum FieldValue {
     EMPTY,

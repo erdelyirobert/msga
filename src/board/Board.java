@@ -1,4 +1,4 @@
-package gui;
+package board;
 
 public class Board {
 

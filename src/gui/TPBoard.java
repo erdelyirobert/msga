@@ -11,6 +11,7 @@ public class TPBoard {
     private final JButton[][] buttons;
     private Board board;
     private final JPanel boardPanel;
+    Color clr1 = new Color(0,153,0);
 
     public TPBoard(int x, int y) {
         boardPanel = new JPanel();
@@ -21,13 +22,14 @@ public class TPBoard {
             for (int j = 0; j < board.getSizeOfBoardY(); ++j) {
                 buttons[i][j] = new JButton("");
                 buttons[i][j].setBorder(null);
-                buttons[i][j].setOpaque(false);
+                //buttons[i][j].setOpaque(false);
                 //buttons[i][j].setBorderPainted(false);
-                buttons[i][j].setContentAreaFilled(false);
+                //buttons[i][j].setContentAreaFilled(false);
                 //buttons[i][j].addActionListener(new ButtonListener(i, j));
                 buttons[i][j].setPreferredSize(new Dimension(20, 20));
-                //buttons[i][j].setBackground(Color.white);
+                buttons[i][j].setBackground(clr1);
                 boardPanel.add(buttons[i][j]);
+
             }
         }
     }

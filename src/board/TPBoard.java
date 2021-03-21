@@ -5,7 +5,9 @@ import gui.ThemeParkGUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLOutput;
 import javax.swing.*;
+
 
 public class TPBoard {
     private final JButton[][] buttons;
@@ -15,11 +17,11 @@ public class TPBoard {
 
     public TPBoard(int x, int y) {
         boardPanel = new JPanel();
-        board = new Board(x, y);
+        board = new Board(x+2, y+2);
         boardPanel.setLayout(new GridLayout(board.getSizeOfBoardX(), board.getSizeOfBoardY()));
         buttons = new JButton[board.getSizeOfBoardX()][board.getSizeOfBoardY()];
-        for (int i = 0; i < board.getSizeOfBoardX(); ++i) {
-            for (int j = 0; j < board.getSizeOfBoardY(); ++j) {
+        for (int i = 0; i < board.getSizeOfBoardX(); i++) {
+            for (int j = 0; j < board.getSizeOfBoardY(); j++) {
                 buttons[i][j] = new JButton("");
                 buttons[i][j].setBorder(null);
                 //buttons[i][j].setOpaque(false);
@@ -29,9 +31,9 @@ public class TPBoard {
                 buttons[i][j].setPreferredSize(new Dimension(20, 20));
                 buttons[i][j].setBackground(clr1);
                 boardPanel.add(buttons[i][j]);
-
             }
         }
+        buttons[3][1].setBackground(Color.gray);
     }
     public JPanel getBoardPanel() {
         return boardPanel;
@@ -50,17 +52,21 @@ public class TPBoard {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
-                if(ThemeParkGUI.selected_game.equals("road")){
-                    buttons[x][y].setBackground(Color.gray);
-                }
-
-
+                if (buttons[x - 1][y].getBackground() == Color.gray
+                        || buttons[x][y - 1].getBackground() == Color.gray
+                        || buttons[x + 1][y].getBackground() == Color.gray
+                        || buttons[x][y + 1].getBackground() == Color.gray
+                        || buttons[-1][y].getBackground() == Color.gray)
+                    if (ThemeParkGUI.selected_game.equals("road")) {
+                        buttons[x][y].setBackground(Color.gray);
+                        System.out.println(buttons[x][y]);
+                        //buttons[x][y].setBorder(BorderFactory.createLineBorder(Color.gray));
+                        //buttons[x][y].setBorder(BorderFactory.createBevelBorder(0, Color.gray, Color.gray, Color.gray, Color.gray)); //Four Colors Outer Bevel
+                    }
+            }
         }
 
 
-
-    }
 
     public JButton[][] getButtons() {
         return buttons;

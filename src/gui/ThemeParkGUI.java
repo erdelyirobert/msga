@@ -2,6 +2,7 @@ package gui;
 
 import board.TPBoard;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,11 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 public class ThemeParkGUI {
-    private TPBoard board;
+      private TPBoard board;
     JFrame frame = new JFrame("Theme park");
     private final int WIDTH = 1000;
     private final int HEIGHT = 800;
     Color clr1 = new Color(0,153,0);
+   public static   String selected_game = "";
     /**
      * Instantiates a new Theme park gui.
      *
@@ -88,7 +90,7 @@ public class ThemeParkGUI {
         JMenuItem treeMenuItem = new JMenuItem("Tree");
         JMenuItem bushRoasterMenuItem = new JMenuItem("Bush");
         JMenuItem roadMenuItem = new JMenuItem("Road");
-        JMenuItem trashBinMenuItem = new JMenuItem("Trash Bin");
+        JMenuItem trashBinMenuItem = new JMenuItem("Bin");
 
 
 
@@ -200,8 +202,9 @@ public class ThemeParkGUI {
         roadMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "road";
+
             }
         });
         trashBinMenuItem.addActionListener(new ActionListener() {
@@ -223,5 +226,9 @@ public class ThemeParkGUI {
          * Components are visible on the screen
          */
         frame.pack();
+    }
+
+    public String getSelected_game() {
+        return selected_game;
     }
 }

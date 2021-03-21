@@ -1,8 +1,10 @@
 package board;
 
-import board.Board;
+import gui.ThemeParkGUI;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 public class TPBoard {
@@ -23,7 +25,7 @@ public class TPBoard {
                 //buttons[i][j].setOpaque(false);
                 //buttons[i][j].setBorderPainted(false);
                 //buttons[i][j].setContentAreaFilled(false);
-                //buttons[i][j].addActionListener(new ButtonListener(i, j));
+                buttons[i][j].addActionListener(new ButtonListener(i, j));
                 buttons[i][j].setPreferredSize(new Dimension(20, 20));
                 buttons[i][j].setBackground(clr1);
                 boardPanel.add(buttons[i][j]);
@@ -35,7 +37,7 @@ public class TPBoard {
         return boardPanel;
     }
 
-    class ButtonListener {
+    class ButtonListener implements ActionListener {
 
         private int x;
         private int y;
@@ -45,5 +47,28 @@ public class TPBoard {
             this.x = x;
             this.y = y;
         }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+                if(ThemeParkGUI.selected_game.equals("road")){
+                    buttons[x][y].setBackground(Color.gray);
+                }
+
+
+        }
+
+
+
     }
+
+    public JButton[][] getButtons() {
+        return buttons;
+    }
+
+
+
+
+
+
 }

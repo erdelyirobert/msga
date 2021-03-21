@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 public class ThemeParkGUI {
+    private TPBoard board;
     JFrame frame = new JFrame("Theme park");
     private final int WIDTH = 1000;
     private final int HEIGHT = 800;
@@ -19,11 +20,14 @@ public class ThemeParkGUI {
     public ThemeParkGUI(String title) {
         frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setLocationRelativeTo(null);
         frame.revalidate();
         frame.repaint();
         frame.getContentPane().setBackground(clr1);
+        board = new TPBoard(20, 20);
+        frame.getContentPane().add(board.getBoardPanel(), BorderLayout.CENTER);
+
 
         /**
          * Menu bar

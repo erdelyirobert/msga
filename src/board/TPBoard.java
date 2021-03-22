@@ -1,5 +1,6 @@
 package board;
 
+import ThemePark.FieldValue;
 import gui.ThemeParkGUI;
 
 import java.awt.*;
@@ -30,10 +31,12 @@ public class TPBoard {
                 buttons[i][j].addActionListener(new ButtonListener(i, j));
                 buttons[i][j].setPreferredSize(new Dimension(20, 20));
                 buttons[i][j].setBackground(clr1);
+                buttons[i][j].setName("EMPTY");
                 boardPanel.add(buttons[i][j]);
             }
         }
         buttons[3][1].setBackground(Color.gray);
+        buttons[3][1].setName("NOT_EMPTY");
     }
     public JPanel getBoardPanel() {
         return boardPanel;
@@ -52,29 +55,51 @@ public class TPBoard {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-                if (buttons[x - 1][y].getBackground() == Color.gray
-                        || buttons[x][y - 1].getBackground() == Color.gray
-                        || buttons[x + 1][y].getBackground() == Color.gray
-                        || buttons[x][y + 1].getBackground() == Color.gray
-                        || buttons[-1][y].getBackground() == Color.gray)
-                    if (ThemeParkGUI.selected_game.equals("road")) {
+
+            if (ThemeParkGUI.selected_game.equals("road")) {
+                if(buttons[x][y].getName().equals("EMPTY")){
+                    if (buttons[x - 1][y].getBackground() == Color.gray
+                            || buttons[x][y - 1].getBackground() == Color.gray
+                            || buttons[x + 1][y].getBackground() == Color.gray
+                            || buttons[x][y + 1].getBackground() == Color.gray
+                            || buttons[-1][y].getBackground() == Color.gray){
                         buttons[x][y].setBackground(Color.gray);
-                        System.out.println(buttons[x][y]);
+                        buttons[x][y].setName("NOT_EMPTY");
+
                         //buttons[x][y].setBorder(BorderFactory.createLineBorder(Color.gray));
-                        //buttons[x][y].setBorder(BorderFactory.createBevelBorder(0, Color.gray, Color.gray, Color.gray, Color.gray)); //Four Colors Outer Bevel
+                        //buttons[x][y].setBorder(BorderFactory.createBevelBorder(0, Color.gray, Color.gray, Color.gray, Color.gray)); //Four Colors Ou
                     }
+                }
+            }
+            if(ThemeParkGUI.selected_game.equals("bin")){
+                if(buttons[x][y].getName().equals("EMPTY")){
+                    buttons[x][y].setText("BIN");
+                    buttons[x][y].setName("NOT_EMPTY");
+                }
+            }
+            if(ThemeParkGUI.selected_game.equals("bush")){
+                if(buttons[x][y].getName().equals("EMPTY")){
+                    buttons[x][y].setText("BUSH");
+                    buttons[x][y].setName("NOT_EMPTY");
+                }
+            }
+            if(ThemeParkGUI.selected_game.equals("tree")){
+                if(buttons[x][y].getName().equals("EMPTY")){
+                    buttons[x][y].setText("TREE");
+                    buttons[x][y].setName("NOT_EMPTY");
+                }
+            }
+            if(ThemeParkGUI.selected_game.equals("restaurant")){
+                if(buttons[x][y].getName().equals("EMPTY")){
+                    buttons[x][y].setText("RESTAURANT");
+                    buttons[x][y].setName("NOT_EMPTY");
+                }
+            }
             }
         }
-
 
 
     public JButton[][] getButtons() {
         return buttons;
     }
-
-
-
-
-
-
 }

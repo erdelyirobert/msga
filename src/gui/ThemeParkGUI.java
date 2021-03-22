@@ -10,12 +10,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 public class ThemeParkGUI {
-      private TPBoard board;
+    private TPBoard board;
     JFrame frame = new JFrame("Theme park");
     private final int WIDTH = 1000;
     private final int HEIGHT = 800;
     Color clr1 = new Color(0,153,0);
-   public static   String selected_game = "";
+    public static String selected_game = "";
     /**
      * Instantiates a new Theme park gui.
      *
@@ -181,22 +181,22 @@ public class ThemeParkGUI {
         restaurantMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "restaurant";
             }
         });
         bushRoasterMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "bush";
             }
         });
         treeMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "tree";
             }
         });
         roadMenuItem.addActionListener(new ActionListener() {
@@ -210,8 +210,8 @@ public class ThemeParkGUI {
         trashBinMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "bin";
             }
         });
 

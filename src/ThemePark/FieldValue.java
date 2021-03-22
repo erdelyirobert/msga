@@ -4,3 +4,4 @@ public enum FieldValue {
     EMPTY,
     NOT_EMPTY
 }
+

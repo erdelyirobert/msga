@@ -141,36 +141,36 @@ public class ThemeParkGUI {
         wheelMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "wheel";
             }
         });
         trainMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "train";
             }
         });
         rollerRoasterMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "rollercoaster";
             }
         });
         waterParkMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "waterpark";
             }
         });
         slideMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
+                System.out.println("kattint");
+                selected_game = "slide";
             }
         });
         /**

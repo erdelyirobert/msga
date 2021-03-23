@@ -33,7 +33,7 @@ public class TPBoard {
                 //buttons[i][j].setBorderPainted(false);
                 //buttons[i][j].setContentAreaFilled(false);
                 buttons[i][j].addActionListener(new ButtonListener(i, j));
-                buttons[i][j].setPreferredSize(new Dimension(20, 20));
+                //buttons[i][j].setPreferredSize(new Dimension(20, 20));
                 buttons[i][j].setBackground(clr1);
                 buttons[i][j].setName("EMPTY");
                 boardPanel.add(buttons[i][j]);
@@ -41,10 +41,13 @@ public class TPBoard {
         }
 
         try {
-            Image img = ImageIO.read(getClass().getResource("data\\images\\entrance.png"));
-            buttons[2][1].setIcon(new ImageIcon(img));
-            buttons[2][1].setName("NOT_EMPTY");
+            //Image img = ImageIO.read(getClass().getResource("data\\images\\entrance.png"));
+            //grid[i][j].setIcon(new ImageIcon(getClass().getResource("smallwhite.png")));
+            buttons[2][1].setContentAreaFilled(false);
+            buttons[2][1].setIcon(new ImageIcon(getClass().getResource("berak.png")));
+         //   buttons[2][1].setName("NOT_EMPTY");
         } catch (Exception ex) {
+            System.out.println("kep beolv hiba");
             System.out.println(ex);
         }
 

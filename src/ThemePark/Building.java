@@ -7,16 +7,18 @@ public  class Building {
     private int Location_X;
     private int Location_Y;
     private int Range;
+    public Enum type;
 
 
 
-    public Building(boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
+    public Building(Enum type,boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
         this.inConstruction = inConstruction;
         this.constructionTime = constructionTime;
         this.buildPrice = buildPrice;
         Location_X = location_X;
         Location_Y = location_Y;
         Range = range;
+        this.type = type;
 
     }
 

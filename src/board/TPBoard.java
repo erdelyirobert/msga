@@ -1,7 +1,8 @@
 package board;
 
-import ThemePark.FieldValue;
+import ThemePark.*;
 import gui.ThemeParkGUI;
+import ThemePark.Building;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLOutput;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -19,6 +21,8 @@ public class TPBoard {
     private Board board;
     private final JPanel boardPanel;
     Color clr1 = new Color(0,153,0);
+    ArrayList<Building> buildings = new ArrayList<Building>();
+
 
     public TPBoard(int x, int y) throws IOException {
         boardPanel = new JPanel();
@@ -137,7 +141,10 @@ public class TPBoard {
                             || buttons[x][y + 1].getBackground().equals(Color.gray)
                             || buttons[x][y - 1].getBackground().equals(Color.gray))
                     {
-                                buttons[x][y].setText("WHEEL");
+                               // buttons[x][y].setText("WHEEL");
+                        //EGames.WHEEL
+                               // buildings.add();
+                        buildings.add(new Game(EGames.WHEEL,true,1,1,1,1,1));
                                 buttons[x][y].setName("NOT_EMPTY");
                     }
                 }

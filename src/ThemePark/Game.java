@@ -10,10 +10,12 @@ public class Game extends Building {
     private int usageTime;
 
 
-    public Game(boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
-        super(inConstruction, constructionTime, buildPrice, location_X, location_Y, range);
+    public Game(Enum type, boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
+        super(type, inConstruction, constructionTime, buildPrice, location_X, location_Y, range);
+        this.waitingTimer = waitingTimer;
+        this.runningTimer = runningTimer;
+        this.usageTime = usageTime;
     }
-
 
     public void inUse() {
         //TODO

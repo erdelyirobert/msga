@@ -6,6 +6,9 @@ import gui.ThemeParkGUI;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLOutput;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,7 +20,7 @@ public class TPBoard {
     private final JPanel boardPanel;
     Color clr1 = new Color(0,153,0);
 
-    public TPBoard(int x, int y) {
+    public TPBoard(int x, int y) throws IOException {
         boardPanel = new JPanel();
         board = new Board(x+2, y+2);
         boardPanel.setLayout(new GridLayout(board.getSizeOfBoardX(), board.getSizeOfBoardY()));
@@ -36,8 +39,18 @@ public class TPBoard {
                 boardPanel.add(buttons[i][j]);
             }
         }
+
+        try {
+            Image img = ImageIO.read(getClass().getResource("data\\images\\entrance.png"));
+            buttons[2][1].setIcon(new ImageIcon(img));
+            buttons[2][1].setName("NOT_EMPTY");
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
         buttons[3][1].setBackground(Color.gray);
         buttons[3][1].setName("NOT_EMPTY");
+
     }
     public JPanel getBoardPanel() {
         return boardPanel;

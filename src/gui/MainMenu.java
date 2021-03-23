@@ -81,7 +81,11 @@ public class MainMenu {
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 Menu.setVisible(false);
-                new ThemeParkGUI("x");
+                try {
+                    new ThemeParkGUI("x");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         });

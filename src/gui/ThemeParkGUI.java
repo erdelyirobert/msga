@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class ThemeParkGUI {
     private TPBoard board;
@@ -21,7 +22,7 @@ public class ThemeParkGUI {
      *
      * @param title the title
      */
-    public ThemeParkGUI(String title) {
+    public ThemeParkGUI(String title) throws IOException {
         frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);

@@ -43,7 +43,8 @@ public class TPBoard {
             //Image img = ImageIO.read(getClass().getResource("data\\images\\entrance.png"));
             //grid[i][j].setIcon(new ImageIcon(getClass().getResource("smallwhite.png")));
             buttons[2][1].setContentAreaFilled(false);
-            buttons[2][1].setIcon(new ImageIcon(getClass().getResource("berak.png")));
+          //  buttons[2][1].setIcon(new ImageIcon(getClass().getResource("enterance.png")));
+            buttons[2][1].setText("ENTERANCE KÉP HELYE");
             //   buttons[2][1].setName("NOT_EMPTY");
         } catch (Exception ex) {
             System.out.println("kep beolv hiba");

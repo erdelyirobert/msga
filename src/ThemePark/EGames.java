@@ -5,5 +5,6 @@ public enum EGames {
     TRAIN,
     WATERPARK,
     WHEEL,
-    SLIDE
+    SLIDE,
+    RESTAURANT
 }

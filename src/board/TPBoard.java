@@ -2,31 +2,26 @@ package board;
 
 import ThemePark.*;
 import gui.ThemeParkGUI;
-import ThemePark.Building;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 
 public class TPBoard {
     private final JButton[][] buttons;
-    private Board board;
     private final JPanel boardPanel;
-    Color clr1 = new Color(0,153,0);
+    Color clr1 = new Color(0, 153, 0);
     ArrayList<Building> buildings = new ArrayList<Building>();
+    private Board board;
 
 
     public TPBoard(int x, int y) throws IOException {
         boardPanel = new JPanel();
-        board = new Board(x+2, y+2);
+        board = new Board(x + 2, y + 2);
         boardPanel.setLayout(new GridLayout(board.getSizeOfBoardX(), board.getSizeOfBoardY()));
         buttons = new JButton[board.getSizeOfBoardX()][board.getSizeOfBoardY()];
         for (int i = 0; i < board.getSizeOfBoardX(); i++) {
@@ -49,7 +44,7 @@ public class TPBoard {
             //grid[i][j].setIcon(new ImageIcon(getClass().getResource("smallwhite.png")));
             buttons[2][1].setContentAreaFilled(false);
             buttons[2][1].setIcon(new ImageIcon(getClass().getResource("berak.png")));
-         //   buttons[2][1].setName("NOT_EMPTY");
+            //   buttons[2][1].setName("NOT_EMPTY");
         } catch (Exception ex) {
             System.out.println("kep beolv hiba");
             System.out.println(ex);
@@ -59,8 +54,13 @@ public class TPBoard {
         buttons[3][1].setName("NOT_EMPTY");
 
     }
+
     public JPanel getBoardPanel() {
         return boardPanel;
+    }
+
+    public JButton[][] getButtons() {
+        return buttons;
     }
 
     class ButtonListener implements ActionListener {
@@ -77,12 +77,12 @@ public class TPBoard {
         public void actionPerformed(ActionEvent e) {
 
             if (ThemeParkGUI.selected_game.equals("road")) {
-                if(buttons[x][y].getName().equals("EMPTY")){
+                if (buttons[x][y].getName().equals("EMPTY")) {
                     if (buttons[x - 1][y].getBackground() == Color.gray
                             || buttons[x][y - 1].getBackground() == Color.gray
                             || buttons[x + 1][y].getBackground() == Color.gray
                             || buttons[x][y + 1].getBackground() == Color.gray
-                            || buttons[-1][y].getBackground() == Color.gray){
+                            || buttons[-1][y].getBackground() == Color.gray) {
                         buttons[x][y].setBackground(Color.gray);
                         buttons[x][y].setName("NOT_EMPTY");
 
@@ -91,15 +91,15 @@ public class TPBoard {
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("bin")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                        || buttons[x+1][y].getBackground().equals(Color.gray)
-                        || buttons[x][y+1].getBackground().equals(Color.gray)
-                        || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
+            if (ThemeParkGUI.selected_game.equals("bin")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
                         buttons[x][y].setText("BIN");
                         buttons[x][y].setName("NOT_EMPTY");
+                        buildings.add(new GeneralEquipment(EGeneralEquipment.BIN, true, 1, 1, 1, 1, 1));
                         /*try {
                             Image img = ImageIO.read(getClass().getResource(""));
                             buttons[x][y].setIcon(new ImageIcon(img));
@@ -109,99 +109,96 @@ public class TPBoard {
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("bush")){
-                if(buttons[x][y].getName().equals("EMPTY")){
+            if (ThemeParkGUI.selected_game.equals("bush")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
                     buttons[x][y].setText("BUSH");
                     buttons[x][y].setName("NOT_EMPTY");
+                    buildings.add(new GeneralEquipment(EGeneralEquipment.BUSH, true, 1, 1, 1, 1, 1));
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("tree")){
-                if(buttons[x][y].getName().equals("EMPTY")){
+            if (ThemeParkGUI.selected_game.equals("tree")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
                     buttons[x][y].setText("TREE");
                     buttons[x][y].setName("NOT_EMPTY");
+                    buildings.add(new GeneralEquipment(EGeneralEquipment.TREE, true, 1, 1, 1, 1, 1));
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("restaurant")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                            || buttons[x+1][y].getBackground().equals(Color.gray)
-                            || buttons[x][y+1].getBackground().equals(Color.gray)
-                            || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
+            if (ThemeParkGUI.selected_game.equals("restaurant")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
+                        buildings.add(new Restaurant(EGames.RESTAURANT, true, 1, 1, 1, 1, 1));
                         buttons[x][y].setText("RESTAURANT");
                         buttons[x][y].setName("NOT_EMPTY");
                     }
                 }
             }
 
-            if(ThemeParkGUI.selected_game.equals("wheel")) {
+            if (ThemeParkGUI.selected_game.equals("wheel")) {
                 if (buttons[x][y].getName().equals("EMPTY")) {
                     if (buttons[x - 1][y].getBackground().equals(Color.gray)
                             || buttons[x + 1][y].getBackground().equals(Color.gray)
                             || buttons[x][y + 1].getBackground().equals(Color.gray)
-                            || buttons[x][y - 1].getBackground().equals(Color.gray))
-                    {
-                               // buttons[x][y].setText("WHEEL");
-                        //EGames.WHEEL
-                               // buildings.add();
-                        buildings.add(new Game(EGames.WHEEL,true,1,1,1,1,1));
-                                buttons[x][y].setName("NOT_EMPTY");
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
+
+                        buildings.add(new Game(EGames.WHEEL, true, 1, 1, 1, 1, 1));
+                        buttons[x][y].setText("WHEEL");
+                        //TODO: image instead of text
+                        buttons[x][y].setName("NOT_EMPTY");
+
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("train")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                            || buttons[x+1][y].getBackground().equals(Color.gray)
-                            || buttons[x][y+1].getBackground().equals(Color.gray)
-                            || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
-                        buttons[x][y].setText("TRAIN");
+            if (ThemeParkGUI.selected_game.equals("train")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
+                        buttons[x][y].setText("Train");
+                        buildings.add(new Game(EGames.TRAIN, true, 1, 1, 1, 1, 1));
                         buttons[x][y].setName("NOT_EMPTY");
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("rollercoaster")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                            || buttons[x+1][y].getBackground().equals(Color.gray)
-                            || buttons[x][y+1].getBackground().equals(Color.gray)
-                            || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
+            if (ThemeParkGUI.selected_game.equals("rollercoaster")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
                         buttons[x][y].setText("ROLLERCOASTER");
+                        buildings.add(new Game(EGames.ROLLERCOASTER, true, 1, 1, 1, 1, 1));
                         buttons[x][y].setName("NOT_EMPTY");
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("waterpark")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                            || buttons[x+1][y].getBackground().equals(Color.gray)
-                            || buttons[x][y+1].getBackground().equals(Color.gray)
-                            || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
+            if (ThemeParkGUI.selected_game.equals("waterpark")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
+                        buildings.add(new Game(EGames.WATERPARK, true, 1, 1, 1, 1, 1));
                         buttons[x][y].setText("WATERPARK");
                         buttons[x][y].setName("NOT_EMPTY");
                     }
                 }
             }
-            if(ThemeParkGUI.selected_game.equals("slide")){
-                if(buttons[x][y].getName().equals("EMPTY")){
-                    if(buttons[x-1][y].getBackground().equals(Color.gray)
-                            || buttons[x+1][y].getBackground().equals(Color.gray)
-                            || buttons[x][y+1].getBackground().equals(Color.gray)
-                            || buttons[x][y-1].getBackground().equals(Color.gray))
-                    {
+            if (ThemeParkGUI.selected_game.equals("slide")) {
+                if (buttons[x][y].getName().equals("EMPTY")) {
+                    if (buttons[x - 1][y].getBackground().equals(Color.gray)
+                            || buttons[x + 1][y].getBackground().equals(Color.gray)
+                            || buttons[x][y + 1].getBackground().equals(Color.gray)
+                            || buttons[x][y - 1].getBackground().equals(Color.gray)) {
+                        buildings.add(new Game(EGames.SLIDE, true, 1, 1, 1, 1, 1));
                         buttons[x][y].setText("SLIDE");
                         buttons[x][y].setName("NOT_EMPTY");
                     }
                 }
             }
-            }//end of actionperform
-        }
-
-
-    public JButton[][] getButtons() {
-        return buttons;
+        }//end of actionperform
     }
 }

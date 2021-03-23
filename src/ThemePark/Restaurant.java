@@ -5,6 +5,9 @@ public class Restaurant extends Building {
         super(type, inConstruction, constructionTime, buildPrice, location_X, location_Y, range);
     }
 
+
+
+
     public void startTrashTimer() {
         //TODO
     }

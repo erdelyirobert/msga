@@ -1,10 +1,16 @@
 import gui.MainMenu;
-import gui.ThemeParkGUI;
 
+
+/**
+ * The  Main program
+ */
 public class Main {
+    /**
+     * The entry point of application.
+     *
+     */
     public static void main(String[] args) {
         MainMenu mainMenu = new MainMenu();
-        System.out.println("szia");
 
     }
 }

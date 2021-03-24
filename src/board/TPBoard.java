@@ -11,14 +11,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+/**
+ * The type Tp board.
+ */
 public class TPBoard {
     private final JButton[][] buttons;
     private final JPanel boardPanel;
+    /**
+     * The Clr 1.
+     */
     Color clr1 = new Color(0, 153, 0);
+    /**
+     * The Buildings.
+     */
     ArrayList<Building> buildings = new ArrayList<Building>();
     private Board board;
 
-
+    /**
+     * Constuctor of /**
+     * * The type Tp board.
+     *
+     * @param x the x
+     * @param y the y
+     * @throws IOException the io exception
+     */
     public TPBoard(int x, int y) throws IOException {
         boardPanel = new JPanel();
         board = new Board(x + 2, y + 2);
@@ -56,19 +72,38 @@ public class TPBoard {
 
     }
 
+    /**
+     * Gets board panel.
+     *
+     * @return the board panel
+     */
     public JPanel getBoardPanel() {
         return boardPanel;
     }
 
+    /**
+     * Get buttons j button [ ] [ ].
+     *
+     * @return the j button [ ] [ ]
+     */
     public JButton[][] getButtons() {
         return buttons;
     }
 
+    /**
+     * The type Button listener.
+     */
     class ButtonListener implements ActionListener {
 
         private int x;
         private int y;
 
+        /**
+         * Instantiates a new Button listener.
+         *
+         * @param x the x
+         * @param y the y
+         */
         public ButtonListener(int x, int y) {
             this.x = x;
             this.y = y;

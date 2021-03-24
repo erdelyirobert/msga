@@ -1,5 +1,8 @@
 package ThemePark;
 
+/**
+ * The enum E games.
+ */
 public enum EGames {
     ROLLERCOASTER,
     TRAIN,

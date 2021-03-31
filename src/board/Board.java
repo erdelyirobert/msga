@@ -1,37 +1,20 @@
 package board;
 
-/**
- * The type Board.
- */
 public class Board {
 
-    private int sizeOfBoardX = 1000;
-    private int sizeOfBoardY = 800;
+    private int WIDTH = 1000; //width of the park
+    private int HEIGHT = 800; //height of the park
+    private int segmentSize = 10; //size of one grid
 
+    public int[] x = new int[HEIGHT * WIDTH];
+    public int[] y = new int[HEIGHT * WIDTH];
 
-    /**
-     * Instantiates a new Board.
-     *
-     * @param sizeOfBoardX the size of board x
-     * @param sizeOfBoardY the size of board y
-     */
-    public Board(int sizeOfBoardX, int sizeOfBoardY) {
-        this.sizeOfBoardX = sizeOfBoardX;
-        this.sizeOfBoardY = sizeOfBoardY;
-
+    public Board(int w, int h) {
+        this.WIDTH = w;
+        this.HEIGHT = h;
     }
 
-    /**
-     * Get size of board x int.
-     *
-     * @return the int
-     */
-    public int getSizeOfBoardX(){ return sizeOfBoardX; }
-
-    /**
-     * Get size of board y int.
-     *
-     * @return the int
-     */
-    public int getSizeOfBoardY(){ return sizeOfBoardY; }
+    public int getSegmentSize(){return segmentSize;}
+    public int getWIDTH(){ return WIDTH; }
+    public int getHEIGHT(){ return HEIGHT; }
 }

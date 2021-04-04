@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+/**
+ * The type Tp board.
+ */
 public class TPBoard {
     private final JPanel boardPanel;
     Color clr1 = new Color(0, 153, 0);

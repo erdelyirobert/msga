@@ -23,6 +23,7 @@ public class ThemeParkGUI {
      * Instantiates a new Theme park gui.
      *
      * @param title the title
+     * @throws IOException the io exception
      */
     public ThemeParkGUI(String title) throws IOException {
         frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -109,6 +110,14 @@ public class ThemeParkGUI {
 
         JButton stopBuild = new JButton("STOP BUILD");
         menub.add(stopBuild);
+
+
+        /*
+        * This label display the money of the player
+        TODO  moneyLabel.setText("Money: " + player.getMoney());
+         */
+        JLabel moneyLabel = new JLabel(" Money: ");
+        menub.add(moneyLabel);
 
         this.frame.setJMenuBar(menub);
 

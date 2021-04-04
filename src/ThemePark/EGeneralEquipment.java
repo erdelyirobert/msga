@@ -8,5 +8,6 @@ public enum EGeneralEquipment{
     BIN,
     TREE,
     NOTHING,
-    ROAD
+    ROAD,
+    TRASH
 }

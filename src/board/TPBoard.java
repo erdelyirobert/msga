@@ -53,6 +53,7 @@ public class TPBoard {
                         System.out.println("UT EPULT");
                         System.out.println(x + "," + y);//these co-ords are relative to the component
                         buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, 1, 1));
+
                     }
 
                     if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
@@ -144,32 +145,18 @@ public class TPBoard {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        //TODO: ROAD int x = buildings.getX(ROAD);
-        //utolsó building adatait lekérjük és azt írjuk ki
-        //Enum type,boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range
-        //   path + toString(ENUMÉRTÉK) + .jpg
-
         Enum e = buildings.get(buildings.size() - 1).getType();
         int x = buildings.get(buildings.size() - 1).getLocation_X();
         int y = buildings.get(buildings.size() - 1).getLocation_Y();
         int a = buildings.get(buildings.size() - 1).getA();
         int b = buildings.get(buildings.size() - 1).getB();
-        /*
-        BufferedImage myPicture = ImageIO.read(new File("path-to-file"));
-        JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-        add(picLabel);
-        MyEnum e = Enum.valueOf(Enum.e.toString());
 
-
-        */
         try {
             img = ImageIO.read(new File("data\\images\\"+e.toString() + ".png"));
         } catch (IOException f) {
-            System.out.println("error");
+            System.out.println("error reading image of data\\images\\" +e.toString() + ".png");
             f.printStackTrace();
         }
-        //Image img = ImageIO.read(new File("data\\images\\"+e.toString() + ".png"));
-
 
         g.drawImage(img, x, y, a, b, this);
 

@@ -9,7 +9,7 @@ public class Restaurant extends Building {
     }
 
 
-
+//todo szia!!!!
 
     public void startTrashTimer() {
         //TODO

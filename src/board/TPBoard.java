@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  * The type Tp board.
  */
-public class TPBoard {
+public class TPBoard extends JPanel{
     private final JPanel boardPanel;
     Color clr1 = new Color(0, 153, 0);
     ArrayList<Building> buildings = new ArrayList<Building>();
@@ -35,6 +35,7 @@ public class TPBoard {
         boardPanel = new JPanel();
         board = new Board(x, y);
         boardPanel.setLayout(new GridLayout(board.getWIDTH(), board.getHEIGHT()));
+        boardPanel.setBackground(clr1);
 
 
         boardPanel.addMouseListener(new MouseAdapter() {// provides empty implementation of all
@@ -53,6 +54,7 @@ public class TPBoard {
                         System.out.println("UT EPULT");
                         System.out.println(x + "," + y);//these co-ords are relative to the component
                         buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, 1, 1));
+
                     }
 
                     if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {

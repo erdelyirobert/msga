@@ -19,10 +19,11 @@ public class Game extends Building {
      * @param buildPrice       the build price
      * @param location_X       the location x
      * @param location_Y       the location y
-     * @param range            the range
+     * @param a                the range a
+     * @param b                 the range b
      */
-    public Game(Enum type, boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
-        super(type, inConstruction, constructionTime, buildPrice, location_X, location_Y, range);
+    public Game(Enum type, boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int a, int b) {
+        super(type, inConstruction, constructionTime, buildPrice, location_X, location_Y, a,b);
         this.waitingTimer = waitingTimer;
         this.runningTimer = runningTimer;
         this.usageTime = usageTime;

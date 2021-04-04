@@ -6,8 +6,8 @@ package board;
  */
 public class Board {
 
-    private int WIDTH = 1000; //width of the park
-    private int HEIGHT = 800; //height of the park
+    private int WIDTH = 100; //width of the park
+    private int HEIGHT = 80; //height of the park
     private int segmentSize = 10; //size of one grid
 
 

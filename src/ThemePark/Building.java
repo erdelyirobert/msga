@@ -3,17 +3,18 @@ package ThemePark;
 /**
  * The type Building.
  */
-public  class Building {
+public class Building {
+    /**
+     * The Type.
+     */
+    public Enum type;
     private boolean inConstruction;
     private int constructionTime;
     private int buildPrice;
     private int Location_X;
     private int Location_Y;
-    private int Range;
-    /**
-     * The Type.
-     */
-    public Enum type;
+    private int A;
+    private int B;
 
 
     /**
@@ -25,15 +26,17 @@ public  class Building {
      * @param buildPrice       the build price
      * @param location_X       the location x
      * @param location_Y       the location y
-     * @param range            the range
+     * @param a                the range a
+     * @param b                the range b
      */
-    public Building(Enum type,boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int range) {
+    public Building(Enum type, boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int a, int b) {
         this.inConstruction = inConstruction;
         this.constructionTime = constructionTime;
         this.buildPrice = buildPrice;
         Location_X = location_X;
         Location_Y = location_Y;
-        Range = range;
+        A = a;
+        B = b;
         this.type = type;
 
     }
@@ -43,7 +46,7 @@ public  class Building {
      *
      * @param mood the mood
      */
-    public void changeMood(int mood){
+    public void changeMood(int mood) {
         //mood = mood +- n;
     }
     /*
@@ -59,12 +62,12 @@ public  class Building {
     /**
      * Start.
      */
-    public void start(){
+    public void start() {
 
     }
 
 
-    //Getter és setter
+    //------------------Getter és setter------------------------///
 
 
     /**
@@ -84,7 +87,6 @@ public  class Building {
     public int getConstructionTime() {
         return constructionTime;
     }
-
 
     /**
      * Gets build price.
@@ -114,71 +116,29 @@ public  class Building {
     }
 
     /**
-     * Gets range.
+     * Gets a.
      *
-     * @return the range
+     * @return the a
      */
-    public int getRange() {
-        return Range;
-    }
-
-
-    /**
-     * Sets in construction.
-     *
-     * @param inConstruction the in construction
-     */
-    public void setInConstruction(boolean inConstruction) {
-        this.inConstruction = inConstruction;
+    public int getA() {
+        return A;
     }
 
     /**
-     * Sets construction time.
+     * Gets b.
      *
-     * @param constructionTime the construction time
+     * @return the b
      */
-    public void setConstructionTime(int constructionTime) {
-        this.constructionTime = constructionTime;
-    }
-
-
-    /**
-     * Sets build price.
-     *
-     * @param buildPrice the build price
-     */
-    public void setBuildPrice(int buildPrice) {
-        this.buildPrice = buildPrice;
+    public int getB() {
+        return B;
     }
 
     /**
-     * Sets location x.
+     * Gets type.
      *
-     * @param location_X the location x
+     * @return the type
      */
-    public void setLocation_X(int location_X) {
-        Location_X = location_X;
+    public Enum getType() {
+        return type;
     }
-
-    /**
-     * Sets location y.
-     *
-     * @param location_Y the location y
-     */
-    public void setLocation_Y(int location_Y) {
-        Location_Y = location_Y;
-    }
-
-    /**
-     * Sets range.
-     *
-     * @param range the range
-     */
-    public void setRange(int range) {
-        Range = range;
-    }
-
-
-
-
 }

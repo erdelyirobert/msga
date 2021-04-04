@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.awt.Graphics;
 
 public class ThemeParkGUI {
     private TPBoard board;
@@ -35,6 +36,7 @@ public class ThemeParkGUI {
         frame.getContentPane().setBackground(clr1);
         board = new TPBoard(20, 20);
         frame.getContentPane().add(board.getBoardPanel(), BorderLayout.CENTER);
+        frame.setResizable(false);
 
 
         /**
@@ -240,6 +242,12 @@ public class ThemeParkGUI {
         });
 
 
+
+
+
+
+
+
         /**
          * Sets the preferred size of the window so the contents are in the
          * window
@@ -251,5 +259,7 @@ public class ThemeParkGUI {
          */
         frame.pack();
     }
+
+
 
 }

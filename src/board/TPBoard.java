@@ -53,7 +53,6 @@ public class TPBoard {
                         System.out.println("UT EPULT");
                         System.out.println(x + "," + y);//these co-ords are relative to the component
                         buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, 1, 1));
-
                     }
 
                     if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {

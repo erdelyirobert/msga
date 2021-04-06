@@ -19,7 +19,6 @@ public class ThemeParkFrame {
         frame.revalidate();
         frame.repaint();
 
-
         BufferedImage img = null;
 
         try {
@@ -29,6 +28,6 @@ public class ThemeParkFrame {
         }
         ImageIcon icon = new ImageIcon(img);
         frame.setIconImage(icon.getImage());
-
     }
 }
+

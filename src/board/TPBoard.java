@@ -15,8 +15,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-
+import java.util.HashMap;
 
 
 /**
@@ -29,10 +28,25 @@ public class TPBoard extends JPanel implements MouseListener{
     private int WIDTH = 600; //width of the park
     private int HEIGHT = 600; //height of the park
     private int segmentSize = 10; //size of one grid
+    /**
+     * Building informations
+     */
     public int x;
     public int y;
-    Image img;
+    public int a;
+    public int b;
+    public String type;
+    public boolean inConstruction;
+    public int buildPrice;
+    public int constructionTime;
+
+    public boolean spaceEmpty;
+
+    Image img = null;
     ArrayList<Building> buildings = new ArrayList<Building>();
+
+    ArrayList<Integer> roadX = new ArrayList<Integer>();
+    ArrayList<Integer> roadY = new ArrayList<Integer>();
 
 
     public TPBoard() throws IOException {
@@ -51,20 +65,39 @@ public class TPBoard extends JPanel implements MouseListener{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paint(g);
-
-        }
+    }
 
     @Override
     public void paint(Graphics g){
-
-
         g.clearRect(0, 0, WIDTH, HEIGHT);
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        try {
+            img = ImageIO.read(new File("data\\images\\rollercoaster.png"));
+        } catch (IOException f) {
+            System.out.println("error");
+            f.printStackTrace();
+        }
+
+        System.out.println(type);
+
+        /**
+         * Starting road
+         */
+        roadX.add(43);
+        roadY.add(35);
+        g.setColor(Color.GRAY);
+        g.fillRect(43, 35, segmentSize*2, segmentSize*2);
+
+        //g.drawImage(img, x, y, a, b, this);
+
+        for(int i = 1; i < roadX.size(); i++) {
+            g.setColor(Color.GRAY);
+            g.fillRect(roadX.get(i), roadY.get(i), a, b);
+        }
+
         System.out.println("sikerült belépnem a paint osztalyba");
-
-
     }
 
         @Override
@@ -72,18 +105,39 @@ public class TPBoard extends JPanel implements MouseListener{
 
             if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
-                    x = e.getX();
-                    y = e.getY();
 
-                    System.out.println("UT EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, 1, 1));
-                    repaint();
+                        x = e.getX();
+                        y = e.getY();
+                        spaceEmpty = true;
+
+                        for(int i = 0; i < roadX.size(); i++){
+                            if(roadX.get(i) == x && roadY.get(i) == y){
+                                spaceEmpty = false;
+                                System.out.println("soz bro");
+                            }
+                        }
+
+                        if(spaceEmpty){
+                            //type = "ROAD";
+                            a = segmentSize * 2;
+                            b = segmentSize * 2;
+                            inConstruction = false;
+                            constructionTime = 0;
+
+                            roadX.add(x);
+                            roadY.add(y);
+
+                            System.out.println("UT EPULT");
+                            System.out.println(x + "," + y);//these co-ords are relative to the component
+                            //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
+                            repaint();
+                        }
                 }
 
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "BUSH";
 
                     System.out.println("BOKOR EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -94,6 +148,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "BIN";
 
                     System.out.println("KUKA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -103,6 +158,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "TREE";
 
                     System.out.println("FA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -115,6 +171,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.ROLLERCOASTER)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "rollercoaster";
 
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -124,6 +181,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.TRAIN)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "TRAIN";
 
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -133,6 +191,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.WATERPARK)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "WATERPARK";
 
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -142,6 +201,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.WHEEL)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "WHEEL";
 
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -151,6 +211,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.SLIDE)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "SLIDE";
 
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -160,6 +221,7 @@ public class TPBoard extends JPanel implements MouseListener{
                 if (ThemeParkGUI.selected_game.equals(EGames.RESTAURANT)) {
                     x = e.getX();
                     y = e.getY();
+                    type = "RESTAURANT";
 
                     System.out.println("RESTAURANT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component

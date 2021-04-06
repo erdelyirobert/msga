@@ -1,16 +1,12 @@
 package gui;
 
-import ThemePark.EGames;
 import ThemePark.EGeneralEquipment;
 import board.TPBoard;
 
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class ThemeParkGUI extends JFrame{
@@ -18,7 +14,6 @@ public class ThemeParkGUI extends JFrame{
     public TPBoard board;
     //JFrame frame = new JFrame("Theme park");
     Color clr1 = new Color(0, 153, 0);
-    public static EGames selected_game = EGames.NOTHING;
     public static EGeneralEquipment selected_ge = EGeneralEquipment.NOTHING;
     public Container c = getContentPane();
     public int HEIGHT = 800;
@@ -162,7 +157,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.WHEEL;
+                selected_ge = EGeneralEquipment.WHEEL;
 
             }
         });
@@ -170,7 +165,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.TRAIN;
+                selected_ge = EGeneralEquipment.TRAIN;
                 updateMoneyLabel();
             }
         });
@@ -178,7 +173,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.ROLLERCOASTER;
+                selected_ge = EGeneralEquipment.ROLLERCOASTER;
                 updateMoneyLabel();
             }
         });
@@ -186,7 +181,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.WATERPARK;
+                selected_ge = EGeneralEquipment.WATERPARK;
                 updateMoneyLabel();
             }
         });
@@ -194,7 +189,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.SLIDE;
+                selected_ge = EGeneralEquipment.SLIDE;
                 updateMoneyLabel();
             }
         });
@@ -207,7 +202,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
-                selected_game = EGames.RESTAURANT;
+                selected_ge = EGeneralEquipment.RESTAURANT;
                 updateMoneyLabel();
             }
         });
@@ -253,7 +248,7 @@ public class ThemeParkGUI extends JFrame{
                 stopBuild.setEnabled(false);
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
-                selected_game = EGames.NOTHING;
+                selected_ge = EGeneralEquipment.NOTHING;
                 updateMoneyLabel();
             }
         });

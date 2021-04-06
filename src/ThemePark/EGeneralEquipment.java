@@ -9,5 +9,11 @@ public enum EGeneralEquipment{
     TREE,
     NOTHING,
     ROAD,
-    TRASH
+    TRASH,
+    ROLLERCOASTER,
+    TRAIN,
+    WATERPARK,
+    WHEEL,
+    SLIDE,
+    RESTAURANT
 }

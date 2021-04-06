@@ -1,7 +1,6 @@
 package board;
 
 import ThemePark.Building;
-import ThemePark.EGames;
 import ThemePark.EGeneralEquipment;
 import ThemePark.GeneralEquipment;
 import gui.ThemeParkGUI;
@@ -72,12 +71,6 @@ public class TPBoard extends JPanel implements MouseListener {
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        try {
-            img = ImageIO.read(new File("data\\images\\rollercoaster.png"));
-        } catch (IOException f) {
-            System.out.println("error");
-            f.printStackTrace();
-        }
 
         System.out.println(type);
 
@@ -85,9 +78,18 @@ public class TPBoard extends JPanel implements MouseListener {
          * Starting road
          */
         roadX.add(60);
-        roadY.add(60);
+        roadY.add(80);
         g.setColor(Color.GRAY);
-        g.fillRect(60, 60, segmentSize, segmentSize);
+        g.fillRect(60, 80, segmentSize, segmentSize);
+
+        /*Entrance*/
+        try {
+            img = ImageIO.read(new File("data\\images\\entrance.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(img, segmentSize, 0,segmentSize*5,segmentSize*6, null);
 
         //g.drawImage(img, x, y, a, b, this);
 
@@ -97,23 +99,31 @@ public class TPBoard extends JPanel implements MouseListener {
         }
 
         for (int i = 0; i < imgX.size(); i++) {
-            g.drawImage(img, imgX.get(i), imgY.get(i), 3 * segmentSize, 3 * segmentSize, null);
+
+            try {
+                img = ImageIO.read(new File("data\\images\\"+ buildingsImages.get(i) +".png"));
+                Graphics2D g3d = (Graphics2D) g;
+                g3d.drawImage(img, imgX.get(i), imgY.get(i),segmentSize*11,segmentSize*5, null);
+                //System.out.println(buildingsImages.get(i));
+            } catch (IOException f) {
+                System.out.println("error");
+                f.printStackTrace();
+            }
+
 
 
         }
 
-        ImageIcon start = new ImageIcon("data\\images\\rollercoaster.png");
-        startgame = start.getImage();
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.drawImage(img, 0, 0, null);
-        g2d.drawImage(startgame, 220, 40, null);
+
 
         System.out.println("sikerült belépnem a paint osztalyba");
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        /*
+            If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
+         */
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
 
@@ -150,18 +160,14 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "BUSH";
-
+                buildingsImages.add("BUSH");
                 System.out.println("BOKOR EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
                 buildings.add(new GeneralEquipment(EGeneralEquipment.BUSH, true, 1, 1, x, y, 1, 1));
 
-                try {
-                    img = ImageIO.read(new File("data\\images\\BUSH.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
 
 
                 repaint();
@@ -170,16 +176,14 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "BIN";
+                buildingsImages.add("BIN");
 
                 System.out.println("KUKA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                try {
-                    img = ImageIO.read(new File("data\\images\\BIN.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
 
                 repaint();
             }
@@ -187,14 +191,11 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "TREE";
+                buildingsImages.add("TREE");
 
-                try {
-                    img = ImageIO.read(new File("data\\images\\TREE.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
 
                 System.out.println("FA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -203,108 +204,98 @@ public class TPBoard extends JPanel implements MouseListener {
         }
 
 
-        if (!ThemeParkGUI.selected_game.equals(EGeneralEquipment.NOTHING)) {
-            if (ThemeParkGUI.selected_game.equals(EGames.ROLLERCOASTER)) {
+        if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROLLERCOASTER)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "rollercoaster";
+                buildingsImages.add("rollercoaster");
 
                 System.out.println("RC EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
 
-                try {
-                    img = ImageIO.read(new File("data\\images\\rollercoaster.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
 
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_game.equals(EGames.TRAIN)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "TRAIN";
+                buildingsImages.add("TRAIN");
 
                 System.out.println("TRAIN EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
 
-                try {
-                    img = ImageIO.read(new File("data\\images\\TRAIN.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
 
 
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_game.equals(EGames.WATERPARK)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "WATERPARK";
+                buildingsImages.add("WATERPARK");
 
                 System.out.println("WP EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                try {
-                    img = ImageIO.read(new File("data\\images\\WATERPARK.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
 
 
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_game.equals(EGames.WHEEL)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "WHEEL";
+                buildingsImages.add("WHEEL");
 
                 System.out.println("WHEEL EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                try {
-                    img = ImageIO.read(new File("data\\images\\WHEEL.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
 
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_game.equals(EGames.SLIDE)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "SLIDE";
+                buildingsImages.add("SLIDE");
 
                 System.out.println("SLIDE EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                try {
-                    img = ImageIO.read(new File("data\\images\\SLIDE.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
+
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_game.equals(EGames.RESTAURANT)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
                 x = e.getX();
                 y = e.getY();
+                imgX.add(x);
+                imgY.add(y);
                 type = "RESTAURANT";
+                buildingsImages.add("RESTAURANT");
 
                 System.out.println("RESTAURANT EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                try {
-                    img = ImageIO.read(new File("data\\images\\RESTAURANT.png"));
-                } catch (IOException f) {
-                    System.out.println("error");
-                    f.printStackTrace();
-                }
+
+
 
                 repaint();
             }

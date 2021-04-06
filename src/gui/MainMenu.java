@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * The type Main menu.
  */
-public class MainMenu {
+public class MainMenu extends JFrame{
 
 
     //Sizes
@@ -82,7 +82,7 @@ public class MainMenu {
             public void actionPerformed(ActionEvent arg0) {
                 Menu.setVisible(false);
                 try {
-                    new ThemeParkGUI("x");
+                    new ThemeParkFrame("x");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

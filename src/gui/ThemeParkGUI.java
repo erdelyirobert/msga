@@ -9,16 +9,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-import java.awt.Graphics;
 
-public class ThemeParkGUI {
-    private TPBoard board;
-    JFrame frame = new JFrame("Theme park");
-    private final int WIDTH = 1000;
-    private final int HEIGHT = 800;
+public class ThemeParkGUI extends JFrame{
+
+    public TPBoard board;
+    //JFrame frame = new JFrame("Theme park");
     Color clr1 = new Color(0, 153, 0);
     public static EGames selected_game = EGames.NOTHING;
     public static EGeneralEquipment selected_ge = EGeneralEquipment.NOTHING;
+    public Container c = getContentPane();
+    public int HEIGHT = 800;
+    public int WIDTH = 600;
 
     /**
      * Instantiates a new Theme park gui.
@@ -27,23 +28,19 @@ public class ThemeParkGUI {
      * @throws IOException the io exception
      */
     public ThemeParkGUI(String title) throws IOException {
-        frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(true);
-        frame.setLocationRelativeTo(null);
-        frame.revalidate();
-        frame.repaint();
-        frame.getContentPane().setBackground(clr1);
-        board = new TPBoard(20, 20);
-        frame.getContentPane().add(board.getBoardPanel(), BorderLayout.CENTER);
-        frame.setResizable(false);
-        //frame.add(board);
+        super(title);
+
+/*
+        board = new TPBoard();
+        c.add(board);
+        c.revalidate();
+        c.repaint();
+*/
+
 
         /**
          * Menu bar
          */
-        JMenuBar menuBar = new JMenuBar(); // creation of menubar
-        frame.setJMenuBar(menuBar); //adding the menubar to the frame
 
 
         JMenuBar menub = new JMenuBar();
@@ -71,7 +68,6 @@ public class ThemeParkGUI {
         JMenuItem slideMenuItem = new JMenuItem("Slide");
 
 
-
         menub.add(buildGame);
         menub.add(wheelMenuItem);
         menub.add(trainMenuItem);
@@ -88,7 +84,6 @@ public class ThemeParkGUI {
          * Menu bar
          * (part of General Equipment)
          */
-
 
 
         JMenu buildGeneralEquipment = new JMenu("General Equipment");
@@ -112,23 +107,23 @@ public class ThemeParkGUI {
 
         JButton stopBuild = new JButton("STOP BUILD");
         menub.add(stopBuild);
+        setJMenuBar(menub);
+
 
 
         /*
         * This label display the money of the player
         TODO  moneyLabel.setText("Money: " + player.getMoney());
          */
-        JLabel moneyLabel = new JLabel();
-       // moneyLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon"));
-        ImageIcon imageIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        moneyLabel.setIcon(imageIcon);
-        moneyLabel.setText("Money: ");
-        moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
-        moneyLabel.setVerticalTextPosition(JLabel.CENTER);
-
+        JLabel moneyLabel = new JLabel(" Money: ");
         menub.add(moneyLabel);
 
-        this.frame.setJMenuBar(menub);
+        board = new TPBoard();
+        board.setBackground(Color.RED);
+        c.add(board);
+        c.revalidate();
+        c.repaint();
+        board.requestFocusInWindow();
 
         /*
          * ActionListeners
@@ -150,7 +145,7 @@ public class ThemeParkGUI {
         exitMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
             }
         });
         /**
@@ -249,22 +244,6 @@ public class ThemeParkGUI {
         });
 
 
-
-
-
-
-
-
-        /**
-         * Sets the preferred size of the window so the contents are in the
-         * window
-         */
-        frame.setVisible(true);
-
-        /**
-         * Components are visible on the screen
-         */
-        frame.pack();
     }
 
 

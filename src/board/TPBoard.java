@@ -27,7 +27,7 @@ public class TPBoard extends JPanel implements MouseListener{
     Color clr1 = new Color(0, 153, 0);
     private int WIDTH = 600; //width of the park
     private int HEIGHT = 600; //height of the park
-    private int segmentSize = 10; //size of one grid
+    private int segmentSize = 20; //size of one grid
     /**
      * Building informations
      */
@@ -85,10 +85,10 @@ public class TPBoard extends JPanel implements MouseListener{
         /**
          * Starting road
          */
-        roadX.add(43);
-        roadY.add(35);
+        roadX.add(60);
+        roadY.add(60);
         g.setColor(Color.GRAY);
-        g.fillRect(43, 35, segmentSize*2, segmentSize*2);
+        g.fillRect(60, 60, segmentSize, segmentSize);
 
         //g.drawImage(img, x, y, a, b, this);
 
@@ -118,18 +118,19 @@ public class TPBoard extends JPanel implements MouseListener{
                         }
 
                         if(spaceEmpty){
-                            //type = "ROAD";
-                            a = segmentSize * 2;
-                            b = segmentSize * 2;
+                            a = segmentSize ;
+                            b = segmentSize ;
                             inConstruction = false;
                             constructionTime = 0;
 
-                            roadX.add(x);
-                            roadY.add(y);
+                            roadX.add(x - (x%segmentSize));
+                            roadY.add(y - (y%segmentSize));
+
+                            //updateMoneyLabel();
 
                             System.out.println("UT EPULT");
                             System.out.println(x + "," + y);//these co-ords are relative to the component
-                            //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
+                                    //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
                             repaint();
                         }
                 }

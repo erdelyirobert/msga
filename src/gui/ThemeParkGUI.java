@@ -87,7 +87,7 @@ public class ThemeParkGUI extends JFrame{
         JMenuItem restaurantMenuItem = new JMenuItem("Restaurant");
         JMenuItem treeMenuItem = new JMenuItem("Tree");
         JMenuItem bushMenuItem = new JMenuItem("Bush");
-        JMenuItem roadMenuItem = new JMenuItem("Road");
+        JMenuItem roadMenuItem = new JMenuItem("Road 10 PÉZ");
         JMenuItem trashBinMenuItem = new JMenuItem("Bin");
 
 
@@ -149,6 +149,7 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 //frame.dispatchEvent(new WindowEvent(frame, WindowEvent.WINDOW_CLOSING));
+                System.exit(0);
             }
         });
         /**
@@ -224,7 +225,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.ROAD;
-
+                updateMoneyLabel();
             }
         });
 

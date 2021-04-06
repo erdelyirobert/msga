@@ -23,6 +23,8 @@ import java.util.ArrayList;
  * The type Tp board.
  */
 public class TPBoard extends JPanel implements MouseListener{
+    public  int budget = 10000;
+    private boolean isGameOver = false ;
     Color clr1 = new Color(0, 153, 0);
     private int WIDTH = 600; //width of the park
     private int HEIGHT = 600; //height of the park
@@ -189,4 +191,10 @@ public class TPBoard extends JPanel implements MouseListener{
     public void mouseExited(MouseEvent e) {
 
     }
+
+    public int getBudget() {
+        return budget;
+    }
+
+
 }

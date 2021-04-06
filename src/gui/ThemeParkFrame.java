@@ -1,7 +1,10 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class ThemeParkFrame {
@@ -16,6 +19,16 @@ public class ThemeParkFrame {
         frame.revalidate();
         frame.repaint();
 
+
+        BufferedImage img = null;
+
+        try {
+            img = ImageIO.read(new File("data\\images\\theme_park.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageIcon icon = new ImageIcon(img);
+        frame.setIconImage(icon.getImage());
 
     }
 }

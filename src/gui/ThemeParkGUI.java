@@ -5,9 +5,12 @@ import ThemePark.EGeneralEquipment;
 import board.TPBoard;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 public class ThemeParkGUI extends JFrame{
@@ -103,17 +106,23 @@ public class ThemeParkGUI extends JFrame{
         menub.add(stopBuild);
         setJMenuBar(menub);
 
-
+        board = new TPBoard();
 
         /*
         * This label display the money of the player
         TODO  moneyLabel.setText("Money: " + player.getMoney());
          */
-        JLabel moneyLabel = new JLabel(" Money: ");
-        menub.add(moneyLabel);
+        JLabel moneyLabel = new JLabel();
 
-        board = new TPBoard();
-        board.setBackground(Color.RED);
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        moneyLabel.setIcon(imageIcon);
+
+        moneyLabel.setFont(new Font("Serif", Font.BOLD, 16));
+        moneyLabel.setText(String.valueOf(board.getBudget()));
+        moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
+        moneyLabel.setVerticalTextPosition(JLabel.CENTER);
+
+        menub.add(moneyLabel);
         c.add(board);
         c.revalidate();
         c.repaint();
@@ -239,7 +248,6 @@ public class ThemeParkGUI extends JFrame{
 
 
     }
-
 
 
 }

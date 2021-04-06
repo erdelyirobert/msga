@@ -124,6 +124,14 @@ public class MainMenu extends JFrame{
         imageLabel.setVisible(true);
         Menu.add(imageLabel);
 
+        try {
+            img = ImageIO.read(new File("data\\images\\theme_park.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ImageIcon icon = new ImageIcon(img);
+        Menu.setIconImage(icon.getImage());
+
         //Menu pack for image
         Menu.pack();
 

@@ -6,18 +6,14 @@ import ThemePark.EGeneralEquipment;
 import ThemePark.GeneralEquipment;
 import gui.ThemeParkGUI;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
+;
 
 
 /**
@@ -29,7 +25,6 @@ public class TPBoard extends JPanel{
     ArrayList<Building> buildings = new ArrayList<Building>();
     Image img;
     private Board board;
-
 
     public TPBoard(int x, int y) throws IOException {
         boardPanel = new JPanel();
@@ -54,6 +49,7 @@ public class TPBoard extends JPanel{
                         System.out.println("UT EPULT");
                         System.out.println(x + "," + y);//these co-ords are relative to the component
                         buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, 1, 1));
+
 
                     }
 
@@ -146,6 +142,8 @@ public class TPBoard extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+
+/*
         Enum e = buildings.get(buildings.size() - 1).getType();
         int x = buildings.get(buildings.size() - 1).getLocation_X();
         int y = buildings.get(buildings.size() - 1).getLocation_Y();
@@ -160,51 +158,9 @@ public class TPBoard extends JPanel{
         }
 
         g.drawImage(img, x, y, a, b, this);
+        */
+
 
     }
-
-    /*public class clickListener extends JPanel implements MouseListener {
-
-        private int x;
-        private int y;
-
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (ThemeParkGUI.selected_game.equals("road")) {
-                x = e.getX();
-                y = e.getY();
-                System.out.println("azert irok");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-            }
-        }
-
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            if (ThemeParkGUI.selected_game.equals("road")) {
-                x = e.getX();
-                y = e.getY();
-                System.out.println("azert irok");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-            }
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
-    }*/
-
 
 }

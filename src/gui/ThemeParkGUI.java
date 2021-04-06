@@ -37,7 +37,7 @@ public class ThemeParkGUI {
         board = new TPBoard(20, 20);
         frame.getContentPane().add(board.getBoardPanel(), BorderLayout.CENTER);
         frame.setResizable(false);
-
+        //frame.add(board);
 
         /**
          * Menu bar
@@ -118,7 +118,14 @@ public class ThemeParkGUI {
         * This label display the money of the player
         TODO  moneyLabel.setText("Money: " + player.getMoney());
          */
-        JLabel moneyLabel = new JLabel(" Money: ");
+        JLabel moneyLabel = new JLabel();
+       // moneyLabel.setIcon(UIManager.getIcon("OptionPane.errorIcon"));
+        ImageIcon imageIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        moneyLabel.setIcon(imageIcon);
+        moneyLabel.setText("Money: ");
+        moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
+        moneyLabel.setVerticalTextPosition(JLabel.CENTER);
+
         menub.add(moneyLabel);
 
         this.frame.setJMenuBar(menub);

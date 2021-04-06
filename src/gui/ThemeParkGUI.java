@@ -23,6 +23,7 @@ public class ThemeParkGUI extends JFrame{
     public Container c = getContentPane();
     public int HEIGHT = 800;
     public int WIDTH = 600;
+    JLabel moneyLabel = new JLabel();
 
     /**
      * Instantiates a new Theme park gui.
@@ -112,7 +113,7 @@ public class ThemeParkGUI extends JFrame{
         * This label display the money of the player
         TODO  moneyLabel.setText("Money: " + player.getMoney());
          */
-        JLabel moneyLabel = new JLabel();
+
 
         ImageIcon imageIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         moneyLabel.setIcon(imageIcon);
@@ -162,6 +163,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.WHEEL;
+
             }
         });
         trainMenuItem.addActionListener(new ActionListener() {
@@ -169,6 +171,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.TRAIN;
+                updateMoneyLabel();
             }
         });
         rollerCoasterMenuItem.addActionListener(new ActionListener() {
@@ -176,6 +179,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.ROLLERCOASTER;
+                updateMoneyLabel();
             }
         });
         waterParkMenuItem.addActionListener(new ActionListener() {
@@ -183,6 +187,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.WATERPARK;
+                updateMoneyLabel();
             }
         });
         slideMenuItem.addActionListener(new ActionListener() {
@@ -190,6 +195,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.SLIDE;
+                updateMoneyLabel();
             }
         });
         /**
@@ -202,6 +208,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_game = EGames.RESTAURANT;
+                updateMoneyLabel();
             }
         });
         bushMenuItem.addActionListener(new ActionListener() {
@@ -209,6 +216,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.BUSH;
+                updateMoneyLabel();
             }
         });
         treeMenuItem.addActionListener(new ActionListener() {
@@ -216,6 +224,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.TREE;
+                updateMoneyLabel();
             }
         });
 
@@ -234,6 +243,7 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.BIN;
+                updateMoneyLabel();
             }
         });
 
@@ -244,10 +254,15 @@ public class ThemeParkGUI extends JFrame{
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
                 selected_game = EGames.NOTHING;
+                updateMoneyLabel();
             }
         });
 
 
+    }
+
+    public void updateMoneyLabel() {
+        moneyLabel.setText(String.valueOf(board.getBudget()));
     }
 
 

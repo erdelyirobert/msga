@@ -30,12 +30,6 @@ public class ThemeParkGUI extends JFrame{
     public ThemeParkGUI(String title) throws IOException {
         super(title);
 
-/*
-        board = new TPBoard();
-        c.add(board);
-        c.revalidate();
-        c.repaint();
-*/
 
 
         /**

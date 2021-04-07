@@ -54,11 +54,11 @@ public class ThemeParkGUI extends JFrame{
 
         ImageIcon coinIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         JMenu buildGame = new JMenu("Game");
-        JMenuItem wheelMenuItem = new JMenuItem("10 | Wheel",coinIcon);
-        JMenuItem trainMenuItem = new JMenuItem("20 | Train",coinIcon);
-        JMenuItem rollerCoasterMenuItem = new JMenuItem("30 | Roller Coaster",coinIcon);
-        JMenuItem waterParkMenuItem = new JMenuItem("40 | Water Park",coinIcon);
-        JMenuItem slideMenuItem = new JMenuItem("50 | Slide",coinIcon);
+        JMenuItem wheelMenuItem = new JMenuItem("1500 | Wheel",coinIcon);
+        JMenuItem trainMenuItem = new JMenuItem("  800 | Train",coinIcon);
+        JMenuItem rollerCoasterMenuItem = new JMenuItem("1000 | Roller Coaster",coinIcon);
+        JMenuItem waterParkMenuItem = new JMenuItem("1000 | Water Park",coinIcon);
+        JMenuItem slideMenuItem = new JMenuItem("  800 | Slide",coinIcon);
 
 
         menub.add(buildGame);
@@ -80,11 +80,11 @@ public class ThemeParkGUI extends JFrame{
 
 
         JMenu buildGeneralEquipment = new JMenu("General Equipment");
-        JMenuItem restaurantMenuItem = new JMenuItem("100 | Restaurant", coinIcon);
-        JMenuItem treeMenuItem = new JMenuItem("10 | Tree", coinIcon);
-        JMenuItem bushMenuItem = new JMenuItem("10 | Bush", coinIcon);
-        JMenuItem roadMenuItem = new JMenuItem("10 | Road", coinIcon);
-        JMenuItem trashBinMenuItem = new JMenuItem("10 | Bin",coinIcon);
+        JMenuItem restaurantMenuItem = new JMenuItem("600 | Restaurant", coinIcon);
+        JMenuItem treeMenuItem = new JMenuItem("  10 | Tree", coinIcon);
+        JMenuItem bushMenuItem = new JMenuItem("  10 | Bush", coinIcon);
+        JMenuItem roadMenuItem = new JMenuItem("  10 | Road", coinIcon);
+        JMenuItem trashBinMenuItem = new JMenuItem("  10 | Bin",coinIcon);
 
 
         menub.add(buildGeneralEquipment);

@@ -40,6 +40,8 @@ public class TPBoard extends JPanel implements MouseListener {
     ArrayList<Integer> imgX = new ArrayList<Integer>();
     ArrayList<Integer> imgY = new ArrayList<Integer>();
     ArrayList<String> buildingsImages = new ArrayList<String>();
+    ArrayList<Integer> buildingsSizesA = new ArrayList<Integer>();
+    ArrayList<Integer> buildingsSizesB = new ArrayList<Integer>();
     private boolean isGameOver = false;
     private final int WIDTH = 600; //width of the park
     private final int HEIGHT = 600; //height of the park
@@ -93,28 +95,25 @@ public class TPBoard extends JPanel implements MouseListener {
 
         //g.drawImage(img, x, y, a, b, this);
 
-        for (int i = 1; i < roadX.size(); i++) {
+        /*for (int i = 1; i < roadX.size(); i++) {
             g.setColor(Color.GRAY);
             g.fillRect(roadX.get(i), roadY.get(i), a, b);
-        }
+        }*/
 
         for (int i = 0; i < imgX.size(); i++) {
 
             try {
                 img = ImageIO.read(new File("data\\images\\"+ buildingsImages.get(i) +".png"));
                 Graphics2D g3d = (Graphics2D) g;
-                g3d.drawImage(img, imgX.get(i), imgY.get(i),segmentSize*11,segmentSize*5, null);
-                //System.out.println(buildingsImages.get(i));
+                g3d.drawImage(img, imgX.get(i), imgY.get(i),buildingsSizesA.get(i),buildingsSizesB.get(i), null);
+
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();
             }
-
-
-
+            System.out.println(buildingsSizesA.get(i));
+            System.out.println(buildingsSizesB.get(i));
         }
-
-
 
         System.out.println("sikerült belépnem a paint osztalyba");
     }
@@ -129,45 +128,51 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 x = e.getX();
                 y = e.getY();
-                spaceEmpty = true;
 
-                for (int i = 0; i < roadX.size(); i++) {
-                    if (roadX.get(i) == x && roadY.get(i) == y) {
-                        spaceEmpty = false;
-                        System.out.println("soz bro");
-                    }
-                }
+                //roadX.add(x - (x % segmentSize));
+                //roadY.add(y - (y % segmentSize));
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+                //spaceEmpty = true;
 
-                if (spaceEmpty) {
-                    budget = budget - 10;
-                    a = segmentSize;
-                    b = segmentSize;
-                    inConstruction = false;
-                    constructionTime = 0;
+                budget = budget - 10;
+                a = segmentSize;
+                b = segmentSize;
+                inConstruction = false;
+                constructionTime = 0;
+                type = "ROAD";
+                buildingsImages.add("ROAD");
 
-                    roadX.add(x - (x % segmentSize));
-                    roadY.add(y - (y % segmentSize));
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
+                //updateMoneyLabel();
 
-                    //updateMoneyLabel();
+                System.out.println("UT EPULT");System.out.println(x + "," + y);//these co-ords are relative to the component
+                //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
+                repaint();
 
-                    System.out.println("UT EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
-                    //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
-                    repaint();
-                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 10;
+                a = segmentSize;
+                b = segmentSize;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "BUSH";
                 buildingsImages.add("BUSH");
-                budget -= 10;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
+
                 System.out.println("BOKOR EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new GeneralEquipment(EGeneralEquipment.BUSH, true, 1, 1, x, y, 1, 1));
+                buildings.add(new GeneralEquipment(EGeneralEquipment.BUSH, true, 1, 1, x, y, segmentSize, segmentSize));
 
 
 
@@ -177,11 +182,20 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 10;
+                a = segmentSize;
+                b = segmentSize;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "BIN";
                 buildingsImages.add("BIN");
-                budget -= 10;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
+
                 System.out.println("KUKA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
 
@@ -192,11 +206,20 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 10;
+                a = segmentSize*2;
+                b = segmentSize*2;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "TREE";
                 buildingsImages.add("TREE");
-                budget -= 10;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
+
 
                 System.out.println("FA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -209,11 +232,19 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROLLERCOASTER)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 1000;
+                a = segmentSize*6;
+                b = segmentSize*4;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "rollercoaster";
                 buildingsImages.add("rollercoaster");
-                budget -= 30;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("RC EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -226,11 +257,19 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 800;
+                a = segmentSize*4;
+                b = segmentSize*4;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "TRAIN";
                 buildingsImages.add("TRAIN");
-                budget -= 20;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("TRAIN EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -244,11 +283,19 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 1000;
+                a = segmentSize*6;
+                b = segmentSize*4;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "WATERPARK";
                 buildingsImages.add("WATERPARK");
-                budget -= 40;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("WP EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -261,11 +308,19 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 1500;
+                a = segmentSize*6;
+                b = segmentSize*6;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "WHEEL";
                 buildingsImages.add("WHEEL");
-                budget -= 10;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("WHEEL EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -277,11 +332,19 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 800;
+                a = segmentSize*4;
+                b = segmentSize*4;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "SLIDE";
                 buildingsImages.add("SLIDE");
-                budget -= 50;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("SLIDE EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -293,16 +356,22 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
                 x = e.getX();
                 y = e.getY();
-                imgX.add(x);
-                imgY.add(y);
+
+                imgX.add(x - (x % segmentSize));
+                imgY.add(y - (y % segmentSize));
+
+                budget = budget - 600;
+                a = segmentSize*3;
+                b = segmentSize*2;
+                inConstruction = false;
+                constructionTime = 0;
                 type = "RESTAURANT";
                 buildingsImages.add("RESTAURANT");
-                budget -= 100;
+                buildingsSizesA.add(a);
+                buildingsSizesB.add(b);
 
                 System.out.println("RESTAURANT EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-
-
 
                 repaint();
             }

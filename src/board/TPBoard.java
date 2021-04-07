@@ -164,6 +164,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "BUSH";
                 buildingsImages.add("BUSH");
+                budget -= 10;
                 System.out.println("BOKOR EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
                 buildings.add(new GeneralEquipment(EGeneralEquipment.BUSH, true, 1, 1, x, y, 1, 1));
@@ -180,7 +181,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "BIN";
                 buildingsImages.add("BIN");
-
+                budget -= 10;
                 System.out.println("KUKA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
 
@@ -195,7 +196,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "TREE";
                 buildingsImages.add("TREE");
-
+                budget -= 10;
 
                 System.out.println("FA EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -212,6 +213,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "rollercoaster";
                 buildingsImages.add("rollercoaster");
+                budget -= 30;
 
                 System.out.println("RC EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -228,6 +230,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "TRAIN";
                 buildingsImages.add("TRAIN");
+                budget -= 20;
 
                 System.out.println("TRAIN EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -245,6 +248,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "WATERPARK";
                 buildingsImages.add("WATERPARK");
+                budget -= 40;
 
                 System.out.println("WP EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -261,6 +265,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "WHEEL";
                 buildingsImages.add("WHEEL");
+                budget -= 10;
 
                 System.out.println("WHEEL EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -276,6 +281,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "SLIDE";
                 buildingsImages.add("SLIDE");
+                budget -= 50;
 
                 System.out.println("SLIDE EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
@@ -291,6 +297,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 imgY.add(y);
                 type = "RESTAURANT";
                 buildingsImages.add("RESTAURANT");
+                budget -= 100;
 
                 System.out.println("RESTAURANT EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component

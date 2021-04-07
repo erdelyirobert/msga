@@ -52,13 +52,13 @@ public class ThemeParkGUI extends JFrame{
          * (part of Game)
          */
 
-
+        ImageIcon coinIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
         JMenu buildGame = new JMenu("Game");
-        JMenuItem wheelMenuItem = new JMenuItem("Wheel");
-        JMenuItem trainMenuItem = new JMenuItem("Train");
-        JMenuItem rollerCoasterMenuItem = new JMenuItem("Roller Coaster");
-        JMenuItem waterParkMenuItem = new JMenuItem("Water Park");
-        JMenuItem slideMenuItem = new JMenuItem("Slide");
+        JMenuItem wheelMenuItem = new JMenuItem("10 | Wheel",coinIcon);
+        JMenuItem trainMenuItem = new JMenuItem("20 | Train",coinIcon);
+        JMenuItem rollerCoasterMenuItem = new JMenuItem("30 | Roller Coaster",coinIcon);
+        JMenuItem waterParkMenuItem = new JMenuItem("40 | Water Park",coinIcon);
+        JMenuItem slideMenuItem = new JMenuItem("50 | Slide",coinIcon);
 
 
         menub.add(buildGame);
@@ -80,11 +80,11 @@ public class ThemeParkGUI extends JFrame{
 
 
         JMenu buildGeneralEquipment = new JMenu("General Equipment");
-        JMenuItem restaurantMenuItem = new JMenuItem("Restaurant");
-        JMenuItem treeMenuItem = new JMenuItem("Tree");
-        JMenuItem bushMenuItem = new JMenuItem("Bush");
-        JMenuItem roadMenuItem = new JMenuItem("Road 10 PÉZ");
-        JMenuItem trashBinMenuItem = new JMenuItem("Bin");
+        JMenuItem restaurantMenuItem = new JMenuItem("100 | Restaurant", coinIcon);
+        JMenuItem treeMenuItem = new JMenuItem("10 | Tree", coinIcon);
+        JMenuItem bushMenuItem = new JMenuItem("10 | Bush", coinIcon);
+        JMenuItem roadMenuItem = new JMenuItem("10 | Road", coinIcon);
+        JMenuItem trashBinMenuItem = new JMenuItem("10 | Bin",coinIcon);
 
 
         menub.add(buildGeneralEquipment);
@@ -110,8 +110,8 @@ public class ThemeParkGUI extends JFrame{
          */
 
 
-        ImageIcon imageIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
-        moneyLabel.setIcon(imageIcon);
+
+        moneyLabel.setIcon(coinIcon);
 
         moneyLabel.setFont(new Font("Serif", Font.BOLD, 16));
         moneyLabel.setText(String.valueOf(board.getBudget()));

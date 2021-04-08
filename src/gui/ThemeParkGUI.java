@@ -114,7 +114,6 @@ public class ThemeParkGUI extends JFrame{
         moneyLabel.setIcon(coinIcon);
 
         moneyLabel.setFont(new Font("Serif", Font.BOLD, 16));
-        //moneyLabel.setText(String.valueOf(board.getBudget()));
         moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
         moneyLabel.setVerticalTextPosition(JLabel.CENTER);
 
@@ -125,7 +124,7 @@ public class ThemeParkGUI extends JFrame{
         board.requestFocusInWindow();
 
         Timer timer;
-        timer = new Timer(1, new ActionListener() {
+        timer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -133,8 +132,9 @@ public class ThemeParkGUI extends JFrame{
             }
         });
         timer.start();
-
         menub.add(moneyLabel);
+
+
         /*
          * ActionListeners
          * Upon clicking on the "Save" option the game will save
@@ -179,7 +179,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.TRAIN;
-                updateMoneyLabel();
             }
         });
         rollerCoasterMenuItem.addActionListener(new ActionListener() {
@@ -187,7 +186,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.ROLLERCOASTER;
-                updateMoneyLabel();
             }
         });
         waterParkMenuItem.addActionListener(new ActionListener() {
@@ -195,7 +193,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.WATERPARK;
-                updateMoneyLabel();
             }
         });
         slideMenuItem.addActionListener(new ActionListener() {
@@ -203,7 +200,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.SLIDE;
-                updateMoneyLabel();
             }
         });
         /**
@@ -216,7 +212,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.RESTAURANT;
-                updateMoneyLabel();
             }
         });
         bushMenuItem.addActionListener(new ActionListener() {
@@ -224,7 +219,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.BUSH;
-                updateMoneyLabel();
             }
         });
         treeMenuItem.addActionListener(new ActionListener() {
@@ -232,7 +226,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.TREE;
-                updateMoneyLabel();
             }
         });
 
@@ -242,7 +235,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.ROAD;
-                updateMoneyLabel();
             }
         });
 
@@ -251,7 +243,6 @@ public class ThemeParkGUI extends JFrame{
             public void actionPerformed(ActionEvent ae) {
                 stopBuild.setEnabled(true);
                 selected_ge = EGeneralEquipment.BIN;
-                updateMoneyLabel();
             }
         });
 
@@ -262,16 +253,7 @@ public class ThemeParkGUI extends JFrame{
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
                 selected_ge = EGeneralEquipment .NOTHING;
-                updateMoneyLabel();
             }
         });
-
-
     }
-
-    public void updateMoneyLabel() {
-        moneyLabel.setText(String.valueOf(board.getBudget()));
-    }
-
-
 }

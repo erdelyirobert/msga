@@ -27,12 +27,11 @@ public class TPBoard extends JPanel implements MouseListener {
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
 
-    ArrayList<Building> buildings = new ArrayList<Building>();
+    public ArrayList<Building> buildings = new ArrayList<Building>();
     private boolean isGameOver = false;
     private final int WIDTH = 600; //width of the park
     private final int HEIGHT = 600; //height of the park
     private int segmentSize = 20; //size of one grid
-
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -58,6 +57,7 @@ public class TPBoard extends JPanel implements MouseListener {
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        budget = 10000;
 
         /**
          * Starting road

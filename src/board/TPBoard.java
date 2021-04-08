@@ -31,7 +31,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean inConstruction;
     public int buildPrice;
     public int constructionTime;
-    public boolean spaceEmpty;
+    public boolean canBuild;
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     ArrayList<Building> buildings = new ArrayList<Building>();
@@ -64,7 +64,6 @@ public class TPBoard extends JPanel implements MouseListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         paint(g);
-
     }
 
     @Override
@@ -73,7 +72,6 @@ public class TPBoard extends JPanel implements MouseListener {
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-
         System.out.println(type);
 
         /**
@@ -81,8 +79,18 @@ public class TPBoard extends JPanel implements MouseListener {
          */
         roadX.add(60);
         roadY.add(80);
-        g.setColor(Color.GRAY);
-        g.fillRect(60, 80, segmentSize, segmentSize);
+
+        /*g.setColor(Color.GRAY);
+        g.fillRect(60, 80, segmentSize, segmentSize);*/
+
+        try {
+            img = ImageIO.read(new File("data\\images\\ROAD.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Graphics2D g1d = (Graphics2D) g;
+        g1d.drawImage(img, 60, 80,segmentSize,segmentSize, null);
+
 
         /*Entrance*/
         try {
@@ -93,12 +101,6 @@ public class TPBoard extends JPanel implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(img, segmentSize, 0,segmentSize*5,segmentSize*6, null);
 
-        //g.drawImage(img, x, y, a, b, this);
-
-        /*for (int i = 1; i < roadX.size(); i++) {
-            g.setColor(Color.GRAY);
-            g.fillRect(roadX.get(i), roadY.get(i), a, b);
-        }*/
 
         for (int i = 0; i < imgX.size(); i++) {
 
@@ -111,11 +113,11 @@ public class TPBoard extends JPanel implements MouseListener {
                 System.out.println("error");
                 f.printStackTrace();
             }
-            System.out.println(buildingsSizesA.get(i));
-            System.out.println(buildingsSizesB.get(i));
+            //System.out.println(buildingsSizesA.get(i));
+            //System.out.println(buildingsSizesB.get(i));
         }
 
-        System.out.println("sikerült belépnem a paint osztalyba");
+        //System.out.println("sikerült belépnem a paint osztalyba");
     }
 
     @Override
@@ -125,31 +127,58 @@ public class TPBoard extends JPanel implements MouseListener {
          */
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
-
                 x = e.getX();
                 y = e.getY();
 
-                //roadX.add(x - (x % segmentSize));
-                //roadY.add(y - (y % segmentSize));
-                imgX.add(x - (x % segmentSize));
-                imgY.add(y - (y % segmentSize));
-                //spaceEmpty = true;
+                System.out.println(x + " " + y);
+                //System.out.println( canRoad);
 
-                budget = budget - 10;
-                a = segmentSize;
-                b = segmentSize;
-                inConstruction = false;
-                constructionTime = 0;
-                type = "ROAD";
-                buildingsImages.add("ROAD");
+                /*for(int i = 0; i < roadX.size(); i++){
+                    System.out.println(roadX.get(i));
+                }*/
+                canBuild = false;
+                int i = 0;
+                while(i < roadX.size() && !canBuild){
+                    if((x + segmentSize) - ((x + segmentSize) % segmentSize) == roadX.get(i)
+                            && (y - (y % segmentSize)) == roadY.get(i)
+                    || x - (x % segmentSize) == roadX.get(i)
+                            && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == roadY.get(i)
+                    ||(x - segmentSize) - ((x - segmentSize) % segmentSize) == roadX.get(i)
+                            && (y - (y % segmentSize)) == roadY.get(i)
+                    ||x - (x % segmentSize) == roadX.get(i)
+                            && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == roadY.get(i)){
+                        canBuild = true;
+                    }
+                    //System.out.println( canRoad);
+                    i++;
+                }
 
-                buildingsSizesA.add(a);
-                buildingsSizesB.add(b);
-                //updateMoneyLabel();
+                if(canBuild){
+                    budget = budget - 10;
+                    a = segmentSize;
+                    b = segmentSize;
+                    inConstruction = false;
+                    constructionTime = 0;
+                    type = "ROAD";
 
-                System.out.println("UT EPULT");System.out.println(x + "," + y);//these co-ords are relative to the component
-                //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
-                repaint();
+                    buildingsImages.add("ROAD");
+
+                    buildingsSizesA.add(a);
+                    buildingsSizesB.add(b);
+
+                    imgX.add(x - (x % segmentSize));
+                    imgY.add(y - (y % segmentSize));
+
+                    roadX.add(x - (x % segmentSize));
+                    roadY.add(y - (y % segmentSize));
+                    //updateMoneyLabel();
+
+                    System.out.println("UT EPULT");System.out.println(x + "," + y);//these co-ords are relative to the component
+                    //buildings.add(new GeneralEquipment(EGeneralEquipment.ROAD, false, 0, 1, x, y, segmentSize, segmentSize));
+                    //System.out.println(x - (x % segmentSize) + " " + (y - (y % segmentSize)));
+                    repaint();
+                }
+
 
             }
 
@@ -166,7 +195,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 inConstruction = false;
                 constructionTime = 0;
                 type = "BUSH";
+
                 buildingsImages.add("BUSH");
+
                 buildingsSizesA.add(a);
                 buildingsSizesB.add(b);
 
@@ -183,24 +214,46 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                imgX.add(x - (x % segmentSize));
-                imgY.add(y - (y % segmentSize));
+                canBuild = false;
+                int i = 0;
+                while(i < roadX.size() && !canBuild){
+                    if((x + segmentSize) - ((x + segmentSize) % segmentSize) == roadX.get(i)
+                            && (y - (y % segmentSize)) == roadY.get(i)
+                            || x - (x % segmentSize) == roadX.get(i)
+                            && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == roadY.get(i)
+                            ||(x - segmentSize) - ((x - segmentSize) % segmentSize) == roadX.get(i)
+                            && (y - (y % segmentSize)) == roadY.get(i)
+                            ||x - (x % segmentSize) == roadX.get(i)
+                            && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == roadY.get(i)){
+                        canBuild = true;
+                    }
+                    //System.out.println( canRoad);
+                    i++;
+                }
 
-                budget = budget - 10;
-                a = segmentSize;
-                b = segmentSize;
-                inConstruction = false;
-                constructionTime = 0;
-                type = "BIN";
-                buildingsImages.add("BIN");
-                buildingsSizesA.add(a);
-                buildingsSizesB.add(b);
+                if(canBuild){
+                    imgX.add(x - (x % segmentSize));
+                    imgY.add(y - (y % segmentSize));
 
-                System.out.println("KUKA EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
+                    budget = budget - 10;
+                    a = segmentSize;
+                    b = segmentSize;
+                    inConstruction = false;
+                    constructionTime = 0;
+                    type = "BIN";
+
+                    buildingsImages.add("BIN");
+
+                    buildingsSizesA.add(a);
+                    buildingsSizesB.add(b);
+
+                    System.out.println("KUKA EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
 
 
-                repaint();
+                    repaint();
+                }
+
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
@@ -273,9 +326,6 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 System.out.println("TRAIN EPULT");
                 System.out.println(x + "," + y);//these co-ords are relative to the component
-
-
-
 
                 repaint();
             }

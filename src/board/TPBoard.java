@@ -27,6 +27,7 @@ public class TPBoard extends JPanel implements MouseListener {
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
 
+    JFrame frame = new JFrame();
     public ArrayList<Building> buildings = new ArrayList<Building>();
     private boolean isGameOver = false;
     private final int WIDTH = 600; //width of the park
@@ -138,6 +139,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Building("ROAD",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     //System.out.println(x - (x % segmentSize) + " " + (y - (y % segmentSize)));
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD" );
                 }
             }
 
@@ -152,6 +155,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
 
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH" );
                 }
             }
 
@@ -184,6 +189,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Building("BIN",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for BIN" );
                 }
 
             }
@@ -197,6 +204,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("TREE",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize*2, segmentSize*2));
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for TREE" );
                 }
             }
         }
@@ -212,6 +221,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("rollercoaster",0,1000,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER" );
                 }
             }
 
@@ -224,6 +235,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("TRAIN",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN" );
                 }
             }
 
@@ -236,6 +249,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("WATERPARK",0,1000 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
                     repaint();
+                }else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK" );
                 }
             }
 
@@ -249,6 +264,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Game("WHEEL",0,1500 ,x - (x % segmentSize) , y - (y % segmentSize), segmentSize*6, segmentSize*6));
 
                     repaint();
+                } else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for WHEEL" );
                 }
             }
 
@@ -262,6 +279,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Game("SLIDE",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
                     repaint();
                 }
+                else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE" );
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
@@ -274,6 +294,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Restaurant("RESTAURANT",0,600 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*3, segmentSize*2));
 
                     repaint();
+                }
+                else{
+                    JOptionPane.showMessageDialog(frame, "There's no enough money for RESTAURANT" );
                 }
             }
         }

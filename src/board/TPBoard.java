@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * The type Tp board.
  */
 public class TPBoard extends JPanel implements MouseListener {
-    public int budget = 10000;
+    public int budget;
     /**
      * Building informations
      */
@@ -32,6 +32,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private final int WIDTH = 600; //width of the park
     private final int HEIGHT = 600; //height of the park
     private int segmentSize = 20; //size of one grid
+    private int buildPrice_;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -132,14 +133,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-                if(canBuild){
+                if(canBuild && (budget - 10 > 0)){
                     System.out.println("UT EPULT");System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     //System.out.println(x - (x % segmentSize) + " " + (y - (y % segmentSize)));
                     repaint();
                 }
-
-
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
@@ -147,10 +146,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 y = e.getY();
 
                 System.out.println("BOKOR EPULT");
-                buildings.add(new Building("BUSH",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-                System.out.println(x + "," + y);//these co-ords are relative to the component
 
-                repaint();
+                if(budget - 10 > 0){
+                    buildings.add(new Building("BUSH",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
@@ -176,7 +178,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-                if(canBuild){
+                if(canBuild && (budget - 10 > 0)){
                     System.out.println("KUKA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("BIN",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
@@ -190,10 +192,12 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("FA EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Building("TREE",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize*2, segmentSize*2));
-                repaint();
+                if(budget - 10 > 0){
+                    System.out.println("FA EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Building("TREE",0,10,x - (x % segmentSize), y - (y % segmentSize), segmentSize*2, segmentSize*2));
+                    repaint();
+                }
             }
         }
 
@@ -203,66 +207,76 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("RC EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Game("rollercoaster",0,1000,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
-                repaint();
+                if(budget - 1000 > 0){
+                    System.out.println("RC EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Game("rollercoaster",0,1000,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("TRAIN EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Game("TRAIN",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
-                repaint();
+                if(budget - 800 > 0){
+                    System.out.println("TRAIN EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Game("TRAIN",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("WP EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Game("WATERPARK",0,1000 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
-                repaint();
+                if(budget - 1000 > 0){
+                    System.out.println("WP EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Game("WATERPARK",0,1000 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*6, segmentSize*4));
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("WHEEL EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Game("WHEEL",0,1500 ,x - (x % segmentSize) , y - (y % segmentSize), segmentSize*6, segmentSize*6));
+                if(budget - 1500 > 0){
+                    System.out.println("WHEEL EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Game("WHEEL",0,1500 ,x - (x % segmentSize) , y - (y % segmentSize), segmentSize*6, segmentSize*6));
 
-
-                repaint();
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("SLIDE EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Game("SLIDE",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
-                repaint();
+                if(budget - 800 >0){
+                    System.out.println("SLIDE EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Game("SLIDE",0,800 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*4, segmentSize*4));
+                    repaint();
+                }
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("RESTAURANT EPULT");
-                System.out.println(x + "," + y);//these co-ords are relative to the component
-                buildings.add(new Restaurant("RESTAURANT",0,600 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*3, segmentSize*2));
+                if(budget - 600 > 0){
+                    System.out.println("RESTAURANT EPULT");
+                    System.out.println(x + "," + y);//these co-ords are relative to the component
+                    buildings.add(new Restaurant("RESTAURANT",0,600 ,x - (x % segmentSize), y - (y % segmentSize), segmentSize*3, segmentSize*2));
 
-                repaint();
+                    repaint();
+                }
             }
         }
-
     }
 
     @Override

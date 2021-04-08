@@ -1,5 +1,7 @@
 package ThemePark;
 
+import java.util.ArrayList;
+
 /**
  * The type Building.
  */
@@ -8,137 +10,90 @@ public class Building {
      * The Type.
      */
     public Enum type;
-    private boolean inConstruction;
+    private String buildingsImages;
     private int constructionTime;
     private int buildPrice;
-    private int Location_X;
-    private int Location_Y;
-    private int A;
-    private int B;
+    private int location_X;
+    private int location_Y;
+    private int buildingsSizesA;
+    private int buildingsSizesB;
 
 
-    /**
-     * Instantiates a new Building.
-     *
-     * @param type             the type
-     * @param inConstruction   the in construction
-     * @param constructionTime the construction time
-     * @param buildPrice       the build price
-     * @param location_X       the location x
-     * @param location_Y       the location y
-     * @param a                the range a
-     * @param b                the range b
-     */
-    public Building(Enum type, boolean inConstruction, int constructionTime, int buildPrice, int location_X, int location_Y, int a, int b) {
-        this.inConstruction = inConstruction;
+
+    public Building(String buildingsImages,  int constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
+        this.buildingsImages = buildingsImages;
         this.constructionTime = constructionTime;
         this.buildPrice = buildPrice;
-        Location_X = location_X;
-        Location_Y = location_Y;
-        A = a;
-        B = b;
-        this.type = type;
-
+        this.location_X = location_X;
+        this.location_Y = location_Y;
+        this.buildingsSizesA = buildingsSizesA;
+        this.buildingsSizesB = buildingsSizesB;
     }
 
-    /**
-     * Change mood.
-     *
-     * @param mood the mood
-     */
-    public void changeMood(int mood) {
-        //mood = mood +- n;
+    public Enum getType() {
+        return type;
     }
-    /*
-    public boolean isEmptyArea(){
-        //TODO return;
 
-    }
-    */
-    /*public boolean isWaiting(Game g){
-      return g.getWaitingTimer();
-    }*/
-
-    /**
-     * Start.
-     */
-    public void start() {
-
+    public String getBuildingsImages() {
+        return buildingsImages;
     }
 
 
-    //------------------Getter és setter------------------------///
 
-
-    /**
-     * Is in construction boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isInConstruction() {
-        return inConstruction;
-    }
-
-    /**
-     * Gets construction time.
-     *
-     * @return the construction time
-     */
     public int getConstructionTime() {
         return constructionTime;
     }
 
-    /**
-     * Gets build price.
-     *
-     * @return the build price
-     */
     public int getBuildPrice() {
         return buildPrice;
     }
 
-    /**
-     * Gets location x.
-     *
-     * @return the location x
-     */
     public int getLocation_X() {
-        return Location_X;
+        return location_X;
     }
 
-    /**
-     * Gets location y.
-     *
-     * @return the location y
-     */
     public int getLocation_Y() {
-        return Location_Y;
+        return location_Y;
     }
 
-    /**
-     * Gets a.
-     *
-     * @return the a
-     */
-    public int getA() {
-        return A;
+    public int getBuildingsSizesA() {
+        return buildingsSizesA;
     }
 
-    /**
-     * Gets b.
-     *
-     * @return the b
-     */
-    public int getB() {
-        return B;
+    public int getBuildingsSizesB() {
+        return buildingsSizesB;
     }
 
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public Enum getType() {
-        return type;
+    public void setType(Enum type) {
+        this.type = type;
+    }
+
+    public void setBuildingsImages(String buildingsImages) {
+        this.buildingsImages = buildingsImages;
+    }
+
+
+    public void setConstructionTime(int constructionTime) {
+        this.constructionTime = constructionTime;
+    }
+
+    public void setBuildPrice(int buildPrice) {
+        this.buildPrice = buildPrice;
+    }
+
+    public void setLocation_X(int location_X) {
+        this.location_X = location_X;
+    }
+
+    public void setLocation_Y(int location_Y) {
+        this.location_Y = location_Y;
+    }
+
+    public void setBuildingsSizesA(int buildingsSizesA) {
+        this.buildingsSizesA = buildingsSizesA;
+    }
+
+    public void setBuildingsSizesB(int buildingsSizesB) {
+        this.buildingsSizesB = buildingsSizesB;
     }
 }

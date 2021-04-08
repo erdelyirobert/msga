@@ -114,20 +114,33 @@ public class ThemeParkGUI extends JFrame{
         moneyLabel.setIcon(coinIcon);
 
         moneyLabel.setFont(new Font("Serif", Font.BOLD, 16));
-        moneyLabel.setText(String.valueOf(board.getBudget()));
+        //moneyLabel.setText(String.valueOf(board.getBudget()));
         moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
         moneyLabel.setVerticalTextPosition(JLabel.CENTER);
 
-        menub.add(moneyLabel);
+
         c.add(board);
         c.revalidate();
         c.repaint();
         board.requestFocusInWindow();
 
+        Timer timer;
+        timer = new Timer(1, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                moneyLabel.setText("  Money: " + String.valueOf(board.getBudget()));
+            }
+        });
+        timer.start();
+
+        menub.add(moneyLabel);
         /*
          * ActionListeners
          * Upon clicking on the "Save" option the game will save
          */
+
+
         saveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -248,7 +261,7 @@ public class ThemeParkGUI extends JFrame{
                 stopBuild.setEnabled(false);
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
-                selected_ge = EGeneralEquipment.NOTHING;
+                selected_ge = EGeneralEquipment .NOTHING;
                 updateMoneyLabel();
             }
         });

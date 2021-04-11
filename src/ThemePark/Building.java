@@ -96,4 +96,17 @@ public class Building {
     public void setBuildingsSizesB(int buildingsSizesB) {
         this.buildingsSizesB = buildingsSizesB;
     }
+
+
+    /*  Terület kiszámitási logika
+    * Kiszámítja az adott területet
+    * x-hez hozzáadja az épület A méretét (szélességét)
+    * y-hoz hozzáadja az épület B méretét (magasságát)
+     */
+    public int sumXA(){
+      return  location_X+buildingsSizesA;
+    }
+    public int sumYB(){
+        return  location_Y+buildingsSizesB;
+    }
 }

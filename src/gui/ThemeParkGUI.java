@@ -20,6 +20,7 @@ public class ThemeParkGUI extends JFrame{
     public int WIDTH = 600;
     JLabel moneyLabel = new JLabel();
 
+
     /**
      * Instantiates a new Theme park gui.
      *

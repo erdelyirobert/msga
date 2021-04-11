@@ -104,10 +104,6 @@ public class ThemeParkGUI extends JFrame{
         menub.add(stopBuild);
         setJMenuBar(menub);
 
-        JButton destroy = new JButton("Destroy game");
-        menub.add(destroy);
-        setJMenuBar(menub);
-
         board = new TPBoard();
 
         /*
@@ -258,16 +254,6 @@ public class ThemeParkGUI extends JFrame{
                 stopBuild.setEnabled(false);
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
-            }
-        });
-
-        destroy.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                destroyGame = true;
-                destroy.setEnabled(false);
-                selected_ge = EGeneralEquipment.NOTHING;
-
             }
         });
     }

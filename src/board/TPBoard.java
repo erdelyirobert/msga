@@ -106,26 +106,30 @@ public class TPBoard extends JPanel implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+
+        /**
+         * Game deletion
+         */
+        x = e.getX();
+        y = e.getY();
+
+        int j= 0;
+        canBuildOn = true;
+        while(j < buildings.size()){
+            if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
+                ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+                int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?", "Confirm", JOptionPane.YES_NO_OPTION);
+                if (reply == JOptionPane.YES_OPTION) {
+                    buildings.remove(j);
+                }
+            }
+            j++;
+        }
+        repaint();
+
         /*
             If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
          */
-        if(ThemeParkGUI.destroyGame){
-            x = e.getX();
-            y = e.getY();
-
-            int i = 0;
-            while(i < buildings.size()){
-                if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                    buildings.remove(i);
-                    System.out.println("törölve");
-                }
-                i++;
-            }
-            repaint();
-            ThemeParkGUI.destroyGame = false;
-
-
-        }
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
                 x = e.getX();

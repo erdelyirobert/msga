@@ -38,8 +38,6 @@ public class Building {
         return buildingsImages;
     }
 
-
-
     public int getConstructionTime() {
         return constructionTime;
     }

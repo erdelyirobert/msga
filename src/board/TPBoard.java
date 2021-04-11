@@ -135,12 +135,14 @@ public class TPBoard extends JPanel implements MouseListener {
                         }
                     }
                 }
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
 
                     }
+                    i++;
                 }
                 if (canBuild && budget - 10 >= 0 && canBuildOn) {
                     System.out.println("UT EPULT");
@@ -160,11 +162,14 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 System.out.println("BOKOR EPULT");
 
+
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
                 if (budget - 10 >= 0 && canBuildOn) {
                     buildings.add(new Building("BUSH", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
@@ -199,11 +204,13 @@ public class TPBoard extends JPanel implements MouseListener {
                         }
                     }
                 }
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
                 if (canBuild && (budget - 10 >= 0) && canBuildOn) {
                     System.out.println("KUKA EPULT");
@@ -219,24 +226,19 @@ public class TPBoard extends JPanel implements MouseListener {
 
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
-                canBuild = true;
                 x = e.getX();
                 y = e.getY();
 
-                for (int i = 0; i < buildings.size(); i++) {
-                    System.out.println("sumXA: " + buildings.get(i).sumXA() + " " + buildings.get(i).sumYB());
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
-                        canBuild = false;
-                    }
-                }
-
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
-                if (budget - 10 >= 0 && canBuild && canBuildOn) {
+                System.out.println(canBuildOn);
+                if (budget - 10 >= 0 && canBuildOn) {
                     System.out.println("FA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("TREE", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
@@ -253,11 +255,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
                 if (budget - 1000 >= 0 && canBuildOn) {
                     System.out.println("RC EPULT");
@@ -272,12 +276,13 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
                 x = e.getX();
                 y = e.getY();
-
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
 
                 if (budget - 800 >= 0 && canBuildOn) {
@@ -294,11 +299,14 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
+
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
                 if (budget - 1000 >= 0 && canBuildOn) {
                     System.out.println("WP EPULT");
@@ -314,11 +322,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
 
                 if (budget - 1500 >= 0 && canBuildOn) {
@@ -336,11 +346,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
 
                 if (budget - 800 >= 0 && canBuildOn) {
@@ -357,11 +369,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
+                int i= 0;
                 canBuildOn = true;
-                for (int i = 0; i < buildings.size(); i++) {
-                    if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
+                while(i < buildings.size()){
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
                     }
+                    i++;
                 }
 
                 if (budget - 600 >= 0 && canBuildOn) {

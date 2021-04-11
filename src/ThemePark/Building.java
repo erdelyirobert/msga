@@ -103,10 +103,8 @@ public class Building {
     * x-hez hozzáadja az épület A méretét (szélességét)
     * y-hoz hozzáadja az épület B méretét (magasságát)
      */
-    public int sumXA(){
-      return  location_X+buildingsSizesA;
-    }
+    public int sumXA() { return  (location_X - (location_X % 20)) +buildingsSizesA; }
     public int sumYB(){
-        return  location_Y+buildingsSizesB;
+        return  (location_Y - (location_Y % 20))+buildingsSizesB;
     }
 }

@@ -139,6 +139,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 for (int i = 0; i < buildings.size(); i++) {
                     if ((x - (x % segmentSize)) < x && x < (buildings.get(i).sumXA()) && (y - (y % segmentSize)) < y && y < (buildings.get(i).sumYB())) {
                         canBuildOn = false;
+
                     }
                 }
                 if (canBuild && budget - 10 >= 0 && canBuildOn) {

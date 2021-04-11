@@ -103,11 +103,29 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+
     @Override
     public void mousePressed(MouseEvent e) {
         /*
             If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
          */
+        if(ThemeParkGUI.destroyGame){
+            x = e.getX();
+            y = e.getY();
+
+            int i = 0;
+            while(i < buildings.size()){
+                if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
+                    buildings.remove(i);
+                    System.out.println("törölve");
+                }
+                i++;
+            }
+            repaint();
+            ThemeParkGUI.destroyGame = false;
+
+
+        }
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
                 x = e.getX();
@@ -184,9 +202,7 @@ public class TPBoard extends JPanel implements MouseListener {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
                 x = e.getX();
                 y = e.getY();
-
                 canBuild = false;
-
 
                 for (int i = 0; i < buildings.size(); ++i) {
                     if (!canBuild) {

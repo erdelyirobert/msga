@@ -118,7 +118,7 @@ public class TPBoard extends JPanel implements MouseListener {
         while(j < buildings.size()){
             if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
                 ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-                int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this?", "Confirm", JOptionPane.YES_NO_OPTION);
+                int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + buildings.get(j).getBuildingsImages() + " ?", "Confirm", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
                     buildings.remove(j);
                 }
@@ -286,7 +286,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0 && canBuildOn) {
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize)-3*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 4));
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
@@ -308,7 +308,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && canBuildOn) {
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-segmentSize, segmentSize * 4, segmentSize * 4));
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
@@ -331,7 +331,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0 && canBuildOn) {
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 4));
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
@@ -354,7 +354,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1500 >= 0 && canBuildOn) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 6, segmentSize * 6));
+                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 6));
 
                     repaint();
                 } else if (budget - 1500 < 0) {
@@ -378,7 +378,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && canBuildOn) {
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize)-segmentSize, y - (y % segmentSize)-segmentSize, segmentSize * 4, segmentSize * 4));
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");

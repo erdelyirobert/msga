@@ -6,10 +6,6 @@ import java.util.ArrayList;
  * The type Building.
  */
 public class Building {
-    /**
-     * The Type.
-     */
-    public Enum type;
     private String buildingsImages;
     private int constructionTime;
     private int buildPrice;
@@ -17,8 +13,6 @@ public class Building {
     private int location_Y;
     private int buildingsSizesA;
     private int buildingsSizesB;
-
-
 
     public Building(String buildingsImages,  int constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         this.buildingsImages = buildingsImages;
@@ -28,10 +22,6 @@ public class Building {
         this.location_Y = location_Y;
         this.buildingsSizesA = buildingsSizesA;
         this.buildingsSizesB = buildingsSizesB;
-    }
-
-    public Enum getType() {
-        return type;
     }
 
     public String getBuildingsImages() {
@@ -60,10 +50,6 @@ public class Building {
 
     public int getBuildingsSizesB() {
         return buildingsSizesB;
-    }
-
-    public void setType(Enum type) {
-        this.type = type;
     }
 
     public void setBuildingsImages(String buildingsImages) {
@@ -96,7 +82,7 @@ public class Building {
     }
 
 
-    /*  Terület kiszámitási logika
+    /**  Terület kiszámitási logika
     * Kiszámítja az adott területet
     * x-hez hozzáadja az épület A méretét (szélességét)
     * y-hoz hozzáadja az épület B méretét (magasságát)

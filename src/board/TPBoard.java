@@ -34,9 +34,7 @@ public class TPBoard extends JPanel implements MouseListener {
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     JFrame frame = new JFrame();
-    private boolean isGameOver = false;
     private int segmentSize = 20; //size of one grid
-    private int buildPrice_;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -67,8 +65,6 @@ public class TPBoard extends JPanel implements MouseListener {
         /**
          * Starting road
          */
-
-        /*Starter road*/
         try {
             img = ImageIO.read(new File("data\\images\\ROAD.png"));
         } catch (IOException e) {
@@ -79,7 +75,9 @@ public class TPBoard extends JPanel implements MouseListener {
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
 
-        /*Entrance*/
+        /**
+         * Entrance
+         */
         try {
             img = ImageIO.read(new File("data\\images\\entrance.png"));
         } catch (IOException e) {
@@ -88,9 +86,11 @@ public class TPBoard extends JPanel implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(img, segmentSize, 0, segmentSize * 5, segmentSize * 6, null);
 
-
+        /**
+         * Redraw images
+         * Manage budget
+         */
         for (int i = 0; i < buildings.size(); i++) {
-
             try {
                 img = ImageIO.read(new File("data\\images\\" + buildings.get(i).getBuildingsImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
@@ -103,7 +103,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-
+    /**
+     * Mouselistener for everything the user can do with mouse
+     * @param e
+     */
     @Override
     public void mousePressed(MouseEvent e) {
 
@@ -127,20 +130,21 @@ public class TPBoard extends JPanel implements MouseListener {
         }
         repaint();
 
-        /*
-            If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
+        /**
+         * If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
          */
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {  // If the selected GeneralEquipment is road
+                                                                            // builds road
                 x = e.getX();
                 y = e.getY();
 
                 System.out.println(x + " " + y);
                 canBuild = false;
 
-                /*
-                    Road can be built only near another road
-                */
+                /**
+                 * Road can build built only next to another road
+                 */
                 for (int i = 0; i < buildings.size(); ++i) {
                     if (!canBuild) {
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
@@ -157,16 +161,23 @@ public class TPBoard extends JPanel implements MouseListener {
                         }
                     }
                 }
-                int i= 0;
+
+                /**
+                 * Can't build road on each other
+                 */
+                int i = 0;
                 canBuildOn = true;
-                while(i < buildings.size()){
+                while (i < buildings.size()) {
                     if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
                         canBuildOn = false;
-
                     }
                     i++;
                 }
-                if (canBuild && budget - 10 >= 0 && canBuildOn) {
+
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (canBuild && canBuildOn && budget - 10 >= 0) {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
@@ -178,36 +189,36 @@ public class TPBoard extends JPanel implements MouseListener {
                 repaint();
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {  // If the selected GeneralEquipment is bush
+                // builds bush
                 x = e.getX();
                 y = e.getY();
 
                 System.out.println("BOKOR EPULT");
 
-
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-                if (budget - 10 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 10 >= 0) {
                     buildings.add(new Building("BUSH", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     System.out.println(x + "," + y);//these co-ords are relative to the component
 
                     repaint();
-                } else if (budget - 10 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {   // If the selected GeneralEquipment is bin
+                                                                            // builds bin
                 x = e.getX();
                 y = e.getY();
+
                 canBuild = false;
 
+                /**
+                 * Bin can be built only next to a road
+                 */
                 for (int i = 0; i < buildings.size(); ++i) {
                     if (!canBuild) {
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
@@ -224,15 +235,11 @@ public class TPBoard extends JPanel implements MouseListener {
                         }
                     }
                 }
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-                if (canBuild && (budget - 10 >= 0) && canBuildOn) {
+
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (canBuild && (budget - 10 >= 0)) {
                     System.out.println("KUKA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("BIN", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
@@ -245,166 +252,130 @@ public class TPBoard extends JPanel implements MouseListener {
             }
 
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {  // If the selected GeneralEquipment is tree
+                                                                            // builds tree
                 x = e.getX();
                 y = e.getY();
 
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-                System.out.println(canBuildOn);
-                if (budget - 10 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 10 >= 0) {
                     System.out.println("FA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("TREE", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
                     repaint();
-                } else if (budget - 10 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TREE");
                 }
             }
-        }
 
 
-        if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROLLERCOASTER)) {
                 x = e.getX();
                 y = e.getY();
 
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-                if (budget - 1000 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 1000 >= 0) {
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize)-3*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
                     repaint();
-                } else if (budget - 1000 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) { // If the selected GeneralEquipment is train
+                                                                            // builds train
                 x = e.getX();
                 y = e.getY();
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
 
-                if (budget - 800 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 800 >= 0) {
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-segmentSize, segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
                     repaint();
-                } else if (budget - 800 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) { // If the selected GeneralEquipment is waterpark
+                                                                                // builds waterpark
                 x = e.getX();
                 y = e.getY();
 
-
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-                if (budget - 1000 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 1000 >= 0) {
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
                     repaint();
-                } else if (budget - 1000 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) { // If the selected GeneralEquipment is wheel
+                                                                            // builds wheel
                 x = e.getX();
                 y = e.getY();
 
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-
-                if (budget - 1500 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 1500 >= 0) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize)-2*segmentSize, y - (y % segmentSize)-2*segmentSize, segmentSize * 6, segmentSize * 6));
+                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6));
 
                     repaint();
-                } else if (budget - 1500 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WHEEL");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) { // If the selected GeneralEquipment is slide
+                                                                            // builds slide
                 x = e.getX();
                 y = e.getY();
 
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-
-                if (budget - 800 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 800 >= 0) {
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize)-segmentSize, y - (y % segmentSize)-segmentSize, segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
                     repaint();
-                } else if (budget - 800 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
                 }
             }
 
-            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
+            if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) { // If the selected GeneralEquipment is restaurant
+                                                                                 // builds restaurant
                 x = e.getX();
                 y = e.getY();
 
-                int i= 0;
-                canBuildOn = true;
-                while(i < buildings.size()){
-                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
-                        canBuildOn = false;
-                    }
-                    i++;
-                }
-
-                if (budget - 600 >= 0 && canBuildOn) {
+                /**
+                 * Can be built only if the user got enough money
+                 */
+                if (budget - 600 >= 0) {
                     System.out.println("RESTAURANT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Restaurant("RESTAURANT", 0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2));
 
                     repaint();
-                } else if (budget - 600 < 0) {
+                } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for RESTAURANT");
                 }
             }
@@ -435,6 +406,4 @@ public class TPBoard extends JPanel implements MouseListener {
     public int getBudget() {
         return budget;
     }
-
-
 }

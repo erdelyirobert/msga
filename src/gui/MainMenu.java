@@ -16,8 +16,6 @@ import java.io.IOException;
  * The type Main menu.
  */
 public class MainMenu extends JFrame{
-
-
     //Sizes
     private final int WIDTH = 490; //The whole menu WIDTH
     private final int HEIGHT = 600; //The whole menu HEIGHT

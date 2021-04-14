@@ -1,19 +1,18 @@
 package board;
 
-import ThemePark.Building;
-import ThemePark.EGeneralEquipment;
-import ThemePark.Game;
-import ThemePark.Restaurant;
+import ThemePark.*;
 import gui.ThemeParkGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -31,10 +30,18 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean canBuild; // Can we build next to the road
     public boolean canBuildOn; //Not to build an object to antoher object
     public ArrayList<Building> buildings = new ArrayList<Building>();
+    public ArrayList<Guest> guests = new ArrayList<Guest>();
+    public ArrayList<Worker> workers = new ArrayList<Worker>();
+    public boolean inMove = false;
+    public int previousNumber;
+    public int actualNumber = 0;
+
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     JFrame frame = new JFrame();
     private int segmentSize = 20; //size of one grid
+    public Timer timer;
+    public int TD = 100;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -45,8 +52,140 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public void startGame() {
-        repaint();
+        generateGuest();
+
+        timer = new Timer(TD, (ActionEvent e) -> {
+            moveGuest();
+            System.out.println("beléptem a timerbe");
+            repaint();
+        });
+        timer.start();
     }
+
+    public void moveGuest(){
+        Random random = new Random();
+        if(!inMove) {
+             actualNumber = random.nextInt(4);
+             previousNumber = actualNumber;
+        }
+
+        switch(actualNumber) {
+            case 0:
+                for(int i = 0; i < guests.size(); ++i){
+                    for (int j = 0; j < buildings.size(); ++j){
+                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //jobbra lép
+                            if((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                                    && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()+segmentSize/7);
+                                System.out.println("jobbra léptem");
+                                inMove = true;
+                                System.out.println(inMove);
+                                break;
+
+                            }
+                        }
+                    }
+                }
+            case 1:
+                for(int i = 0; i < guests.size(); ++i){
+                    for (int j = 0; j < buildings.size(); ++j){
+                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //lefele lép
+                            if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                    && (guests.get(i).getLocation_Y() + segmentSize - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()+segmentSize/7);
+                                System.out.println("lefele léptem");
+                                inMove = true;
+                                System.out.println(inMove);
+                                break;
+                            }
+                        } else {
+                            inMove = false;
+                        }
+                    }
+                }
+            case 2:
+                for(int i = 0; i < guests.size(); ++i){
+                    for (int j = 0; j < buildings.size(); ++j){
+                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //balra lép
+                            if((guests.get(i).getLocation_X() - segmentSize) - ((guests.get(i).getLocation_X() - segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                                    && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()-segmentSize/7);
+                                System.out.println("balra léptem");
+                                inMove = true;
+                                System.out.println(inMove);
+                                break;
+                            }
+                        }else {
+                            inMove = false;
+                        }
+                    }
+                }
+            case 3:
+                for(int i = 0; i < guests.size(); ++i){
+                    for (int j = 0; j < buildings.size(); ++j){
+                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //felfele lép
+                            if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                    && (guests.get(i).getLocation_Y() - segmentSize - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()-segmentSize/7);
+                                System.out.println("felfele léptem");
+                                inMove = true;
+                                System.out.println(inMove);
+                                break;
+                            }
+                        }else {
+                            inMove = false;
+                        }
+                    }
+                }
+
+
+       /* for (int i = 0; i < buildings.size(); ++i) {
+            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
+                if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()  //jobbra
+                        && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
+                        || x - (x % segmentSize) == buildings.get(i).getLocation_X()                            //lefele
+                        && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()
+                        || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()        //balra
+                        && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
+                        || x - (x % segmentSize) == buildings.get(i).getLocation_X()            //felfele
+                        && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()) {
+                    canBuild = true;
+                }
+            }*/
+            /*case 1: down = true;
+                break;
+            case 2: right = true;
+                break;
+            case 3: left = true;
+                break;
+
+
+            for (int i = 0; i < buildings.size(); ++i) {
+                if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
+                    if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()  //jobbra
+                            && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
+                            || x - (x % segmentSize) == buildings.get(i).getLocation_X()                            //lefele
+                            && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()
+                            || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()        //balra
+                            && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
+                            || x - (x % segmentSize) == buildings.get(i).getLocation_X()            //felfele
+                            && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()) {
+                        canBuild = true;
+                    }
+                }*/
+            }
+
+        }
+
+
+    public void generateGuest(){
+        Random random = new Random();
+        int r = random.nextInt(4);
+        //if(r%2==0) {
+            guests.add(new Guest("guest",60,80, segmentSize*2, segmentSize*2));
+        //}
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -101,6 +240,20 @@ public class TPBoard extends JPanel implements MouseListener {
                 f.printStackTrace();
             }
         }
+        /*
+         * Redraw images
+         * Persons
+         */
+        for (int i = 0; i < guests.size(); i++) {
+            try {
+                img = ImageIO.read(new File("data\\images\\" + guests.get(i).getPersonImages() + ".png"));
+                Graphics2D g3d = (Graphics2D) g;
+                g3d.drawImage(img, guests.get(i).getLocation_X()-segmentSize/2, guests.get(i).getLocation_Y()-segmentSize, guests.get(i).getBuildingsSizesA(), guests.get(i).getBuildingsSizesB(), null);
+            } catch (IOException f) {
+                System.out.println("error");
+                f.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -116,7 +269,7 @@ public class TPBoard extends JPanel implements MouseListener {
         x = e.getX();
         y = e.getY();
 
-        int j= 0;
+        int j = 0;
         canBuildOn = true;
         while(j < buildings.size()){
             if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
@@ -148,13 +301,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 for (int i = 0; i < buildings.size(); ++i) {
                     if (!canBuild) {
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-                            if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()
+                            if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()  //jobbra
                                     && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                                    || x - (x % segmentSize) == buildings.get(i).getLocation_X()
+                                    || x - (x % segmentSize) == buildings.get(i).getLocation_X()                            //lefele
                                     && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()
-                                    || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()
+                                    || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()        //balra
                                     && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                                    || x - (x % segmentSize) == buildings.get(i).getLocation_X()
+                                    || x - (x % segmentSize) == buildings.get(i).getLocation_X()            //felfele
                                     && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()) {
                                 canBuild = true;
                             }
@@ -281,7 +434,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0) {
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4,15));
                     repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
@@ -299,7 +452,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0) {
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4,15));
                     repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
@@ -317,7 +470,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0) {
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
+                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4,15));
                     repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
@@ -335,7 +488,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1500 >= 0 && canBuildOn) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6));
+                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6,15));
 
                     repaint();
                 } else {
@@ -354,7 +507,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0) {
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
+                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4,15));
                     repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
@@ -372,7 +525,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 600 >= 0) {
                     System.out.println("RESTAURANT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Restaurant("RESTAURANT", 0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2));
+                    buildings.add(new Restaurant("RESTAURANT", 0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2,15));
 
                     repaint();
                 } else {

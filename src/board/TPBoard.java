@@ -23,7 +23,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private final int WIDTH = 600; //width of the park
     private final int HEIGHT = 600; //height of the park
     public int budget;
-    /**
+    /*
      * Building informations
      */
     public int x;
@@ -62,7 +62,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
         budget = 10000;
 
-        /**
+        /*
          * Starting road
          */
         try {
@@ -75,7 +75,7 @@ public class TPBoard extends JPanel implements MouseListener {
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
 
-        /**
+        /*
          * Entrance
          */
         try {
@@ -86,7 +86,7 @@ public class TPBoard extends JPanel implements MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(img, segmentSize, 0, segmentSize * 5, segmentSize * 6, null);
 
-        /**
+        /*
          * Redraw images
          * Manage budget
          */
@@ -110,7 +110,7 @@ public class TPBoard extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
 
-        /**
+        /*
          * Game deletion
          */
         x = e.getX();
@@ -130,7 +130,7 @@ public class TPBoard extends JPanel implements MouseListener {
         }
         repaint();
 
-        /**
+        /*
          * If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
          */
         if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
@@ -142,7 +142,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 System.out.println(x + " " + y);
                 canBuild = false;
 
-                /**
+                /*
                  * Road can build built only next to another road
                  */
                 for (int i = 0; i < buildings.size(); ++i) {
@@ -162,8 +162,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-                /**
-                 * Can't build road on each other
+                /*
+                  Can't build road on each other
                  */
                 int i = 0;
                 canBuildOn = true;
@@ -174,8 +174,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     i++;
                 }
 
-                /**
-                 * Can be built only if the user got enough money
+                /*
+                  Can be built only if the user got enough money
                  */
                 if (canBuild && canBuildOn && budget - 10 >= 0) {
                     System.out.println("UT EPULT");
@@ -196,7 +196,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 System.out.println("BOKOR EPULT");
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 10 >= 0) {
@@ -216,7 +216,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 canBuild = false;
 
-                /**
+                /*
                  * Bin can be built only next to a road
                  */
                 for (int i = 0; i < buildings.size(); ++i) {
@@ -236,7 +236,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (canBuild && (budget - 10 >= 0)) {
@@ -257,7 +257,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 10 >= 0) {
@@ -275,7 +275,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 1000 >= 0) {
@@ -293,7 +293,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 800 >= 0) {
@@ -311,7 +311,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 1000 >= 0) {
@@ -329,10 +329,10 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 1500 >= 0) {
+                if (budget - 1500 >= 0 && canBuildOn) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6));
@@ -348,7 +348,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 800 >= 0) {
@@ -366,7 +366,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                /**
+                /*
                  * Can be built only if the user got enough money
                  */
                 if (budget - 600 >= 0) {

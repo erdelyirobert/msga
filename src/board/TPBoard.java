@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -34,6 +35,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Worker> workers = new ArrayList<Worker>();
     private int maxGuests = 10;
     private int currentGuests = 0;
+    private int randomTimer;
 
     Random random = new Random();
     public int actualNumber = random.nextInt(4);
@@ -60,11 +62,9 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public void startGame() {
-        /*Random randomTimer = new Random();
-        randomTime = getRandomNumberUsingNextInt(15000, 20000);
-        System.out.println(randomTime);*/
+        randomTimer = ThreadLocalRandom.current().nextInt(15000, 19999 + 1);
 
-        timer2 = new Timer(15000, (ActionEvent e) -> {
+        timer2 = new Timer(randomTimer, (ActionEvent e) -> {
             if(currentGuests < maxGuests){
                 generateGuest();
                 currentGuests++;

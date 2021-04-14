@@ -32,8 +32,9 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
+    private int maxGuests = 10;
+    private int currentGuests = 0;
 
-    public boolean inMove = false;
     Random random = new Random();
     public int actualNumber = random.nextInt(4);
 
@@ -42,7 +43,13 @@ public class TPBoard extends JPanel implements MouseListener {
     JFrame frame = new JFrame();
     private int segmentSize = 20; //size of one grid
     public Timer timer;
-    public int TD = 100;
+    public Timer timer2;
+    public int TD = 50;
+
+    public int getRandomNumberUsingNextInt(int min, int max) {
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -53,11 +60,24 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public void startGame() {
-        generateGuest();
+        /*Random randomTimer = new Random();
+        randomTime = getRandomNumberUsingNextInt(15000, 20000);
+        System.out.println(randomTime);*/
+
+        timer2 = new Timer(15000, (ActionEvent e) -> {
+            if(currentGuests < maxGuests){
+                generateGuest();
+                currentGuests++;
+            }
+            System.out.println("generateGuest meghivva");
+            repaint();
+        });
+        timer2.start();
+
 
         timer = new Timer(TD, (ActionEvent e) -> {
             moveGuest();
-            System.out.println(actualNumber);
+            //System.out.println(actualNumber);
             repaint();
         });
         timer.start();
@@ -73,7 +93,7 @@ public class TPBoard extends JPanel implements MouseListener {
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //jobbra lép
                             if((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
                                     && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()+segmentSize/5);
+                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()+segmentSize/7);
                                 System.out.println("jobbra léptem");
                                 actualNumber = 0;
                                 break;
@@ -89,8 +109,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     for (int j = 0; j < buildings.size(); ++j){
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //lefele lép
                             if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
-                                    && (guests.get(i).getLocation_Y() + segmentSize - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()+segmentSize/5);
+                                    && ((guests.get(i).getLocation_Y() + segmentSize) - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()+segmentSize/7);
                                 System.out.println("lefele léptem");
                                 actualNumber = 1;
                                 break;
@@ -105,9 +125,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 for(int i = 0; i < guests.size(); ++i){
                     for (int j = 0; j < buildings.size(); ++j){
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //balra lép
-                            if((guests.get(i).getLocation_X() - segmentSize) - ((guests.get(i).getLocation_X() - segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                            if((guests.get(i).getLocation_X() - segmentSize/7) - ((guests.get(i).getLocation_X() - segmentSize/7) % segmentSize) == buildings.get(j).getLocation_X()
                                     && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()-segmentSize/5);
+                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()-segmentSize/7);
                                 System.out.println("balra léptem");
                                 actualNumber = 2;
                                 break;
@@ -123,8 +143,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     for (int j = 0; j < buildings.size(); ++j){
                         if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //felfele lép
                             if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
-                                    && ((guests.get(i).getLocation_Y() - segmentSize) - ((guests.get(i).getLocation_Y() - segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()-segmentSize/5);
+                                    && ((guests.get(i).getLocation_Y() - segmentSize/7) - ((guests.get(i).getLocation_Y() - segmentSize/7) % segmentSize) == buildings.get(j).getLocation_Y())){
+                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()-segmentSize/7);
                                 System.out.println("felfele léptem");
                                 actualNumber = 3;
                                 break;
@@ -135,41 +155,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
                 break;
-
-       /* for (int i = 0; i < buildings.size(); ++i) {
-            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-                if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()  //jobbra
-                        && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                        || x - (x % segmentSize) == buildings.get(i).getLocation_X()                            //lefele
-                        && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()
-                        || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()        //balra
-                        && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                        || x - (x % segmentSize) == buildings.get(i).getLocation_X()            //felfele
-                        && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()) {
-                    canBuild = true;
-                }
-            }*/
-            /*case 1: down = true;
-                break;
-            case 2: right = true;
-                break;
-            case 3: left = true;
-                break;
-
-
-            for (int i = 0; i < buildings.size(); ++i) {
-                if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-                    if ((x + segmentSize) - ((x + segmentSize) % segmentSize) == buildings.get(i).getLocation_X()  //jobbra
-                            && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                            || x - (x % segmentSize) == buildings.get(i).getLocation_X()                            //lefele
-                            && ((y + segmentSize) - ((y + segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()
-                            || (x - segmentSize) - ((x - segmentSize) % segmentSize) == buildings.get(i).getLocation_X()        //balra
-                            && (y - (y % segmentSize)) == buildings.get(i).getLocation_Y()
-                            || x - (x % segmentSize) == buildings.get(i).getLocation_X()            //felfele
-                            && ((y - segmentSize) - ((y - segmentSize) % segmentSize)) == buildings.get(i).getLocation_Y()) {
-                        canBuild = true;
-                    }
-                }*/
             }
 
         }
@@ -178,9 +163,9 @@ public class TPBoard extends JPanel implements MouseListener {
     public void generateGuest(){
         Random random = new Random();
         int r = random.nextInt(4);
-        //if(r%2==0) {
-            guests.add(new Guest("guest",60,80, segmentSize , segmentSize));
-        //}
+        if(r%2==0) {
+            guests.add(new Guest("guest",60,80, segmentSize * 2, segmentSize * 2));
+        }
     }
 
 
@@ -245,7 +230,7 @@ public class TPBoard extends JPanel implements MouseListener {
             try {
                 img = ImageIO.read(new File("data\\images\\" + guests.get(i).getPersonImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
-                g3d.drawImage(img, guests.get(i).getLocation_X(), guests.get(i).getLocation_Y(), guests.get(i).getBuildingsSizesA(), guests.get(i).getBuildingsSizesB(), null);
+                g3d.drawImage(img, guests.get(i).getLocation_X() - segmentSize/2, guests.get(i).getLocation_Y() - segmentSize, guests.get(i).getBuildingsSizesA(), guests.get(i).getBuildingsSizesB(), null);
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();

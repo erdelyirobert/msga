@@ -33,7 +33,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
-    private int maxGuests = 10;
+    private int maxGuests = 1;
     private int currentGuests = 0;
     private int randomTimer;
 
@@ -46,12 +46,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private int segmentSize = 20; //size of one grid
     public Timer timer;
     public Timer timer2;
-    public int TD = 50;
-
-    public int getRandomNumberUsingNextInt(int min, int max) {
-        Random random = new Random();
-        return random.nextInt(max - min) + min;
-    }
+    public int TD = 3000;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -62,19 +57,19 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public void startGame() {
-        randomTimer = ThreadLocalRandom.current().nextInt(15000, 19999 + 1);
+        randomTimer = ThreadLocalRandom.current().nextInt(1000, 2000 + 1);
 
-        timer2 = new Timer(randomTimer, (ActionEvent e) -> {
+        /*timer2 = new Timer(randomTimer, (ActionEvent e) -> {
             if(currentGuests < maxGuests){
                 generateGuest();
+                System.out.println("generated");
                 currentGuests++;
             }
-            System.out.println("generateGuest meghivva");
+            //System.out.println("generateGuest meghivva");
             repaint();
         });
-        timer2.start();
-
-
+        timer2.start();*/
+        generateGuest();
         timer = new Timer(TD, (ActionEvent e) -> {
             moveGuest();
             //System.out.println(actualNumber);
@@ -83,89 +78,206 @@ public class TPBoard extends JPanel implements MouseListener {
         timer.start();
     }
 
-    public void moveGuest(){
-        Random random = new Random();
+    public void moveGuest() {
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); j++) {
+                if (guests.get(i).getDirection() == 0) {
+                    if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //jobbra lép
+                        if ((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                                && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize / 7);
+                            System.out.println("jobbra leptem");
+                        } else {
+                            guests.get(i).setDirection(1);
+                        }
+                    }
+                }
 
-        switch(actualNumber) {
-            case 0:
-                for(int i = 0; i < guests.size(); ++i){
-                    for (int j = 0; j < buildings.size(); ++j){
-                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //jobbra lép
-                            if((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
-                                    && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()+segmentSize/7);
-                                System.out.println("jobbra léptem");
-                                actualNumber = 0;
-                                break;
-                            } else {
-                                actualNumber = random.nextInt(4);
-                            }
+                else if(guests.get(i).getDirection() == 1){
+                    if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //lefele lép
+                        if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                && ((guests.get(i).getLocation_Y() + segmentSize) - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize / 7);
+                            System.out.println("lefele leptem");
+                        }else{
+                            guests.get(i).setDirection(2);
                         }
                     }
                 }
-                break;
-            case 1:
-                for(int i = 0; i < guests.size(); ++i){
-                    for (int j = 0; j < buildings.size(); ++j){
-                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //lefele lép
-                            if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
-                                    && ((guests.get(i).getLocation_Y() + segmentSize) - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()+segmentSize/7);
-                                System.out.println("lefele léptem");
-                                actualNumber = 1;
-                                break;
-                            } else {
-                                actualNumber = random.nextInt(4);
-                            }
+
+                else if(guests.get(i).getDirection() == 2){
+                    if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //balra lép
+                        if ((guests.get(i).getLocation_X() - segmentSize / 7) - ((guests.get(i).getLocation_X() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_X()
+                                && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize / 7);
+                            System.out.println("balra leptem");
+                        } else {
+                            guests.get(i).setDirection(3);
                         }
                     }
                 }
-                break;
-            case 2:
-                for(int i = 0; i < guests.size(); ++i){
-                    for (int j = 0; j < buildings.size(); ++j){
-                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //balra lép
-                            if((guests.get(i).getLocation_X() - segmentSize/7) - ((guests.get(i).getLocation_X() - segmentSize/7) % segmentSize) == buildings.get(j).getLocation_X()
-                                    && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_X(guests.get(i).getLocation_X()-segmentSize/7);
-                                System.out.println("balra léptem");
-                                actualNumber = 2;
-                                break;
-                            } else {
-                                actualNumber = random.nextInt(4);
-                            }
+
+                else if(guests.get(i).getDirection() == 3){
+                    if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //felfele lép
+                        if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                && ((guests.get(i).getLocation_Y() - segmentSize / 7) - ((guests.get(i).getLocation_Y() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize / 7);
+                            System.out.println("felfele leptem");
+                        } else {
+                            guests.get(i).setDirection(0);
                         }
                     }
                 }
-                break;
-            case 3:
-                for(int i = 0; i < guests.size(); ++i){
-                    for (int j = 0; j < buildings.size(); ++j){
-                        if (buildings.get(i).getBuildingsImages().equals("ROAD")){              //felfele lép
-                            if(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
-                                    && ((guests.get(i).getLocation_Y() - segmentSize/7) - ((guests.get(i).getLocation_Y() - segmentSize/7) % segmentSize) == buildings.get(j).getLocation_Y())){
-                                guests.get(i).setLocation_Y(guests.get(i).getLocation_Y()-segmentSize/7);
-                                System.out.println("felfele léptem");
-                                actualNumber = 3;
-                                break;
-                            } else {
-                                actualNumber = random.nextInt(4);
+            }
+        }
+    }
+
+    /*public void moveGuest() {
+        Random random = new Random();
+            for(int i = 0; i < guests.size(); i++){
+                for(int j = 0; j < buildings.size(); j++){
+                    switch (guests.get(i).getDirection()){
+                        case 0:
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //jobbra lép
+                                if ((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                                        && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize / 7);
+                                    System.out.println("jobbra léptem");
+                                    guests.get(i).setDirection(0);
+                                    break;
+                                } else {
+                                    guests.get(i).setDirection(1);
+                                }
                             }
-                        }
+                            break;
+                        case 1:
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //lefele lép
+                                if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                        && ((guests.get(i).getLocation_Y() + segmentSize) - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize / 7);
+                                    System.out.println("lefele léptem");
+                                    guests.get(i).setDirection(1);
+                                    break;
+                                } else {
+                                    guests.get(i).setDirection(2);
+                                }
+                            }
+                            break;
+                        case 2:
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //balra lép
+                                if ((guests.get(i).getLocation_X() - segmentSize / 7) - ((guests.get(i).getLocation_X() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_X()
+                                        && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize / 7);
+                                    System.out.println("balra léptem");
+                                    guests.get(i).setDirection(2);
+                                    break;
+                                } else {
+                                    guests.get(i).setDirection(3);
+                                }
+                            }
+                            break;
+                        case 3:
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //felfele lép
+                                if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                        && ((guests.get(i).getLocation_Y() - segmentSize / 7) - ((guests.get(i).getLocation_Y() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize / 7);
+                                    System.out.println("felfele léptem");
+                                    guests.get(i).setDirection(3);
+                                    break;
+                                } else {
+                                    guests.get(i).setDirection(0);
+                                }
+                            }
+                            break;
                     }
                 }
                 break;
             }
+    }*/
 
-        }
+    /*public void moveGuest() {
+        Random random = new Random();
+            switch (actualNumber) {
+                case 0:
+                    for (int i = 0; i < guests.size(); ++i) {
+                        for (int j = 0; j < buildings.size(); ++j) {
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //jobbra lép
+                                if ((guests.get(i).getLocation_X() + segmentSize) - ((guests.get(i).getLocation_X() + segmentSize) % segmentSize) == buildings.get(j).getLocation_X()
+                                        && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize / 7);
+                                    System.out.println("jobbra léptem");
+                                    actualNumber = 0;
+                                    break;
+                                } else {
+                                    actualNumber = random.nextInt(4);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    for (int i = 0; i < guests.size(); ++i) {
+                        for (int j = 0; j < buildings.size(); ++j) {
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //lefele lép
+                                if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                        && ((guests.get(i).getLocation_Y() + segmentSize) - ((guests.get(i).getLocation_Y() + segmentSize) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize / 7);
+                                    System.out.println("lefele léptem");
+                                    actualNumber = 1;
+                                    break;
+                                } else {
+                                    actualNumber = random.nextInt(4);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < guests.size(); ++i) {
+                        for (int j = 0; j < buildings.size(); ++j) {
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //balra lép
+                                if ((guests.get(i).getLocation_X() - segmentSize / 7) - ((guests.get(i).getLocation_X() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_X()
+                                        && (guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize / 7);
+                                    System.out.println("balra léptem");
+                                    actualNumber = 2;
+                                    break;
+                                } else {
+                                    actualNumber = random.nextInt(4);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int i = 0; i < guests.size(); ++i) {
+                        for (int j = 0; j < buildings.size(); ++j) {
+                            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {              //felfele lép
+                                if (guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize) == buildings.get(j).getLocation_X()
+                                        && ((guests.get(i).getLocation_Y() - segmentSize / 7) - ((guests.get(i).getLocation_Y() - segmentSize / 7) % segmentSize) == buildings.get(j).getLocation_Y())) {
+                                    guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize / 7);
+                                    System.out.println("felfele léptem");
+                                    actualNumber = 3;
+                                    break;
+                                } else {
+                                    actualNumber = random.nextInt(4);
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+    }*/
+
+
 
 
     public void generateGuest(){
         Random random = new Random();
-        int r = random.nextInt(4);
-        if(r%2==0) {
+        //int r = random.nextInt(4);
+        //if(r%2==0) {
             guests.add(new Guest("guest",60,80, segmentSize * 2, segmentSize * 2));
-        }
+        //}
     }
 
 

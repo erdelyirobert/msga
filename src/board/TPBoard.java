@@ -68,11 +68,6 @@ public class TPBoard extends JPanel implements MouseListener {
         timer = new Timer(TD, (ActionEvent e) -> {
             generateGuest();
             moveGuest();
-            System.out.println("-------------");
-            for (int i = 0; i < guests.size(); i++) {
-                System.out.println("irány: " + guests.get(i).getDirection() +" x: " + guests.get(i).getLocation_X() + " y: " + guests.get(i).getLocation_Y());
-
-            }
             repaint();
         });
         timer.start();
@@ -96,7 +91,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (guests.get(i).getDirection() == 0) {            //jobbra lép
                     if(checkRoad(guests.get(i).getLocation_X() + segmentSize, guests.get(i).getLocation_Y())){
                             guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize/2);
-                            System.out.println("jobbra léptem");
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -107,7 +101,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 else if (guests.get(i).getDirection() == 1) {               //lefele lép
                     if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() + segmentSize)){
                             guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize/2);
-                            System.out.println("lefele léptem");
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -118,7 +111,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 else if (guests.get(i).getDirection() == 2) {                       //balra lép
                     if (checkRoad(guests.get(i).getLocation_X() - segmentSize/2, guests.get(i).getLocation_Y())){
                             guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize/2);
-                            System.out.println("balra léptem");
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -129,7 +121,6 @@ public class TPBoard extends JPanel implements MouseListener {
                  else {                                                              //felfele lép
                     if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize/2)) {
                             guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize/2);
-                            System.out.println("felfele léptem");
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -287,7 +278,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-                    //System.out.println(x - (x % segmentSize) + " " + (y - (y % segmentSize)));
 
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
@@ -296,7 +286,6 @@ public class TPBoard extends JPanel implements MouseListener {
             }
 
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {  // If the selected GeneralEquipment is bush
-                // builds bush
                 x = e.getX();
                 y = e.getY();
 

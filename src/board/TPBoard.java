@@ -62,23 +62,14 @@ public class TPBoard extends JPanel implements MouseListener {
         randomTimer = ThreadLocalRandom.current().nextInt(500, 1000);
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
-/*
-        timer2 = new Timer(randomTimer, (ActionEvent e) -> {
-            if(currentGuests < maxGuests){
-                generateGuest();
-                currentGuests++;
-            }
-            System.out.println("generateGuest meghivva");
-            repaint();
-        });
-        timer2.start();
-*/
+
         generateGuest();
+        //generateGuest();
         timer = new Timer(TD, (ActionEvent e) -> {
 
             moveGuest();
             System.out.println("-------------");
-            System.out.println("irány: " + guests.get(0).getDirection() +" x: " + guests.get(0).getLocation_X() + " y: " + guests.get(0).getLocation_Y());
+            //System.out.println("irány: " + guests.get(0).getDirection() +" x: " + guests.get(0).getLocation_X() + " y: " + guests.get(0).getLocation_Y());
             repaint();
         });
         timer.start();
@@ -87,8 +78,8 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean checkRoad(int x, int y){
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).getBuildingsImages().equals("ROAD")){
-                if (x == buildings.get(i).getLocation_X()
-                        && y == buildings.get(i).getLocation_Y()){
+                if (x - (x%segmentSize) == buildings.get(i).getLocation_X()
+                        && y-(y%segmentSize) == buildings.get(i).getLocation_Y()){
                     return true;
                 }
             }
@@ -98,61 +89,61 @@ public class TPBoard extends JPanel implements MouseListener {
 
     public void moveGuest() {       //jobbra -> lefel -> balra -> felfele -> jobbra
 
-        for (int i = 0; i < guests.size(); ++i) {
+        for (int i = 0; i < guests.size(); i++) {
                 if (guests.get(i).getDirection() == 0) {            //jobbra lép
                     if(checkRoad(guests.get(i).getLocation_X() + segmentSize, guests.get(i).getLocation_Y())){
-                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize);
+                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize/2);
                             System.out.println("jobbra léptem");
                             break;
                         } else {
-                            guests.get(i).setDirection(1);
-                            guests.get(i).setPreviousDirection(0);
+                            Random random = new Random();
+                            int r = random.nextInt(4);
+                            guests.get(i).setDirection(r);
                         }
                 }
 
                 else if (guests.get(i).getDirection() == 1) {               //lefele lép
                     if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() + segmentSize)){
-                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize);
+                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize/2);
                             System.out.println("lefele léptem");
                             break;
                         } else {
-                            guests.get(i).setDirection(2);
-                        guests.get(i).setPreviousDirection(1);
+                            Random random = new Random();
+                            int r = random.nextInt(4);
+                            guests.get(i).setDirection(r);
                         }
                     }
 
                 else if (guests.get(i).getDirection() == 2) {                       //balra lép
-                    if (checkRoad(guests.get(i).getLocation_X() - segmentSize, guests.get(i).getLocation_Y())){
-                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize);
+                    if (checkRoad(guests.get(i).getLocation_X() - segmentSize/2, guests.get(i).getLocation_Y())){
+                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize/2);
                             System.out.println("balra léptem");
                             break;
                         } else {
-                            guests.get(i).setDirection(3);
-                            guests.get(i).setPreviousDirection(2);
+                            Random random = new Random();
+                            int r = random.nextInt(4);
+                            guests.get(i).setDirection(r);
                         }
                 }
 
                  else {
-                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize)) {              //felfele lép
-                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize);
+                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize/2)) {              //felfele lép
+                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize/2);
                             System.out.println("felfele léptem");
                             break;
                         } else {
-                            guests.get(i).setDirection(0);
-                            guests.get(i).setPreviousDirection(3);
+                            Random random = new Random();
+                            int r = random.nextInt(4);
+                            guests.get(i).setDirection(r);
                         }
                     }
                 }
     }
 
-
-
-
-
     public void generateGuest(){
         Random random = new Random();
-        int r = random.nextInt(4);
-        //if(r%2==0) {
+        int r = random.nextInt(100);
+        //if(r%5==0) {
             guests.add(new Guest("guest",60,80, segmentSize , segmentSize ));
         //}
     }

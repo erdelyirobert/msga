@@ -1,11 +1,13 @@
 package ThemePark;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Guest extends Person{
+    Random random = new Random();
+    int r = random.nextInt(4);
     private int mood = 20;
-    public int direction = 0;           //actual direction
-    public int previousDirection = 0;   //previous direction
+    public int direction = r;           //actual direction
 
 
     public Guest(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
@@ -30,13 +32,7 @@ public class Guest extends Person{
         this.direction = direction;
     }
 
-    public int getPreviousDirection() {
-        return previousDirection;
-    }
 
-    public void setPreviousDirection(int previousDirection) {
-        this.previousDirection = previousDirection;
-    }
 
 
 }

@@ -34,9 +34,9 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
-    private int maxGuests = 3;
-    private int currentGuests = 0;
+    private int maxGuests = 5;
     private int randomTimer;
+    private int guestNumber = 0;
 
     Random random = new Random();
 
@@ -46,7 +46,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private int segmentSize = 20; //size of one grid
     public Timer timer;
     public Timer timer2;
-    public int TD = 300;
+    public int TD = 100;
     public int memoryDirection;
 
 
@@ -63,23 +63,26 @@ public class TPBoard extends JPanel implements MouseListener {
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
 
-        generateGuest();
+
         //generateGuest();
         timer = new Timer(TD, (ActionEvent e) -> {
-
+            generateGuest();
             moveGuest();
             System.out.println("-------------");
-            //System.out.println("irány: " + guests.get(0).getDirection() +" x: " + guests.get(0).getLocation_X() + " y: " + guests.get(0).getLocation_Y());
+            for (int i = 0; i < guests.size(); i++) {
+                System.out.println("irány: " + guests.get(i).getDirection() +" x: " + guests.get(i).getLocation_X() + " y: " + guests.get(i).getLocation_Y());
+
+            }
             repaint();
         });
         timer.start();
     }
 
     public boolean checkRoad(int x, int y){
-        for (int i = 0; i < buildings.size(); i++) {
-            if (buildings.get(i).getBuildingsImages().equals("ROAD")){
-                if (x - (x%segmentSize) == buildings.get(i).getLocation_X()
-                        && y-(y%segmentSize) == buildings.get(i).getLocation_Y()){
+        for (int j = 0; j < buildings.size(); j++) {
+            if (buildings.get(j).getBuildingsImages().equals("ROAD")){
+                if (x - ( x % segmentSize) == buildings.get(j).getLocation_X()
+                        && y - ( y % segmentSize) == buildings.get(j).getLocation_Y()){
                     return true;
                 }
             }
@@ -94,7 +97,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     if(checkRoad(guests.get(i).getLocation_X() + segmentSize, guests.get(i).getLocation_Y())){
                             guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize/2);
                             System.out.println("jobbra léptem");
-                            break;
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -106,7 +108,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() + segmentSize)){
                             guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize/2);
                             System.out.println("lefele léptem");
-                            break;
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -118,7 +119,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     if (checkRoad(guests.get(i).getLocation_X() - segmentSize/2, guests.get(i).getLocation_Y())){
                             guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize/2);
                             System.out.println("balra léptem");
-                            break;
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -126,11 +126,10 @@ public class TPBoard extends JPanel implements MouseListener {
                         }
                 }
 
-                 else {
-                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize/2)) {              //felfele lép
+                 else {                                                              //felfele lép
+                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize/2)) {
                             guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize/2);
                             System.out.println("felfele léptem");
-                            break;
                         } else {
                             Random random = new Random();
                             int r = random.nextInt(4);
@@ -143,9 +142,13 @@ public class TPBoard extends JPanel implements MouseListener {
     public void generateGuest(){
         Random random = new Random();
         int r = random.nextInt(100);
-        //if(r%5==0) {
-            guests.add(new Guest("guest",60,80, segmentSize , segmentSize ));
-        //}
+        if(guestNumber < maxGuests) {
+            if (r % 5 == 0) {
+                guests.add(new Guest("guest", 60, 80, segmentSize, segmentSize));
+                guestNumber++;
+
+            }
+        }
     }
 
 
@@ -163,17 +166,6 @@ public class TPBoard extends JPanel implements MouseListener {
 
         budget = 10000;
 
-        /*
-         * Starting road
-         */
-        /*try {
-            img = ImageIO.read(new File("data\\images\\ROAD.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Graphics2D g1d = (Graphics2D) g;
-        g1d.drawImage(img, 60, 80, segmentSize, segmentSize, null);
-*/
         /*
          * Entrance
          */

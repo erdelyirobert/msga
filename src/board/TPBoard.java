@@ -296,51 +296,247 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     /**
-     * Checks if a road near if you try to make a building
+     * @param mouse_X x coordinate of clicked mouse
+     * @param mouse_Y y coordinate of clicked mouse
+     * @return does the building near the road
+     <br>
+     * Checks if a road near if you try to make a building.
+     * Input mause X coordiante, and mause Y coordianate
+     <br>
      * return true if you can build
      * return false if no road near
-     **/
-    public boolean canBuildNearRoad(int mouse_X, int mouse_Y) {
+     */
+    public boolean PointIsWithinCircle(double mouse_X, double mouse_Y) {
+        boolean joe = false;
+
+        for (int i = 0; i < buildings.size(); i++) {
+
+            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
+
+                int pointToCheckX = buildings.get(i).getLocation_X();
+                int pointToCheckY = buildings.get(i).getLocation_Y();
+
+                //rendgeteg if 10 építmény ;->
+                //1. if BUSHRA
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BUSH)) {
+                    double circleRadius_A = (double) segmentSize * 1.5;
+                    double circleRadius_B = (double) segmentSize * 1.5;
+
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+                //2. if BINre
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.BIN)) {
+                    double circleRadius_A = (double) segmentSize * 1.5;
+                    double circleRadius_B = (double) segmentSize * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                //3. if TREEre
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
+                    double circleRadius_A = (double) segmentSize * 2 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 2 * 1.5;
+
+                    double circleRadius_A1 = (double) segmentSize * 2 * 1;
+                    double circleRadius_B1 = (double) segmentSize * 2 * 1;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+                    System.out.println("crA1: " + circleRadius_A1);
+                    System.out.println("crB1: " + circleRadius_B1);
+
+                    if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_A1, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_B1, 2))
+                            && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+                //4. if ROLLERCOASTEREe
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROLLERCOASTER)) {
+                    double circleRadius_A = (double) segmentSize * 6 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 4 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                //5. if TRAIN
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
+                    double circleRadius_A = (double) segmentSize * 4 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 4 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                //6. if WATERPARK
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
+                    double circleRadius_A = (double) segmentSize * 6 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 4 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+                //7. if WHEEL
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WHEEL)) {
+                    double circleRadius_A = (double) segmentSize * 6 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 6 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                //8. if SLIDE
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
+                    double circleRadius_A = (double) segmentSize * 6 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 4 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                //9. if RESTAURANT
+                if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
+                    double circleRadius_A = (double) segmentSize * 3 * 1.5;
+                    double circleRadius_B = (double) segmentSize * 2 * 1.5;
+
+                    System.out.println("-------------------");
+                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
+                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
+                    System.out.println("crA: " + circleRadius_A);
+                    System.out.println("crB: " + circleRadius_B);
+
+                    if ((Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                        joe = true;
+                        break;
+                    } else {
+                        joe = false;
+                    }
+
+                }
+
+
+                /////////////////////////////
+
+
+            }
+        }
+
+        return joe;
+
+    }
+
+    public boolean isCanBuildOn(int mouse_X, int mouse_Y) {
+        boolean raepit = false;
 
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-                //felső oldal
-                if (mouse_X <= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y == buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //alsó oldal
-                if (mouse_X >= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y == buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //Bal oldal
-                if (mouse_X == buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y >= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //Jobb oldal
-                if (mouse_X == buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y <= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-
-                //Átló
-                //Felső jobb
-                if (mouse_X >= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y <= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //Felső bal
-                if (mouse_X <= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y <= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //Alsó jobb
-                if (mouse_X >= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y >= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
-                }
-                //Alsó bal
-                if (mouse_X <= buildings.get(i).getLocation_X() + (buildings.get(i).getBuildingsSizesA() / 2) && mouse_Y >= buildings.get(i).getLocation_Y() + (buildings.get(i).getBuildingsSizesB() / 2)) {
-                    return true;
+                if (mouse_X - mouse_X % segmentSize == buildings.get(i).getLocation_X() && mouse_Y - mouse_Y % segmentSize == buildings.get(i).getLocation_Y()) {
+                    raepit = false;
+                    break;
+                } else {
+                    raepit = true;
                 }
             }
         }
-        return false;
+
+        return raepit;
+
     }
 
 
@@ -515,13 +711,19 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 10 >= 0) {
+
+
+                if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("BUSH", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     System.out.println(x + "," + y);//these co-ords are relative to the component
 
                     repaint();
-                } else {
+                } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -555,14 +757,18 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (canBuild && (budget - 10 >= 0)) {
+                if (canBuild && (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY()))) {
                     System.out.println("KUKA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("BIN", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
                     repaint();
-                } else if (budget - 10 < 0) {
+                }  else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BIN");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
 
             }
@@ -576,13 +782,17 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 10 >= 0) {
+                if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("FA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("TREE", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
                     repaint();
-                } else {
+                } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TREE");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -594,13 +804,17 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 1000 >= 0) {
+                if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
                     repaint();
-                } else {
+                } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -612,13 +826,17 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 800 >= 0) {
+                if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
                     repaint();
-                } else {
+                } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -630,13 +848,17 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 1000 >= 0) {
+                if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
                     repaint();
-                } else {
+                }  else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -648,14 +870,18 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 1500 >= 0 && canBuildOn) {
+                if (budget - 1500 >= 0 && canBuildOn && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
 
                     repaint();
-                } else {
+                } else if (budget - 1500 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WHEEL");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -667,13 +893,17 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 800 >= 0) {
+                if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
                     repaint();
-                } else {
+                }  else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
 
@@ -685,14 +915,18 @@ public class TPBoard extends JPanel implements MouseListener {
                 /*
                  * Can be built only if the user got enough money
                  */
-                if (budget - 600 >= 0) {
+                if (budget - 600 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("RESTAURANT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Restaurant("RESTAURANT", 0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2, 15));
 
                     repaint();
-                } else {
+                } else if (budget - 600 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for RESTAURANT");
+                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
+                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                    JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
         }

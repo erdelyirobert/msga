@@ -15,5 +15,7 @@ public enum EGeneralEquipment{
     WATERPARK,
     WHEEL,
     SLIDE,
-    RESTAURANT
+    RESTAURANT,
+    CLEANER,
+    MAINTENANCE
 }

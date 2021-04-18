@@ -10,6 +10,10 @@ public class Guest extends Person{
     public int direction = r;           //actual direction
 
 
+
+
+
+
     public Guest(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);
     }

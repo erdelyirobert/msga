@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,7 +35,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
-    private int maxGuests = 5;
+    private int maxGuests = 1;
     private int randomTimer;
     private int guestNumber = 0;
 
@@ -44,10 +45,10 @@ public class TPBoard extends JPanel implements MouseListener {
     Image img = null;
     JFrame frame = new JFrame();
     private int segmentSize = 20; //size of one grid
+    private int stepsPerSegment = 5;
     public Timer timer;
-    public Timer timer2;
     public int TD = 100;
-    public int memoryDirection;
+
 
 
     public TPBoard() throws IOException {
@@ -62,17 +63,16 @@ public class TPBoard extends JPanel implements MouseListener {
         randomTimer = ThreadLocalRandom.current().nextInt(500, 1000);
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
-
-
-        //generateGuest();
         timer = new Timer(TD, (ActionEvent e) -> {
             generateGuest();
+            generateWorker();
+            moveCleaner();
             moveGuest();
             repaint();
         });
         timer.start();
     }
-
+/*
     public boolean checkRoad(int x, int y){
         for (int j = 0; j < buildings.size(); j++) {
             if (buildings.get(j).getBuildingsImages().equals("ROAD")){
@@ -84,61 +84,233 @@ public class TPBoard extends JPanel implements MouseListener {
         }
         return false;
     }
+*/
+    public boolean checkRoad(int x, int y){                 //amig nem egész szám a segment size, addig nem értünk a szélére, tehát léptetjük
+        if (x % segmentSize !=0 || y % segmentSize != 0){   // check for whole segment size stepped
+            return true;                                    // if not continue stepping the same segment
+        }
+        for (int j = 0; j < buildings.size(); j++) {
+            if (buildings.get(j).getBuildingsImages().equals("ROAD")){
+                if (x  == buildings.get(j).getLocation_X()
+                        && y  == buildings.get(j).getLocation_Y()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-    public void moveGuest() {       //jobbra -> lefel -> balra -> felfele -> jobbra
+    public boolean testDirection(int x, int y, int direction){          //a megadott irányba(direction) van-e út, tehát a következő négyzet út-e
+        switch(direction){
+            case 0:
+                if(checkRoad(x + segmentSize, y)){
+                    return true;          //jobbra
+                }
+                break;
+            case 1:
+                if(checkRoad(x, y + segmentSize)){
+                    return true;
+                }
+                break;
+            case 2:
+                if(checkRoad(x - segmentSize, y)){
+                    return true;
+                }
+                break;
+            case 3:
+                if(checkRoad(x, y - segmentSize)){
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
 
+    public int checkIntersection(int x, int y, int originalDirection, int direction1, int direction2) { //van-e kereszteződés ebben a pontban és ha igen véletlenszerűen választ irányt
+
+        if (x % segmentSize !=0 || y % segmentSize != 0){   // csak a segmentSize végén teszteli az irányt, addig tartja az irányt
+            return originalDirection;
+        }
+
+        Random random = new Random();
+        int r = random.nextInt(2);
+        if (r % 2 == 1) {
+            return originalDirection;
+        }
+        int r2 = random.nextInt(2);
+        if (r2 % 2 == 0) {                                // ha páros a szám, akkor az első utvonalat teszteli(pl. jobbra)
+            if (testDirection(x, y, direction1)) {
+                return direction1;
+            } else {
+                if (testDirection(x, y, direction2)) {
+                    return direction2;
+                }
+            }
+        } else {                                           //ha páratlan a szám, akkor az első utvonalat teszteli(pl. balra)
+            if (testDirection(x, y, direction2)) {
+                return direction2;
+            } else {
+                if (testDirection(x, y, direction1)) {
+                    return direction1;
+                }
+            }
+        }
+        return originalDirection;                       //ha egyik iárnyba se lehet haladni, return az eredeti számot
+    }
+
+    public void doStep(int guest, int Direction, int stepLength) {                  // itt léptetjük a a guestet az adott(direction) irányba egy stepLengthet
+        switch (Direction) {
+            case 0: {
+                guests.get(guest).setLocation_X(guests.get(guest).getLocation_X() + stepLength);
+            }
+            break;
+            case 1: {
+                guests.get(guest).setLocation_Y(guests.get(guest).getLocation_Y() + stepLength);
+            }
+            break;
+            case 2: {
+                guests.get(guest).setLocation_X(guests.get(guest).getLocation_X() - stepLength);
+            }
+            break;
+            default: {
+                guests.get(guest).setLocation_Y(guests.get(guest).getLocation_Y() - stepLength);
+            }
+            break;
+        }
+    }
+
+    public void moveOneStep(int iGuest, int actualDirection, int crossDirection1, int crossDirection2, int segmentSizeX, int segmentSizeY) {
+// iGuest = i-edik Guest, crossDirection-ok a keresztező útvonalak, segmentSizeX-Y-t aszerint növeljük, hogy merre lép a guest
+        if (checkRoad(guests.get(iGuest).getLocation_X() + segmentSizeX, guests.get(iGuest).getLocation_Y() + segmentSizeY)) {
+                int tempDirection = checkIntersection(guests.get(iGuest).getLocation_X(), guests.get(iGuest).getLocation_Y(), actualDirection, crossDirection1, crossDirection2);
+                if (tempDirection == actualDirection) {
+                    doStep(iGuest, actualDirection, segmentSize / stepsPerSegment);
+                } else {
+                    guests.get(iGuest).setDirection(tempDirection);
+                }
+
+        } else {
+            Random random = new Random();
+            int r;
+            do {
+                r = random.nextInt(4);
+            } while (r == actualDirection);
+            guests.get(iGuest).setDirection(r);
+        }
+    }
+
+    public void moveGuest() {           //guest léptetése iránytól függően
         for (int i = 0; i < guests.size(); i++) {
-                if (guests.get(i).getDirection() == 0) {            //jobbra lép
-                    if(checkRoad(guests.get(i).getLocation_X() + segmentSize, guests.get(i).getLocation_Y())){
-                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() + segmentSize/2);
-                        } else {
-                            Random random = new Random();
-                            int r = random.nextInt(4);
-                            guests.get(i).setDirection(r);
-                        }
+            switch (guests.get(i).getDirection()) {
+                case 0: {
+                    moveOneStep(i, 0, 1, 3,segmentSize,0);  //jobbra
                 }
+                break;
+                case 1: {
+                    moveOneStep(i, 1, 0, 2,0,segmentSize);  //lefele
+                }
+                break;
+                case 2: {
+                    moveOneStep(i, 2, 1, 3,-segmentSize,0); //balra
+                }
+                break;
+                default: {
+                    moveOneStep(i, 3, 0, 2,0,-segmentSize); //felfele
+                }
+                break;
 
-                else if (guests.get(i).getDirection() == 1) {               //lefele lép
-                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() + segmentSize)){
-                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() + segmentSize/2);
-                        } else {
-                            Random random = new Random();
-                            int r = random.nextInt(4);
-                            guests.get(i).setDirection(r);
-                        }
+            }
+        }
+    }
+
+    //move Cleaner functions
+    public void doStepCleaner(int cleaner, int Direction, int stepLength) {                  // itt léptetjük a a guestet az adott(direction) irányba egy stepLengthet
+        switch (Direction) {
+            case 0: {
+                workers.get(cleaner).setLocation_X(workers.get(cleaner).getLocation_X() + stepLength);
+            }
+            break;
+            case 1: {
+                workers.get(cleaner).setLocation_Y(workers.get(cleaner).getLocation_Y() + stepLength);
+            }
+            break;
+            case 2: {
+                workers.get(cleaner).setLocation_X(workers.get(cleaner).getLocation_X() - stepLength);
+            }
+            break;
+            default: {
+                workers.get(cleaner).setLocation_Y(workers.get(cleaner).getLocation_Y() - stepLength);
+            }
+            break;
+        }
+    }
+
+    public void moveOneStepCleaner(int iCleaner, int actualDirection, int crossDirection1, int crossDirection2, int segmentSizeX, int segmentSizeY){
+        if (checkRoad(workers.get(iCleaner).getLocation_X() + segmentSizeX, workers.get(iCleaner).getLocation_Y() + segmentSizeY)) {
+            int tempDirection = checkIntersection(workers.get(iCleaner).getLocation_X(), workers.get(iCleaner).getLocation_Y(), actualDirection, crossDirection1, crossDirection2);
+            if (tempDirection == actualDirection) {
+                doStepCleaner(iCleaner, actualDirection, segmentSize / stepsPerSegment);
+            } else {
+                workers.get(iCleaner).setDirection(tempDirection);
+            }
+
+        } else {
+            Random random = new Random();
+            int r;
+            do {
+                r = random.nextInt(4);
+            } while (r == actualDirection);
+            workers.get(iCleaner).setDirection(r);
+        }
+    }
+
+    public void moveCleaner(){
+        for (int i = 0; i < workers.size(); i++) {
+            if(workers.get(i).getPersonImages().equals("cleaner")) {
+                switch (workers.get(i).getDirection()) {
+                    case 0: {
+                        moveOneStepCleaner(i, 0, 1, 3, segmentSize, 0);
                     }
-
-                else if (guests.get(i).getDirection() == 2) {                       //balra lép
-                    if (checkRoad(guests.get(i).getLocation_X() - segmentSize/2, guests.get(i).getLocation_Y())){
-                            guests.get(i).setLocation_X(guests.get(i).getLocation_X() - segmentSize/2);
-                        } else {
-                            Random random = new Random();
-                            int r = random.nextInt(4);
-                            guests.get(i).setDirection(r);
-                        }
-                }
-
-                 else {                                                              //felfele lép
-                    if (checkRoad(guests.get(i).getLocation_X(), guests.get(i).getLocation_Y() - segmentSize/2)) {
-                            guests.get(i).setLocation_Y(guests.get(i).getLocation_Y() - segmentSize/2);
-                        } else {
-                            Random random = new Random();
-                            int r = random.nextInt(4);
-                            guests.get(i).setDirection(r);
-                        }
+                    break;
+                    case 1: {
+                        moveOneStepCleaner(i, 1, 0, 2, 0, segmentSize);
                     }
+                    break;
+                    case 2: {
+                        moveOneStepCleaner(i, 2, 1, 3, -segmentSize, 0);
+                    }
+                    break;
+                    default: {
+                        moveOneStepCleaner(i, 3, 0, 2, 0, -segmentSize);
+                    }
+                    break;
+
                 }
+            }
+        }
     }
 
     public void generateGuest(){
         Random random = new Random();
         int r = random.nextInt(100);
         if(guestNumber < maxGuests) {
-            if (r % 5 == 0) {
+            if (r % 10 == 0) {
                 guests.add(new Guest("guest", 60, 80, segmentSize, segmentSize));
                 guestNumber++;
 
             }
+        }
+    }
+
+    public void generateWorker(){
+        if(ThemeParkGUI.selected_ge.equals(EGeneralEquipment.CLEANER)){
+            workers.add(new Worker("cleaner",60,80, segmentSize, segmentSize));
+            ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+        }
+
+        else if(ThemeParkGUI.selected_ge.equals(EGeneralEquipment.MAINTENANCE)){
+            workers.add(new Worker("maintenance",60,80, segmentSize, segmentSize));
+            ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
         }
     }
 
@@ -170,6 +342,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
         /*
          * Redraw images
+         * Buildings
          * Manage budget
          */
         for (int i = 0; i < buildings.size(); i++) {
@@ -192,6 +365,22 @@ public class TPBoard extends JPanel implements MouseListener {
                 img = ImageIO.read(new File("data\\images\\" + guests.get(i).getPersonImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, guests.get(i).getLocation_X(), guests.get(i).getLocation_Y(), guests.get(i).getBuildingsSizesA(), guests.get(i).getBuildingsSizesB(), null);
+            } catch (IOException f) {
+                System.out.println("error");
+                f.printStackTrace();
+            }
+        }
+
+        /*
+         * Redraw images
+         * Cleaners
+         */
+        for (int i = 0; i < workers.size(); i++) {
+            try {
+                img = ImageIO.read(new File("data\\images\\" + workers.get(i).getPersonImages() + ".png"));
+                Graphics2D g3d = (Graphics2D) g;
+                g3d.drawImage(img, workers.get(i).getLocation_X(), workers.get(i).getLocation_Y(), workers.get(i).getBuildingsSizesA(), workers.get(i).getBuildingsSizesB(), null);
+                budget-=workers.get(i).getSalary();
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();
@@ -228,9 +417,11 @@ public class TPBoard extends JPanel implements MouseListener {
         repaint();
 
         /*
-         * If selected game not nothing (empty variable), check what kind of GeneralEquipment is selected.
+         * If selected game not nothing (empty variable) not cleaner or not maintenance, check what kind of GeneralEquipment is selected.
          */
-        if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)) {
+        if (!ThemeParkGUI.selected_ge.equals(EGeneralEquipment.NOTHING)
+                && !ThemeParkGUI.selected_ge.equals(EGeneralEquipment.CLEANER)
+        && !ThemeParkGUI.selected_ge.equals(EGeneralEquipment.MAINTENANCE)) {
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROAD)) {  // If the selected GeneralEquipment is road
                                                                             // builds road
                 x = e.getX();

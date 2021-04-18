@@ -37,6 +37,7 @@ public class ThemeParkGUI extends JFrame{
         JMenu settingsMenu = new JMenu("Settings");
         JMenu buildGame = new JMenu("Game");
         JMenu buildGeneralEquipment = new JMenu("General Equipment");
+        JMenu callStaff = new JMenu("Call Staff");
 
         /**
          * Adding the menus to the menubar
@@ -44,6 +45,7 @@ public class ThemeParkGUI extends JFrame{
         menub.add(settingsMenu);
         menub.add(buildGame);
         menub.add(buildGeneralEquipment);
+        menub.add(callStaff);
 
         /**
          * Settings menuitems creation
@@ -86,6 +88,17 @@ public class ThemeParkGUI extends JFrame{
         buildGeneralEquipment.add(bushMenuItem);
         buildGeneralEquipment.add(roadMenuItem);
         buildGeneralEquipment.add(trashBinMenuItem);
+
+        /**
+         * Call Staff menuitems creation
+         * Adding staffs to Call staff dropdown
+         */
+
+        JMenuItem callCleaner = new JMenuItem("  200 | Cleaner", coinIcon);
+        JMenuItem callMaintenance = new JMenuItem("  200 | Maintenance", coinIcon);
+
+        callStaff.add(callCleaner);
+        callStaff.add(callMaintenance);
 
         /**
          * Button to stop building
@@ -250,6 +263,26 @@ public class ThemeParkGUI extends JFrame{
             }
         });
 
+        /**
+         * ActionListeners
+         *
+         * Upon clicking on the Call Staff option the user can call 2 types of staffs
+         */
+
+        callCleaner.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                selected_ge = EGeneralEquipment.CLEANER;
+            }
+        });
+
+        callMaintenance.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                selected_ge = EGeneralEquipment.MAINTENANCE;
+            }
+        });
+
         stopBuild.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -258,5 +291,6 @@ public class ThemeParkGUI extends JFrame{
                 selected_ge = EGeneralEquipment.NOTHING;
             }
         });
+
     }
 }

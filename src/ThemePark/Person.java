@@ -42,4 +42,8 @@ public class Person {
     public void setLocation_Y(int location_Y) {
         this.location_Y = location_Y;
     }
+
+    public void setPersonImages(String personImages){
+        this.personImages = personImages;
+    }
 }

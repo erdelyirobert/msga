@@ -5,7 +5,7 @@ package ThemePark;
  */
 public class Building {
     private String buildingsImages;
-    private int constructionTime;
+    private double constructionTime;
     private int buildPrice;
     private int location_X;
     private int location_Y;
@@ -15,7 +15,7 @@ public class Building {
     private int closestPoint_Y = -20;
 
 
-    public Building(String buildingsImages, int constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
+    public Building(String buildingsImages, double constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         this.buildingsImages = buildingsImages;
         this.constructionTime = constructionTime;
         this.buildPrice = buildPrice;
@@ -33,7 +33,7 @@ public class Building {
         this.buildingsImages = buildingsImages;
     }
 
-    public int getConstructionTime() {
+    public double getConstructionTime() {
         return constructionTime;
     }
 

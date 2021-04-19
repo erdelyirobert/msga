@@ -64,9 +64,22 @@ public class TPBoard extends JPanel implements MouseListener {
             generateWorker();
             moveCleaner();
             moveGuest();
+            reduceConstTime();
             repaint();
         });
         timer.start();
+    }
+
+    public void reduceConstTime(){
+        for(int i = 0; i < buildings.size(); i++){
+            if(buildings.get(i).getConstructionTime() >= 0){
+                buildings.get(i).setConstructionTime((int) (buildings.get(i).getConstructionTime() - 0.1));
+            }
+
+            if(buildings.get(i).getConstructionTime() <= 0){
+
+            }
+        }
     }
 
     public boolean checkRoad(int x, int y) {                 //amig nem egész szám a segment size, addig nem értünk a szélére, tehát léptetjük
@@ -357,13 +370,22 @@ public class TPBoard extends JPanel implements MouseListener {
                         guests.get(i).setMood(guests.get(i).getMood() + 1);
                     }
                 }
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BIN")) {
+                        guests.get(i).setMood(guests.get(i).getMood() - 1);
+                    }
+                }
             }
-            System.out.println(guests.get(i).getMood());
+            //System.out.println(guests.get(i).getMood());
         }
     }
-
-
-
 
     /**
      * @param mouse_X x coordinate of clicked mouse
@@ -392,14 +414,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 1.5;
                     double circleRadius_B = (double) segmentSize * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
                 //2. if BINre
@@ -407,14 +427,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 1.5;
                     double circleRadius_B = (double) segmentSize * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
 
@@ -423,18 +441,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 2 * 1.5;
                     double circleRadius_B = (double) segmentSize * 2 * 1.5;
 
-                    double circleRadius_A1 = (double) segmentSize * 2 * 1;
-                    double circleRadius_B1 = (double) segmentSize * 2 * 1;
-
-
-                    if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_A1, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_B1, 2))
-                            && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
+                    if ((Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
                 //4. if ROLLERCOASTEREe
@@ -442,14 +454,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
 
@@ -458,14 +468,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 4 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
 
@@ -474,14 +482,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
 
                 //7. if WHEEL
@@ -489,22 +495,18 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 6 * 1.5;
 
-
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
                     } else {
                         joe = false;
                     }
-
                 }
-
 
                 //8. if SLIDE
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.SLIDE)) {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
-
 
                     if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -512,15 +514,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     } else {
                         joe = false;
                     }
-
                 }
-
 
                 //9. if RESTAURANT
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.RESTAURANT)) {
                     double circleRadius_A = (double) segmentSize * 3 * 1.5;
                     double circleRadius_B = (double) segmentSize * 2 * 1.5;
-
 
                     if ((Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -528,15 +527,10 @@ public class TPBoard extends JPanel implements MouseListener {
                     } else {
                         joe = false;
                     }
-
                 }
-
-
             }
         }
-
         return joe;
-
     }
 
     public boolean isCanBuildOn(int mouse_X, int mouse_Y) {
@@ -556,7 +550,6 @@ public class TPBoard extends JPanel implements MouseListener {
         return raepit;
 
     }
-
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -607,6 +600,11 @@ public class TPBoard extends JPanel implements MouseListener {
          */
         for (int i = 0; i < guests.size(); i++) {
             try {
+                if(guests.get(i).getMood() <= 5){
+                    guests.get(i).setPersonImages("guest_angeri");
+                }else{
+                    guests.get(i).setPersonImages("guest");
+                }
                 img = ImageIO.read(new File("data\\images\\" + guests.get(i).getPersonImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, guests.get(i).getLocation_X(), guests.get(i).getLocation_Y(), guests.get(i).getBuildingsSizesA(), guests.get(i).getBuildingsSizesB(), null);
@@ -714,7 +712,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (canBuild && canBuildOn && budget - 10 >= 0) {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Building("ROAD", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
@@ -734,7 +732,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
 
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    buildings.add(new Building("BUSH", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    buildings.add(new Building("BUSH", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     System.out.println(x + "," + y);//these co-ords are relative to the component
 
                     repaint();
@@ -780,7 +778,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (canBuild && (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY()))) {
                     System.out.println("KUKA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Building("BIN", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    buildings.add(new Building("BIN", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
                     repaint();
                 }  else if (budget - 10 < 0) {
@@ -805,7 +803,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("FA EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Building("TREE", 0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
+                    buildings.add(new Building("TREE", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TREE");
@@ -827,7 +825,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("RC EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("rollercoaster", 0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+                    buildings.add(new Game("rollercoaster_underconstruction", 5.0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
@@ -849,7 +847,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("TRAIN EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("TRAIN", 0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
+                    buildings.add(new Game("train_underconstruction", 5.0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
@@ -871,7 +869,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("WP EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WATERPARK", 0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+                    buildings.add(new Game("waterpark_underconstruction", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
                     repaint();
                 }  else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
@@ -893,7 +891,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1500 >= 0 && canBuildOn && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("WHEEL EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("WHEEL", 0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
+                    buildings.add(new Game("wheel_underconstruction", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
 
                     repaint();
                 } else if (budget - 1500 < 0) {
@@ -916,7 +914,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("SLIDE EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("SLIDE", 0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
+                    buildings.add(new Game("slide_underconstruction", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
                     repaint();
                 }  else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
@@ -938,7 +936,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 600 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     System.out.println("RESTAURANT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Restaurant("RESTAURANT", 0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2, 15));
+                    buildings.add(new Restaurant("RESTAURANT", 0.0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2, 15));
 
                     repaint();
                 } else if (budget - 600 < 0) {

@@ -70,39 +70,11 @@ public class TPBoard extends JPanel implements MouseListener {
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
-            dijkstra();
-            isItRoad(60,70);
             repaint();
         });
         timer.start();
     }
 
-    ArrayList<Connections> pairs = new ArrayList<Connections>();
-
-    public void dijkstra() {
-
-        for (int i = 0; i < WIDTH; i += segmentSize) {
-            for (int j = 0; j < HEIGHT; j += segmentSize) {
-                if (isItRoad(i, j) && isItRoad(i + segmentSize,j)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i+segmentSize, j)));
-                }
-                if (isItRoad(i, j) && isItRoad(i - segmentSize,j)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i-segmentSize, j)));
-                }
-                if (isItRoad(i, j) && isItRoad(i,j+segmentSize)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j+segmentSize)));
-                }
-                if (isItRoad(i, j) && isItRoad(i ,j-segmentSize)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j-segmentSize)));
-                }
-            }
-
-        }
-        for (int i = 0; i < pairs.size(); i++) {
-            System.out.println(i + ".dik kapcsolat: első koordináta x: " + pairs.get(i).getConnection1().getX() + " második koordináta y: " + pairs.get(i).getConnection1().getY() + " második koordináta x: " + pairs.get(i).getConnection2().getX() + " második koordináta y: " + pairs.get(i).getConnection2().getY());
-        }
-        System.out.println("párok száma:" + pairs.size());
-    }
 
     public boolean isItRoad(int x, int y){
         for (int j = 0; j < buildings.size(); j++) {
@@ -774,7 +746,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }

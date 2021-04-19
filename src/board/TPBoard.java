@@ -63,7 +63,8 @@ public class TPBoard extends JPanel implements MouseListener {
         buildings.add(starterRoad);
         Building starterRoad2 = new Building("ROAD", 0, 0, 60, 100, segmentSize, segmentSize);
         buildings.add(starterRoad2);
-
+        connections.add(new Connection(new Pair(60,80), new Pair(60, 100)));
+        //System.out.println(connections.);
         timer = new Timer(TD, (ActionEvent e) -> {
             setClosestPointsToGames();
             changeMoodByGeneralEquipment();
@@ -88,29 +89,46 @@ public class TPBoard extends JPanel implements MouseListener {
     public void addEdge() {
         for (int i = 0; i < WIDTH - segmentSize; i += segmentSize) {
             for (int j = 0; j < HEIGHT - segmentSize; j += segmentSize) {
-                for(int k = 0; k < connections.size(); k++) {
-                    if(connections.get(k).getFirst().getX() != i && connections.get(k).getFirst().getY() != j
-                            || connections.get(k).getSecond().getX() != i && connections.get(k).getSecond().getY() != j) {
-                        if (isItRoad(i, j) && isItRoad(i + segmentSize, j)) {
-                            connections.add(new Connection(new Pair(i, j), new Pair(i + segmentSize, j)));
-                            System.out.println("beleraktam");
-                        } else if (isItRoad(i, j) && isItRoad(i - segmentSize, j)) {
-                            connections.add(new Connection(new Pair(i, j), new Pair(i - segmentSize, j)));
-                            System.out.println("beleraktam");
-                        } else if (isItRoad(i, j) && isItRoad(i, j + segmentSize)) {
-                            connections.add(new Connection(new Pair(i, j), new Pair(i, j + segmentSize)));
-                            System.out.println("beleraktam");
-                        } else if (isItRoad(i, j) && isItRoad(i, j - segmentSize)) {
-                            connections.add(new Connection(new Pair(i, j), new Pair(i, j - segmentSize)));
-                            System.out.println("beleraktam");
-                        }
-                    }
+                //for (int k = 0; k < connections.size(); k++) {
+                //if (connections.get(k).getFirst().getX() != i && connections.get(k).getFirst().getY() != j
+                //        || connections.get(k).getSecond().getX() != i && connections.get(k).getSecond().getY() != j) {
+
+                if (isItRoad(i, j) && isItRoad(i + segmentSize, j)) {
+                    connections.add(new Connection(new Pair(i, j), new Pair(i + segmentSize, j)));
+                    System.out.println("beleraktam");
+                } else if (isItRoad(i, j) && isItRoad(i - segmentSize, j)) {
+                    connections.add(new Connection(new Pair(i, j), new Pair(i - segmentSize, j)));
+                    System.out.println("beleraktam");
+                } else if (isItRoad(i, j) && isItRoad(i, j + segmentSize)) {
+                    connections.add(new Connection(new Pair(i, j), new Pair(i, j + segmentSize)));
+                    System.out.println("beleraktam");
+                } else if (isItRoad(i, j) && isItRoad(i, j - segmentSize)) {
+                    connections.add(new Connection(new Pair(i, j), new Pair(i, j - segmentSize)));
+                    System.out.println("beleraktam");
+                }
+                //}
+                //}
+            }
+        }
+
+        for (int i = 0; i < connections.size(); i++) {
+            for (int j = 1; j < connections.size(); j++) {
+                if (connections.get(i).getFirst().getX() == connections.get(j).getFirst().getX()
+                        && connections.get(i).getFirst().getY() == connections.get(j).getFirst().getY()
+                        || connections.get(i).getSecond().getX() == connections.get(j).getSecond().getX()
+                        && connections.get(i).getSecond().getY() == connections.get(j).getSecond().getY()
+                        || connections.get(i).getFirst().getX() == connections.get(j).getSecond().getX()
+                        && connections.get(i).getFirst().getY() == connections.get(j).getSecond().getY()
+                        || connections.get(i).getSecond().getX() == connections.get(j).getFirst().getX()
+                        && connections.get(i).getSecond().getY() == connections.get(j).getFirst().getY()) {
+                            connections.remove(connections.get(j));
+                    System.out.println("töröltem");
                 }
             }
         }
 
         for (int i = 0; i < connections.size(); i++) {
-            System.out.println(i+1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY()+")");
+            System.out.println(i + 1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY() + ")");
         }
     }
 

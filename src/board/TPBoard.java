@@ -84,16 +84,16 @@ public class TPBoard extends JPanel implements MouseListener {
         for (int i = 0; i < WIDTH; i += segmentSize) {
             for (int j = 0; j < HEIGHT; j += segmentSize) {
                 if (isItRoad(i, j) && isItRoad(i + segmentSize,j)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i+segmentSize, j)));
                 }
                 if (isItRoad(i, j) && isItRoad(i - segmentSize,j)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i-segmentSize, j)));
                 }
                 if (isItRoad(i, j) && isItRoad(i,j+segmentSize)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j+segmentSize)));
                 }
                 if (isItRoad(i, j) && isItRoad(i ,j-segmentSize)) {
-                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j-segmentSize)));
                 }
             }
 

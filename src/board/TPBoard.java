@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,8 +32,12 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean canBuild; // Can we build next to the road
     public boolean canBuildOn; //Not to build an object to antoher object
     public ArrayList<Building> buildings = new ArrayList<Building>();
+
+
+
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
+
     public Timer timer;
     public int TD = 100;
     Random random = new Random();
@@ -64,20 +69,76 @@ public class TPBoard extends JPanel implements MouseListener {
             generateWorker();
             moveCleaner();
             moveGuest();
-            reduceConstTime();
+            reduceConstructionTime();
+            dijkstra();
+            isItRoad(60,70);
             repaint();
         });
         timer.start();
     }
 
-    public void reduceConstTime(){
+    ArrayList<Connections> pairs = new ArrayList<Connections>();
+
+    public void dijkstra() {
+
+        for (int i = 0; i < WIDTH; i += segmentSize) {
+            for (int j = 0; j < HEIGHT; j += segmentSize) {
+                if (isItRoad(i, j) && isItRoad(i + segmentSize,j)) {
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                }
+                if (isItRoad(i, j) && isItRoad(i - segmentSize,j)) {
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                }
+                if (isItRoad(i, j) && isItRoad(i,j+segmentSize)) {
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                }
+                if (isItRoad(i, j) && isItRoad(i ,j-segmentSize)) {
+                    pairs.add(new Connections(new Pair(i, j), new Pair(i, j)));
+                }
+            }
+
+        }
+        for (int i = 0; i < pairs.size(); i++) {
+            System.out.println(i + ".dik kapcsolat: első koordináta x: " + pairs.get(i).getConnection1().getX() + " második koordináta y: " + pairs.get(i).getConnection1().getY() + " második koordináta x: " + pairs.get(i).getConnection2().getX() + " második koordináta y: " + pairs.get(i).getConnection2().getY());
+        }
+        System.out.println("párok száma:" + pairs.size());
+    }
+
+    public boolean isItRoad(int x, int y){
+        for (int j = 0; j < buildings.size(); j++) {
+            if (buildings.get(j).getBuildingsImages().equals("ROAD")) {
+                if (x == buildings.get(j).getLocation_X()
+                        && y == buildings.get(j).getLocation_Y()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void reduceConstructionTime(){
         for(int i = 0; i < buildings.size(); i++){
             if(buildings.get(i).getConstructionTime() >= 0){
-                buildings.get(i).setConstructionTime((int) (buildings.get(i).getConstructionTime() - 0.1));
+                buildings.get(i).setConstructionTime((buildings.get(i).getConstructionTime() - 0.1));
+                System.out.println();
             }
 
             if(buildings.get(i).getConstructionTime() <= 0){
-
+                if(buildings.get(i).getBuildingsImages().equals("slide_underconstruction")){
+                    buildings.get(i).setBuildingsImages("SLIDE");
+                }
+                if(buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")){
+                    buildings.get(i).setBuildingsImages("WATERPARK");
+                }
+                if(buildings.get(i).getBuildingsImages().equals("rollercoaster_underconstruction")){
+                    buildings.get(i).setBuildingsImages("rollercoaster");
+                }
+                if(buildings.get(i).getBuildingsImages().equals("wheel_underconstruction")){
+                    buildings.get(i).setBuildingsImages("WHEEL");
+                }
+                if(buildings.get(i).getBuildingsImages().equals("train_underconstruction")){
+                    buildings.get(i).setBuildingsImages("TRAIN");
+                }
             }
         }
     }

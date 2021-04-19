@@ -37,7 +37,7 @@ public class Building {
         return constructionTime;
     }
 
-    public void setConstructionTime(int constructionTime) {
+    public void setConstructionTime(double constructionTime) {
         this.constructionTime = constructionTime;
     }
 

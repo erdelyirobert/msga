@@ -11,8 +11,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -32,11 +32,9 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean canBuild; // Can we build next to the road
     public boolean canBuildOn; //Not to build an object to antoher object
     public ArrayList<Building> buildings = new ArrayList<Building>();
-
-
-
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
+    private ArrayList<Connection> connections = new ArrayList<Connection>();
 
     public Timer timer;
     public int TD = 100;
@@ -49,6 +47,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private int guestNumber = 0;
     private int segmentSize = 20; //size of one grid
     private int stepsPerSegment = 5;
+    private boolean putRoad = false;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -62,6 +61,9 @@ public class TPBoard extends JPanel implements MouseListener {
         randomTimer = ThreadLocalRandom.current().nextInt(500, 1000);
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
+        Building starterRoad2 = new Building("ROAD", 0, 0, 60, 100, segmentSize, segmentSize);
+        buildings.add(starterRoad2);
+
         timer = new Timer(TD, (ActionEvent e) -> {
             setClosestPointsToGames();
             changeMoodByGeneralEquipment();
@@ -70,11 +72,47 @@ public class TPBoard extends JPanel implements MouseListener {
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
+
+            if(putRoad && buildings.get(buildings.size()-1).getBuildingsImages().equals("ROAD")){
+                addEdge();
+            }
+            putRoad = false;
+
             repaint();
+
         });
         timer.start();
     }
 
+    //Graph logic
+    public void addEdge() {
+        for (int i = 0; i < WIDTH - segmentSize; i += segmentSize) {
+            for (int j = 0; j < HEIGHT - segmentSize; j += segmentSize) {
+                for(int k = 0; k < connections.size(); k++) {
+                    if(connections.get(k).getFirst().getX() != i && connections.get(k).getFirst().getY() != j
+                            || connections.get(k).getSecond().getX() != i && connections.get(k).getSecond().getY() != j) {
+                        if (isItRoad(i, j) && isItRoad(i + segmentSize, j)) {
+                            connections.add(new Connection(new Pair(i, j), new Pair(i + segmentSize, j)));
+                            System.out.println("beleraktam");
+                        } else if (isItRoad(i, j) && isItRoad(i - segmentSize, j)) {
+                            connections.add(new Connection(new Pair(i, j), new Pair(i - segmentSize, j)));
+                            System.out.println("beleraktam");
+                        } else if (isItRoad(i, j) && isItRoad(i, j + segmentSize)) {
+                            connections.add(new Connection(new Pair(i, j), new Pair(i, j + segmentSize)));
+                            System.out.println("beleraktam");
+                        } else if (isItRoad(i, j) && isItRoad(i, j - segmentSize)) {
+                            connections.add(new Connection(new Pair(i, j), new Pair(i, j - segmentSize)));
+                            System.out.println("beleraktam");
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < connections.size(); i++) {
+            System.out.println(i+1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY()+")");
+        }
+    }
 
     public boolean isItRoad(int x, int y){
         for (int j = 0; j < buildings.size(); j++) {
@@ -746,6 +784,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    putRoad = true;
+                    System.out.println(putRoad);
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }

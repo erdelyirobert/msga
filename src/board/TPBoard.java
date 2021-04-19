@@ -45,7 +45,6 @@ public class TPBoard extends JPanel implements MouseListener {
     private int segmentSize = 20; //size of one grid
     private int stepsPerSegment = 5;
 
-
     public TPBoard() throws IOException {
         this.addMouseListener(this);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -59,6 +58,8 @@ public class TPBoard extends JPanel implements MouseListener {
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
         timer = new Timer(TD, (ActionEvent e) -> {
+            setClosestPointsToGames();
+            changeMoodByGeneralEquipment();
             generateGuest();
             generateWorker();
             moveCleaner();
@@ -295,6 +296,75 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+    public double coordinateDistance(int x1,int x2 ,int y1,int y2){      //pitagorasz tétel
+        double first = Math.abs(x1 - x2);
+        double second = Math.abs(y1 - y2);
+        double distance = Math.sqrt(Math.pow(first, 2) + Math.pow(second, 2));
+        return distance;
+    }
+
+    public void setClosestPointsToGames() {
+        for (int i = 0; i < buildings.size(); i++) {
+            if (!buildings.get(i).getBuildingsImages().equals("ROAD")) {
+                double min = 100000.0;
+                for (int j = 0; j < buildings.size(); j++) {
+                    if (buildings.get(j).getBuildingsImages().equals("ROAD")) {
+                        if (min > coordinateDistance(buildings.get(i).getLocation_X(), buildings.get(j).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(j).getLocation_Y())) {
+                            {
+                                min = coordinateDistance(buildings.get(i).getLocation_X(), buildings.get(j).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(j).getLocation_Y());
+                                buildings.get(i).setClosestPoint_X(buildings.get(j).getLocation_X());
+                                buildings.get(i).setClosestPoint_Y(buildings.get(j).getLocation_Y());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void changeMoodByGeneralEquipment() {            //ha elmennek bokor vagy fa mellett a guestek, növeljük a kedvüket
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); ++j) {
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BUSH")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
+                    }
+                }
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize
+                        || buildings.get(j).getLocation_X() + segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize * 2
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize * 2) {
+                    if (buildings.get(j).getBuildingsImages().equals("TREE")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
+                    }
+                }
+            }
+            System.out.println(guests.get(i).getMood());
+        }
+    }
+
+
+
+
     /**
      * @param mouse_X x coordinate of clicked mouse
      * @param mouse_Y y coordinate of clicked mouse
@@ -323,12 +393,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_B = (double) segmentSize * 1.5;
 
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
-
                     if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
                         break;
@@ -343,11 +407,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 1.5;
                     double circleRadius_B = (double) segmentSize * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -367,14 +426,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A1 = (double) segmentSize * 2 * 1;
                     double circleRadius_B1 = (double) segmentSize * 2 * 1;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
-                    System.out.println("crA1: " + circleRadius_A1);
-                    System.out.println("crB1: " + circleRadius_B1);
 
                     if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_A1, 2)) && (Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) >= (Math.pow(circleRadius_B1, 2))
                             && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
@@ -391,11 +442,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -412,11 +458,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 4 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -433,11 +474,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -453,11 +489,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 6 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 6 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 6 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -474,11 +505,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 6 * 1.5;
                     double circleRadius_B = (double) segmentSize * 4 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 4 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 4 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -495,11 +521,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     double circleRadius_A = (double) segmentSize * 3 * 1.5;
                     double circleRadius_B = (double) segmentSize * 2 * 1.5;
 
-                    System.out.println("-------------------");
-                    System.out.println("A size: " + buildings.get(i).getBuildingsSizesA());
-                    System.out.println("B size: " + buildings.get(i).getBuildingsSizesB());
-                    System.out.println("crA: " + circleRadius_A);
-                    System.out.println("crB: " + circleRadius_B);
 
                     if ((Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2)) && (Math.pow(pointToCheckX + segmentSize * 3 / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize * 2 / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_B, 2))) {
                         joe = true;
@@ -509,9 +530,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
 
                 }
-
-
-                /////////////////////////////
 
 
             }
@@ -576,6 +594,8 @@ public class TPBoard extends JPanel implements MouseListener {
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(i).getBuildingsSizesA(), buildings.get(i).getBuildingsSizesB(), null);
                 budget -= buildings.get(i).getBuildPrice();
+                g.setColor(Color.BLACK);
+                g.fillRect(buildings.get(i).getClosestPoint_X(),buildings.get(i).getClosestPoint_Y(),segmentSize,segmentSize);
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();

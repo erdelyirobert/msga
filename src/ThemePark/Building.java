@@ -11,8 +11,8 @@ public class Building {
     private int location_Y;
     private int buildingsSizesA; //szélesség: width
     private int buildingsSizesB; //magasság: height
-    private int closestRoad_X;
-    private int closestRoad_Y;
+    private int closestPoint_X = -20;
+    private int closestPoint_Y = -20;
 
 
     public Building(String buildingsImages, int constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
@@ -102,19 +102,19 @@ public class Building {
      * and you can get it from getters
     * */
 
-    public int getClosestRoad_X() {
-        return closestRoad_X;
+    public int getClosestPoint_X() {
+        return closestPoint_X;
     }
 
-    public void setClosestRoad_X(int closestRoad_X) {
-        this.closestRoad_X = closestRoad_X;
+    public void setClosestPoint_X(int closestPoint_X) {
+        this.closestPoint_X = closestPoint_X;
     }
 
-    public int getClosestRoad_Y() {
-        return closestRoad_Y;
+    public int getClosestPoint_Y() {
+        return closestPoint_Y;
     }
 
-    public void setClosestRoad_Y(int closestRoad_Y) {
-        this.closestRoad_Y = closestRoad_Y;
+    public void setClosestPoint_Y(int closestPoint_Y) {
+        this.closestPoint_Y = closestPoint_Y;
     }
 }

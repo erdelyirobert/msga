@@ -35,6 +35,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Worker> workers = new ArrayList<Worker>();
     public ArrayList<Connection> connections = new ArrayList<Connection>();
     public ArrayList<Building> roads = new ArrayList<Building>();
+    public ArrayList<Trash> trashes = new ArrayList<Trash>();
 
     public Timer timer;
     public int TD = 100;
@@ -47,8 +48,6 @@ public class TPBoard extends JPanel implements MouseListener {
     private int guestNumber = 0;
     private int segmentSize = 20; //size of one grid
     private int stepsPerSegment = 5;
-    private boolean putRoad = false;
-    private int roadNumber = 1;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -69,7 +68,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
         connections.add(new Connection(new Pair(60, 80), new Pair(60, 100)));*/
 
-        System.out.println("szia");
+
         timer = new Timer(TD, (ActionEvent e) -> {
             setClosestPointsToGames();
             changeMoodByGeneralEquipment();
@@ -78,11 +77,25 @@ public class TPBoard extends JPanel implements MouseListener {
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
-            //if (putRoad && buildings.get(buildings.size() - 1).getBuildingsImages().equals("ROAD")) {
-                addEdge();
+            beenToRestaurant();
+            leaveTrash();
+            cleanTrash();
 
-            //}
-            //putRoad = false;
+            for(int i = 0; i < guests.size(); i++){
+                for (int j = 0; j < workers.size(); j++) {
+                    for (int k = 0; k < trashes.size(); k++) {
+                        if(workers.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                                && trashes.get(k).getLocation_X() == workers.get(j).getLocation_X()
+                                && workers.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                                && trashes.get(k).getLocation_Y() == workers.get(j).getLocation_Y()){
+                            System.out.println("cross");
+                        }
+                    }
+                }
+
+
+            }
+
             repaint();
         });
         timer.start();
@@ -90,30 +103,6 @@ public class TPBoard extends JPanel implements MouseListener {
 
     //Graph logic
     /*public void addEdge() {
-        connections.clear();
-        int connectionIndex = 1;
-        int previousX = 60;
-        int previousY = 80;
-
-        if (roadNumber >= 2) {
-            for (int i = 0; i < buildings.size() - 1; i++) {
-                if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-                    if(buildings.get(i).getLocation_X() - segmentSize != previousX  && buildings.get(i).getLocation_Y() != previousY)
-                    connections.add(new Connection(new Pair(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y()), new Pair(buildings.get(i + 1).getLocation_X(), buildings.get(i + 1).getLocation_Y())));
-                    previousX = buildings.get(i).getLocation_X();
-                    previousY = buildings.get(i).getLocation_Y();
-                    connections.get(i).setIndex(connectionIndex);
-                    connectionIndex++;
-                }
-            }
-        }
-
-        for (int i = 0; i < connections.size(); i++) {
-            System.out.println(i + 1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY() + ")");
-        }
-    }*/
-
-    public void addEdge() {
         connections.clear();
         for (int i = 0; i < roads.size() - 1; i += segmentSize) {
             int j = i + segmentSize;
@@ -133,13 +122,41 @@ public class TPBoard extends JPanel implements MouseListener {
         for (int i = 0; i < connections.size(); i++) {
             System.out.println(i + 1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY() + ")");
         }
+    }*/
+    public void cleanTrash(){
+        for(int i = 0; i < workers.size(); i++){
+            if(workers.get(i).getPersonImages().equals("cleaner")){
+                for(int j = 0; j < trashes.size(); j++){
+                    if(workers.get(i).getLocation_X() == trashes.get(j).getLocation_X()
+                    && workers.get(i).getLocation_Y() == trashes.get(j).getLocation_Y()){
+                        System.out.println(trashes.size());
+                        //trashes.clear();
+                    }
+                }
+            }
+        }
     }
 
+    public void beenToRestaurant(){
+        for(int i = 0; i < guests.size(); i++){
+            for(int j = 0; j < buildings.size(); j++){
+                if(guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
+                && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
+                && buildings.get(j).getBuildingsImages().equals("RESTAURANT")){
+                    guests.get(i).startTrashTimer();
+                }
+            }
+        }
+    }
 
-    /*public int[] BFS(int starter){
-        LinkedList<Integer> queue = new LinkedList<Integer>();
-
-    }*/
+    public void leaveTrash(){
+        trashes.clear();
+        for(int i = 0; i < guests.size(); i++){
+            if(guests.get(i).getLeaveTrash()){
+                trashes.add(new Trash(guests.get(i).getLocation_X(),guests.get(i).getLocation_Y()));
+            }
+        }
+    }
 
     public boolean isItRoad(int x, int y) {
         for (int j = 0; j < buildings.size(); j++) {
@@ -728,6 +745,20 @@ public class TPBoard extends JPanel implements MouseListener {
             }
         }
 
+        /*
+         * Redraw images
+         * trashes
+         */
+        for (int i = 0; i < trashes.size(); i++) {
+            try {
+                img = ImageIO.read(new File("data\\images\\TRASH.png"));
+                Graphics2D g3d = (Graphics2D) g;
+                g3d.drawImage(img, trashes.get(i).getLocation_X() + segmentSize/2, trashes.get(i).getLocation_Y() + segmentSize/2, segmentSize/2, segmentSize/2, null);
+            } catch (IOException f) {
+                System.out.println("error");
+                f.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -813,8 +844,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     roads.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
-                    putRoad = true;
-                    roadNumber++;
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }
@@ -1075,6 +1104,4 @@ public class TPBoard extends JPanel implements MouseListener {
     public int getBudget() {
         return budget;
     }
-
-
 }

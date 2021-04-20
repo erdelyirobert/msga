@@ -34,6 +34,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
     public ArrayList<Connection> connections = new ArrayList<Connection>();
+    public ArrayList<Building> roads = new ArrayList<Building>();
 
     public Timer timer;
     public int TD = 100;
@@ -61,6 +62,7 @@ public class TPBoard extends JPanel implements MouseListener {
         randomTimer = ThreadLocalRandom.current().nextInt(500, 1000);
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
+        roads.add(starterRoad);
 
         /*Building starterRoad2 = new Building("ROAD", 0, 0, 60, 100, segmentSize, segmentSize);
         buildings.add(starterRoad2);
@@ -76,11 +78,11 @@ public class TPBoard extends JPanel implements MouseListener {
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
-            if (putRoad && buildings.get(buildings.size() - 1).getBuildingsImages().equals("ROAD")) {
+            //if (putRoad && buildings.get(buildings.size() - 1).getBuildingsImages().equals("ROAD")) {
                 addEdge();
 
-            }
-            putRoad = false;
+            //}
+            //putRoad = false;
             repaint();
         });
         timer.start();
@@ -113,13 +115,16 @@ public class TPBoard extends JPanel implements MouseListener {
 
     public void addEdge() {
         connections.clear();
-        for (int i = 0; i < WIDTH - segmentSize; i += segmentSize) {
+        for (int i = 0; i < roads.size() - 1; i += segmentSize) {
             int j = i + segmentSize;
-            if (isItRoad(i, j - segmentSize) && isItRoad(i , j)) {
+            int k = 0;
+            if (i == roads.get(k).getLocation_X() && (j - segmentSize) == roads.get(k).getLocation_Y()
+                && i == roads.get(k).getLocation_X() && j == roads.get(k).getLocation_Y()) {
                 connections.add(new Connection(new Pair(i, j - segmentSize), new Pair(i, j)));
                 System.out.println("beleraktam");
             }
-            if (isItRoad(j - segmentSize, i) && isItRoad(j, i)) {
+            if (j-segmentSize == roads.get(k).getLocation_X() && i == roads.get(k).getLocation_Y()
+                    && j == roads.get(k).getLocation_X() && i == roads.get(k).getLocation_Y()) {
                 connections.add(new Connection(new Pair(j - segmentSize, i), new Pair(j, i)));
                 System.out.println("beleraktam");
             }
@@ -806,6 +811,8 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println("UT EPULT");
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    roads.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+
                     putRoad = true;
                     roadNumber++;
                 } else if (budget - 10 < 0) {

@@ -149,11 +149,15 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+
     public void leaveTrash(){
-        trashes.clear();
+        //trashes.clear();
         for(int i = 0; i < guests.size(); i++){
             if(guests.get(i).getLeaveTrash()){
                 trashes.add(new Trash(guests.get(i).getLocation_X(),guests.get(i).getLocation_Y()));
+            }
+            if(trashes.size()>2){
+                trashes.clear();
             }
         }
     }
@@ -753,6 +757,7 @@ public class TPBoard extends JPanel implements MouseListener {
             try {
                 img = ImageIO.read(new File("data\\images\\TRASH.png"));
                 Graphics2D g3d = (Graphics2D) g;
+                System.out.println("trash kirajzolás");
                 g3d.drawImage(img, trashes.get(i).getLocation_X() + segmentSize/2, trashes.get(i).getLocation_Y() + segmentSize/2, segmentSize/2, segmentSize/2, null);
             } catch (IOException f) {
                 System.out.println("error");

@@ -3,6 +3,7 @@ package board;
 public class Connection { // 1 él két road között
     private Pair first; //első pont x és y
     private Pair second; //második pont x és y
+    private int index;
 
     public Connection(Pair first, Pair second) {
         this.first = first;
@@ -23,5 +24,13 @@ public class Connection { // 1 él két road között
 
     public void setSecond(Pair second) {
         this.second = second;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

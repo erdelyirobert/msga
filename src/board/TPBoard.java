@@ -5,15 +5,14 @@ import gui.ThemeParkGUI;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -34,8 +33,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
-    private ArrayList<Connection> connections = new ArrayList<Connection>();
-
+    public ArrayList<Connection> connections = new ArrayList<Connection>();
 
     public Timer timer;
     public int TD = 100;
@@ -64,6 +62,12 @@ public class TPBoard extends JPanel implements MouseListener {
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
         buildings.add(starterRoad);
 
+        /*Building starterRoad2 = new Building("ROAD", 0, 0, 60, 100, segmentSize, segmentSize);
+        buildings.add(starterRoad2);
+
+        connections.add(new Connection(new Pair(60, 80), new Pair(60, 100)));*/
+
+        System.out.println("szia");
         timer = new Timer(TD, (ActionEvent e) -> {
             setClosestPointsToGames();
             changeMoodByGeneralEquipment();
@@ -72,8 +76,9 @@ public class TPBoard extends JPanel implements MouseListener {
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
-            if(putRoad && buildings.get(buildings.size()-1).getBuildingsImages().equals("ROAD")){
+            if (putRoad && buildings.get(buildings.size() - 1).getBuildingsImages().equals("ROAD")) {
                 addEdge();
+
             }
             putRoad = false;
             repaint();
@@ -82,14 +87,41 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     //Graph logic
-    public void addEdge() {
+    /*public void addEdge() {
         connections.clear();
+        int connectionIndex = 1;
+        int previousX = 60;
+        int previousY = 80;
 
         if (roadNumber >= 2) {
             for (int i = 0; i < buildings.size() - 1; i++) {
                 if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
+                    if(buildings.get(i).getLocation_X() - segmentSize != previousX  && buildings.get(i).getLocation_Y() != previousY)
                     connections.add(new Connection(new Pair(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y()), new Pair(buildings.get(i + 1).getLocation_X(), buildings.get(i + 1).getLocation_Y())));
+                    previousX = buildings.get(i).getLocation_X();
+                    previousY = buildings.get(i).getLocation_Y();
+                    connections.get(i).setIndex(connectionIndex);
+                    connectionIndex++;
                 }
+            }
+        }
+
+        for (int i = 0; i < connections.size(); i++) {
+            System.out.println(i + 1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY() + ")");
+        }
+    }*/
+
+    public void addEdge() {
+        connections.clear();
+        for (int i = 0; i < WIDTH - segmentSize; i += segmentSize) {
+            int j = i + segmentSize;
+            if (isItRoad(i, j - segmentSize) && isItRoad(i , j)) {
+                connections.add(new Connection(new Pair(i, j - segmentSize), new Pair(i, j)));
+                System.out.println("beleraktam");
+            }
+            if (isItRoad(j - segmentSize, i) && isItRoad(j, i)) {
+                connections.add(new Connection(new Pair(j - segmentSize, i), new Pair(j, i)));
+                System.out.println("beleraktam");
             }
         }
 
@@ -98,7 +130,13 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public boolean isItRoad(int x, int y){
+
+    /*public int[] BFS(int starter){
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+
+    }*/
+
+    public boolean isItRoad(int x, int y) {
         for (int j = 0; j < buildings.size(); j++) {
             if (buildings.get(j).getBuildingsImages().equals("ROAD")) {
                 if (x == buildings.get(j).getLocation_X()
@@ -110,27 +148,27 @@ public class TPBoard extends JPanel implements MouseListener {
         return false;
     }
 
-    public void reduceConstructionTime(){
-        for(int i = 0; i < buildings.size(); i++){
-            if(buildings.get(i).getConstructionTime() >= 0){
+    public void reduceConstructionTime() {
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).getConstructionTime() >= 0) {
                 buildings.get(i).setConstructionTime((buildings.get(i).getConstructionTime() - 0.1));
                 System.out.println();
             }
 
-            if(buildings.get(i).getConstructionTime() <= 0){
-                if(buildings.get(i).getBuildingsImages().equals("slide_underconstruction")){
+            if (buildings.get(i).getConstructionTime() <= 0) {
+                if (buildings.get(i).getBuildingsImages().equals("slide_underconstruction")) {
                     buildings.get(i).setBuildingsImages("SLIDE");
                 }
-                if(buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")){
+                if (buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")) {
                     buildings.get(i).setBuildingsImages("WATERPARK");
                 }
-                if(buildings.get(i).getBuildingsImages().equals("rollercoaster_underconstruction")){
+                if (buildings.get(i).getBuildingsImages().equals("rollercoaster_underconstruction")) {
                     buildings.get(i).setBuildingsImages("rollercoaster");
                 }
-                if(buildings.get(i).getBuildingsImages().equals("wheel_underconstruction")){
+                if (buildings.get(i).getBuildingsImages().equals("wheel_underconstruction")) {
                     buildings.get(i).setBuildingsImages("WHEEL");
                 }
-                if(buildings.get(i).getBuildingsImages().equals("train_underconstruction")){
+                if (buildings.get(i).getBuildingsImages().equals("train_underconstruction")) {
                     buildings.get(i).setBuildingsImages("TRAIN");
                 }
             }
@@ -364,7 +402,7 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public double coordinateDistance(int x1,int x2 ,int y1,int y2){      //pitagorasz tétel
+    public double coordinateDistance(int x1, int x2, int y1, int y2) {      //pitagorasz tétel
         double first = Math.abs(x1 - x2);
         double second = Math.abs(y1 - y2);
         double distance = Math.sqrt(Math.pow(first, 2) + Math.pow(second, 2));
@@ -446,10 +484,10 @@ public class TPBoard extends JPanel implements MouseListener {
      * @param mouse_X x coordinate of clicked mouse
      * @param mouse_Y y coordinate of clicked mouse
      * @return does the building near the road
-     <br>
+     * <br>
      * Checks if a road near if you try to make a building.
      * Input mause X coordiante, and mause Y coordianate
-     <br>
+     * <br>
      * return true if you can build
      * return false if no road near
      */
@@ -643,7 +681,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 g3d.drawImage(img, buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(i).getBuildingsSizesA(), buildings.get(i).getBuildingsSizesB(), null);
                 budget -= buildings.get(i).getBuildPrice();
                 g.setColor(Color.BLACK);
-                g.fillRect(buildings.get(i).getClosestPoint_X(),buildings.get(i).getClosestPoint_Y(),segmentSize,segmentSize);
+                g.fillRect(buildings.get(i).getClosestPoint_X(), buildings.get(i).getClosestPoint_Y(), segmentSize, segmentSize);
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();
@@ -655,9 +693,9 @@ public class TPBoard extends JPanel implements MouseListener {
          */
         for (int i = 0; i < guests.size(); i++) {
             try {
-                if(guests.get(i).getMood() <= 5){
+                if (guests.get(i).getMood() <= 5) {
                     guests.get(i).setPersonImages("guest_angeri");
-                }else{
+                } else {
                     guests.get(i).setPersonImages("guest");
                 }
                 img = ImageIO.read(new File("data\\images\\" + guests.get(i).getPersonImages() + ".png"));
@@ -794,9 +832,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -837,11 +875,11 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Building("BIN", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
 
                     repaint();
-                }  else if (budget - 10 < 0) {
+                } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BIN");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
 
@@ -863,9 +901,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TREE");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -885,9 +923,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -907,9 +945,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -927,11 +965,11 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("waterpark_underconstruction", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
                     repaint();
-                }  else if (budget - 1000 < 0) {
+                } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -952,9 +990,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 1500 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WHEEL");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -972,11 +1010,11 @@ public class TPBoard extends JPanel implements MouseListener {
                     System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("slide_underconstruction", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
                     repaint();
-                }  else if (budget - 800 < 0) {
+                } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }
@@ -997,9 +1035,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     repaint();
                 } else if (budget - 600 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for RESTAURANT");
-                }else if( !PointIsWithinCircle(e.getX(), e.getY())){
+                } else if (!PointIsWithinCircle(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build away from the road.");
-                }else if(!isCanBuildOn(e.getX(), e.getY())){
+                } else if (!isCanBuildOn(e.getX(), e.getY())) {
                     JOptionPane.showMessageDialog(frame, "You can't build on the road.");
                 }
             }

@@ -135,9 +135,9 @@ public class TPBoard extends JPanel implements MouseListener {
         gameIndexes.clear();
         for (int i = 0; i < buildings.size(); i++) {
             if(buildings.get(i).getBuildingsImages().equals("SLIDE")
-            || buildings.get(i).getBuildingsImages().equals("rollercoaster")
-            || buildings.get(i).getBuildingsImages().equals("WATERPARK")
-            || buildings.get(i).getBuildingsImages().equals("TRAIN")
+                    || buildings.get(i).getBuildingsImages().equals("rollercoaster")
+                    || buildings.get(i).getBuildingsImages().equals("WATERPARK")
+                    || buildings.get(i).getBuildingsImages().equals("TRAIN")
                     || buildings.get(i).getBuildingsImages().equals("WHEEL")){
                 gameIndexes.add(i);
             }
@@ -185,14 +185,14 @@ public class TPBoard extends JPanel implements MouseListener {
             boolean onBin = checkBin(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X()%segmentSize), guests.get(i).getLocation_Y()-(guests.get(i).getLocation_Y()%segmentSize));
             System.out.println(onBin);
             if (guests.get(i).canLeaveTrash(onBin)) {
-                    trashes.add(new Trash(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize), guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize)));
+                trashes.add(new Trash(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize), guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize)));
 
-                    if(onBin) {
-                        shortTimerActive = true;
-                    }
-
+                if(onBin) {
+                    shortTimerActive = true;
                 }
+
             }
+        }
     }
 
 
@@ -221,15 +221,15 @@ public class TPBoard extends JPanel implements MouseListener {
 
 
     public boolean checkBin(int x, int y){
-            for(int i = 0; i < buildings.size(); i++){
-                if (buildings.get(i).getBuildingsImages().equals("BIN")
-                        && buildings.get(i).getClosestPoint_X() == x
-                        && buildings.get(i).getClosestPoint_Y() == y){
+        for(int i = 0; i < buildings.size(); i++){
+            if (buildings.get(i).getBuildingsImages().equals("BIN")
+                    && buildings.get(i).getClosestPoint_X() == x
+                    && buildings.get(i).getClosestPoint_Y() == y){
 
-                    return true;
-                }
+                return true;
             }
-            return false;
+        }
+        return false;
     }
 
     /*public void checkBin(){

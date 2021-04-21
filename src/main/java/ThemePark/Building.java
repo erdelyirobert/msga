@@ -11,8 +11,10 @@ public class Building {
     private int location_Y;
     private int buildingsSizesA; //szélesség: width
     private int buildingsSizesB; //magasság: height
+    private int usagePrice;
     private int closestPoint_X = -20;
     private int closestPoint_Y = -20;
+
 
 
     public Building(String buildingsImages, double constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
@@ -117,5 +119,13 @@ public class Building {
 
     public void setClosestPoint_Y(int closestPoint_Y) {
         this.closestPoint_Y = closestPoint_Y;
+    }
+
+    public int getUsagePrice() {
+        return usagePrice;
+    }
+
+    public void setUsagePrice(int usagePrice) {
+        this.usagePrice = usagePrice;
     }
 }

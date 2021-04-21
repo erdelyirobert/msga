@@ -37,10 +37,10 @@ public class Guest extends Person{
 
 
 
-    public boolean canLeaveTrash(){  // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a szemetet
+    public boolean canLeaveTrash(boolean onBin){  // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a szemetet
         if(activateTimer){
             trashTimer--;
-            if(trashTimer==0){
+            if(trashTimer==0 || onBin && trashTimer < 20){
                 trashTimer = 50;
                 activateTimer = false;
                 return true;

@@ -82,6 +82,7 @@ public class Building {
     }
 
 
+
     /**
      * Terület kiszámitási logika
      * Kiszámítja az adott területet

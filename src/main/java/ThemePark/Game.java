@@ -14,4 +14,9 @@ public class Game extends Building {
     public int getUsagePrice() {
         return usagePrice;
     }
+
+    public void setUsagePrice(int usagePrice) {
+        this.usagePrice = usagePrice;
+    }
+
 }

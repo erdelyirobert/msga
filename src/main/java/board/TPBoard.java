@@ -36,6 +36,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Connection> connections = new ArrayList<Connection>();
     public ArrayList<Building> roads = new ArrayList<Building>();
     public ArrayList<Trash> trashes = new ArrayList<Trash>();
+    public ArrayList<Game> games = new ArrayList<Game>();
 
 
     public Timer timer;
@@ -51,6 +52,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private int stepsPerSegment = 2;
     public boolean shortTimerActive = false;
     public int shortTimerCounter = 5;
+    private int salaryTimer = 50;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -77,7 +79,6 @@ public class TPBoard extends JPanel implements MouseListener {
             changeMoodByGeneralEquipment();
             generateGuest();
             generateWorker();
-            workerSalary();
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
@@ -86,7 +87,12 @@ public class TPBoard extends JPanel implements MouseListener {
             removeLastTrash();
             cleanTrash();
             playGuest();
+            workerSalary();
             repaint();
+
+            for(int i = 0; i < games.size(); i++){
+                System.out.println(games.get(i).getUsagePrice());
+            }
         });
         timer.start();
     }
@@ -114,13 +120,13 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }*/
 
-    private int salaryTimer = 50;
+
     public void workerSalary(){
         salaryTimer--;
 
         if(salaryTimer == 0){
-            salaryTimer = 50;
             budget -= 20;
+            salaryTimer = 50;
         }
     }
 
@@ -192,7 +198,6 @@ public class TPBoard extends JPanel implements MouseListener {
     public void leaveTrash() {                   //belerakja a szemetet a szemét arraylistbe - timerenként meghívódik
         for (int i = 0; i < guests.size(); i++) {
             boolean onBin = checkBin(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X()%segmentSize), guests.get(i).getLocation_Y()-(guests.get(i).getLocation_Y()%segmentSize));
-            System.out.println(onBin);
             if (guests.get(i).canLeaveTrash(onBin)) {
                 trashes.add(new Trash(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize), guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize)));
 
@@ -775,11 +780,9 @@ public class TPBoard extends JPanel implements MouseListener {
 
     @Override
     public void paint(Graphics g) {
-
         g.clearRect(0, 0, WIDTH, HEIGHT);
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
-
 
         /*
          * Entrance
@@ -803,7 +806,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 img = ImageIO.read(new File("data\\images\\" + buildings.get(i).getBuildingsImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(i).getBuildingsSizesA(), buildings.get(i).getBuildingsSizesB(), null);
-                budget -= buildings.get(i).getBuildPrice();
+                //budget -= buildings.get(i).getBuildPrice();
 
                 g.setColor(Color.BLACK);
                 g.fillRect(buildings.get(i).getClosestPoint_X(), buildings.get(i).getClosestPoint_Y(), segmentSize, segmentSize);
@@ -841,12 +844,13 @@ public class TPBoard extends JPanel implements MouseListener {
                 img = ImageIO.read(new File("data\\images\\" + workers.get(i).getPersonImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, workers.get(i).getLocation_X(), workers.get(i).getLocation_Y(), workers.get(i).getBuildingsSizesA(), workers.get(i).getBuildingsSizesB(), null);
-                budget -= workers.get(i).getSalary();
+
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();
             }
         }
+
 
         /*
          * Redraw images
@@ -878,21 +882,18 @@ public class TPBoard extends JPanel implements MouseListener {
         x = e.getX();
         y = e.getY();
 
-        int j = 0;
+        //int j = 0;
         canBuildOn = true;
-        String[] buttons = { "Delete", "Change usage price"};
-        while (j < buildings.size()) {
-            if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
-                ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-                //int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + buildings.get(j).getBuildingsImages() + " ?", "Confirm", JOptionPane.YES_NO_OPTION);
-                int reply = JOptionPane.showOptionDialog(null, "What would you like to do with " + buildings.get(j).getBuildingsImages() + "?", "Manage building",
-                        JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[1]);
-                /*if (reply == JOptionPane.YES_OPTION) {
-                    buildings.remove(j);
-                }*/
+        for(int j = 0; j < games.size(); j++){
+            if(games.get(j).getLocation_X() < x && x < (games.get(j).sumXA()) && (games.get(j).getLocation_Y() < y && y < (games.get(j).sumYB()))){
+                JFrame f = new JFrame();
+                String s = JOptionPane.showInputDialog(f,"Change usage price");
+                int newUsagePrice;
 
+                newUsagePrice = Integer.parseInt(s);
+
+                games.get(j).setUsagePrice(newUsagePrice);
             }
-            j++;
         }
         repaint();
 
@@ -907,7 +908,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println(x + " " + y);
                 canBuild = false;
 
                 /*
@@ -946,11 +946,9 @@ public class TPBoard extends JPanel implements MouseListener {
                   Can be built only if the user got enough money
                  */
                 if (canBuild && canBuildOn && budget - 10 >= 0) {
-                    System.out.println("UT EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     roads.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-
+                    budget -= 10;
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }
@@ -961,7 +959,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-                System.out.println("BOKOR EPULT");
 
                 /*
                  * Can be built only if the user got enough money
@@ -970,8 +967,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("BUSH", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
-
+                    budget -= 10;
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH");
@@ -1013,10 +1009,8 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (canBuild && (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY()))) {
-                    System.out.println("KUKA EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("BIN", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
-
+                    budget -= 10;
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BIN");
@@ -1038,9 +1032,8 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("FA EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Building("TREE", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 2, segmentSize * 2));
+                    budget -= 10;
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TREE");
@@ -1060,9 +1053,10 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("RC EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("rollercoaster_underconstruction", 5.0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+                    games.add(new Game("rollercoaster", 5.0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+
+                    budget -= 1000;
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROLLERCOASTER");
@@ -1082,10 +1076,10 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("TRAIN EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("train_underconstruction", 5.0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
+                    games.add(new Game("TRAIN", 5.0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
 
+                    budget -= 800;
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
@@ -1105,9 +1099,10 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("WP EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
                     buildings.add(new Game("waterpark_underconstruction", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+                    games.add(new Game("WATERPARK", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4, 15));
+
+                    budget -= 1000;
                     repaint();
                 } else if (budget - 1000 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WATERPARK");
@@ -1127,10 +1122,11 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 1500 >= 0 && canBuildOn && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("WHEEL EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
-                    buildings.add(new Game("wheel_underconstruction", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
 
+                    buildings.add(new Game("wheel_underconstruction", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
+                    games.add(new Game("WHEEL", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6, 15));
+
+                    budget -= 1500;
                     repaint();
                 } else if (budget - 1500 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for WHEEL");
@@ -1150,9 +1146,11 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("SLIDE EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
+
                     buildings.add(new Game("slide_underconstruction", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
+                    games.add(new Game("SLIDE", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4, 15));
+
+                    budget -= 800;
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for SLIDE");
@@ -1172,9 +1170,10 @@ public class TPBoard extends JPanel implements MouseListener {
                  * Can be built only if the user got enough money
                  */
                 if (budget - 600 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
-                    System.out.println("RESTAURANT EPULT");
-                    System.out.println(x + "," + y);//these co-ords are relative to the component
+
                     buildings.add(new Restaurant("RESTAURANT", 0.0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2, 15));
+
+                    budget -= 600;
                     repaint();
                 } else if (budget - 600 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for RESTAURANT");

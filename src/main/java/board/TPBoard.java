@@ -44,7 +44,7 @@ public class TPBoard extends JPanel implements MouseListener {
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     JFrame frame = new JFrame();
-    private int maxGuests = 3;
+    private int maxGuests = 1;
     private int randomTimer;
     private int guestNumber = 0;
     private int segmentSize = 20; //size of one grid
@@ -111,11 +111,10 @@ public class TPBoard extends JPanel implements MouseListener {
     }*/
 
 
-
-    public void playGuest(){
-        for(int i = 0; i < guests.size(); i++) {
+    public void playGuest() {
+        for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
-                if(!buildings.get(j).getBuildingsImages().equals("ROAD")) {
+                if (!buildings.get(j).getBuildingsImages().equals("ROAD")) {
                     if (guests.get(i).getLocation_X() == buildings.get(j).getLocation_X()
                             && guests.get(i).getLocation_Y() == buildings.get(j).getLocation_Y()
                             && buildings.get(j).getBuildingsImages().equals(guests.get(i).getTargetGame())) {
@@ -126,21 +125,21 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void addTargetGameToGuest(String target){
+    public void addTargetGameToGuest(String target) {
         for (int i = 0; i < guests.size(); i++) {
-            if(guests.get(i).getTargetGame().equals("")){
+            if (guests.get(i).getTargetGame().equals("")) {
                 guests.get(i).setTargetGame(target);
                 break;
             }
         }
     }
 
-    public void cleanTrash(){               //ha a takarító koordinátája megegyezik a a szemét koordinátájával, akkor a szemetet eltávolítjuk
-        for(int i = 0; i < workers.size(); i++){
-            if(workers.get(i).getPersonImages().equals("cleaner")){
-                for(int j = 0; j < trashes.size(); j++){
-                    if(workers.get(i).getLocation_X() == trashes.get(j).getLocation_X()
-                            && workers.get(i).getLocation_Y() == trashes.get(j).getLocation_Y()){
+    public void cleanTrash() {               //ha a takarító koordinátája megegyezik a a szemét koordinátájával, akkor a szemetet eltávolítjuk
+        for (int i = 0; i < workers.size(); i++) {
+            if (workers.get(i).getPersonImages().equals("cleaner")) {
+                for (int j = 0; j < trashes.size(); j++) {
+                    if (workers.get(i).getLocation_X() == trashes.get(j).getLocation_X()
+                            && workers.get(i).getLocation_Y() == trashes.get(j).getLocation_Y()) {
                         trashes.remove(i);
                     }
                 }
@@ -148,12 +147,12 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void beenToRestaurant(){         //ha áthaladt restauranton
-        for(int i = 0; i < guests.size(); i++){
-            for(int j = 0; j < buildings.size(); j++){
-                if(guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
+    public void beenToRestaurant() {         //ha áthaladt restauranton
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); j++) {
+                if (guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
                         && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
-                        && buildings.get(j).getBuildingsImages().equals("RESTAURANT")){
+                        && buildings.get(j).getBuildingsImages().equals("RESTAURANT")) {
                     guests.get(i).setActivateTimer(true);
 
                 }
@@ -161,16 +160,29 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void leaveTrash(){                   //belerakja a szemetet a szemét arraylistbe - timerenként meghívódik
+    public void leaveTrash() {                   //belerakja a szemetet a szemét arraylistbe - timerenként meghívódik
+        for (int i = 0; i < guests.size(); i++) {
+                if (guests.get(i).canLeaveTrash()) {
+                    trashes.add(new Trash(guests.get(i).getLocation_X() - (guests.get(i).getLocation_X() % segmentSize), guests.get(i).getLocation_Y() - (guests.get(i).getLocation_Y() % segmentSize)));
+                    System.out.println("checkbin elott " + trashes.size());
+                    checkBin();
+                    System.out.println("checkbin utan " + trashes.size());
+                }
+            }
+    }
+
+    public void checkBin(){
         for(int i = 0; i < guests.size(); i++){
-            if(guests.get(i).canLeaveTrash()){
-
-                //if ((Math.pow(pointToCheckX + segmentSize / 2 - mouse_X, 2) + Math.pow(pointToCheckY + segmentSize / 2 - mouse_Y, 2)) <= (Math.pow(circleRadius_A, 2))
-
-                trashes.add(new Trash(guests.get(i).getLocation_X()-(guests.get(i).getLocation_X()%segmentSize),guests.get(i).getLocation_Y()-(guests.get(i).getLocation_Y()%segmentSize)));
+            for(int j = 0; j < buildings.size(); j++){
+                if (buildings.get(j).getBuildingsImages().equals("BIN")
+                        && guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
+                        && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()) {
+                    trashes.remove(trashes.size()-1);
+                }
             }
         }
     }
+
 
     public boolean isItRoad(int x, int y) {
         for (int j = 0; j < buildings.size(); j++) {
@@ -770,7 +782,7 @@ public class TPBoard extends JPanel implements MouseListener {
             try {
                 img = ImageIO.read(new File("data\\images\\TRASH.png"));
                 Graphics2D g3d = (Graphics2D) g;
-                g3d.drawImage(img, trashes.get(i).getLocation_X() + segmentSize/2, trashes.get(i).getLocation_Y() + segmentSize/2, segmentSize/2, segmentSize/2, null);
+                g3d.drawImage(img, trashes.get(i).getLocation_X() + segmentSize / 2, trashes.get(i).getLocation_Y() + segmentSize / 2, segmentSize / 2, segmentSize / 2, null);
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();

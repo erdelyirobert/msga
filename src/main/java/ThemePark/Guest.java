@@ -16,9 +16,6 @@ public class Guest extends Person{
     private boolean inGame = false;
     private int playingTimer = 100;
 
-
-
-
     public boolean isInGame(){
         if(inGame){
             playingTimer--;
@@ -40,7 +37,7 @@ public class Guest extends Person{
 
 
 
-    public boolean canLeaveTrash(){              // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a kukát
+    public boolean canLeaveTrash(){  // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a szemetet
         if(activateTimer){
             trashTimer--;
             if(trashTimer==0){
@@ -109,6 +106,4 @@ public class Guest extends Person{
     public void setDirection(int direction) {
         this.direction = direction;
     }
-
-
 }

@@ -291,6 +291,5 @@ public class ThemeParkGUI extends JFrame{
                 selected_ge = EGeneralEquipment.NOTHING;
             }
         });
-
     }
 }

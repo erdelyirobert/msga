@@ -11,7 +11,7 @@ public class ThemeParkFrame {
     JFrame frame = new ThemeParkGUI("Theme Park");
 
     public ThemeParkFrame(String title) throws IOException {
-        frame.setSize(600, 600);
+        frame.setSize(700, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(true);
         frame.setLocationRelativeTo(null);

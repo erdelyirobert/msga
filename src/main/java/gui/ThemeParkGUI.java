@@ -94,8 +94,8 @@ public class ThemeParkGUI extends JFrame{
          * Adding staffs to Call staff dropdown
          */
 
-        JMenuItem callCleaner = new JMenuItem("  200 | Cleaner", coinIcon);
-        JMenuItem callMaintenance = new JMenuItem("  200 | Maintenance", coinIcon);
+        JMenuItem callCleaner = new JMenuItem("  10 / 5sec | Cleaner", coinIcon);
+        JMenuItem callMaintenance = new JMenuItem("  10 / 5sec | Maintenance", coinIcon);
 
         callStaff.add(callCleaner);
         callStaff.add(callMaintenance);
@@ -291,6 +291,5 @@ public class ThemeParkGUI extends JFrame{
                 selected_ge = EGeneralEquipment.NOTHING;
             }
         });
-
     }
 }

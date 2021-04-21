@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TPBoard extends JPanel implements MouseListener {
     private final int WIDTH = 600; //width of the park
     private final int HEIGHT = 600; //height of the park
-    public int budget;
+    public int budget = 10000;
     /*
      * Building informations
      */
@@ -77,7 +77,7 @@ public class TPBoard extends JPanel implements MouseListener {
             changeMoodByGeneralEquipment();
             generateGuest();
             generateWorker();
-
+            workerSalary();
             moveCleaner();
             moveGuest();
             reduceConstructionTime();
@@ -114,6 +114,15 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }*/
 
+    private int salaryTimer = 50;
+    public void workerSalary(){
+        salaryTimer--;
+
+        if(salaryTimer == 0){
+            salaryTimer = 50;
+            budget -= 20;
+        }
+    }
 
     public void playGuest() {
         for (int i = 0; i < guests.size(); i++) {
@@ -766,11 +775,11 @@ public class TPBoard extends JPanel implements MouseListener {
 
     @Override
     public void paint(Graphics g) {
+
         g.clearRect(0, 0, WIDTH, HEIGHT);
         g.setColor(clr1);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
-        budget = 10000;
 
         /*
          * Entrance
@@ -788,12 +797,14 @@ public class TPBoard extends JPanel implements MouseListener {
          * Buildings
          * Manage budget
          */
+
         for (int i = 0; i < buildings.size(); i++) {
             try {
                 img = ImageIO.read(new File("data\\images\\" + buildings.get(i).getBuildingsImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(i).getBuildingsSizesA(), buildings.get(i).getBuildingsSizesB(), null);
                 budget -= buildings.get(i).getBuildPrice();
+
                 g.setColor(Color.BLACK);
                 g.fillRect(buildings.get(i).getClosestPoint_X(), buildings.get(i).getClosestPoint_Y(), segmentSize, segmentSize);
             } catch (IOException f) {
@@ -869,13 +880,17 @@ public class TPBoard extends JPanel implements MouseListener {
 
         int j = 0;
         canBuildOn = true;
+        String[] buttons = { "Delete", "Change usage price"};
         while (j < buildings.size()) {
             if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
                 ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-                int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + buildings.get(j).getBuildingsImages() + " ?", "Confirm", JOptionPane.YES_NO_OPTION);
-                if (reply == JOptionPane.YES_OPTION) {
+                //int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete " + buildings.get(j).getBuildingsImages() + " ?", "Confirm", JOptionPane.YES_NO_OPTION);
+                int reply = JOptionPane.showOptionDialog(null, "What would you like to do with " + buildings.get(j).getBuildingsImages() + "?", "Manage building",
+                        JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[1]);
+                /*if (reply == JOptionPane.YES_OPTION) {
                     buildings.remove(j);
-                }
+                }*/
+
             }
             j++;
         }

@@ -11,16 +11,16 @@ public class Guest extends Person{
     private int mood = 6;
     public int direction = r;           //actual direction
     private boolean activateTimer = false;
-    private int trashTimer = 50;
+    private int trashTimer = 90;
     private String targetGame = "";
     private boolean inGame = false;
-    private int playingTimer = 100;
+    private int playingTimer = 50;
 
     public boolean isInGame(){
         if(inGame){
             playingTimer--;
             if(playingTimer==0){
-                playingTimer = 100;
+                playingTimer = 50;
                 inGame = false;
                 targetGame="";
                 return false;
@@ -41,7 +41,7 @@ public class Guest extends Person{
         if(activateTimer){
             trashTimer--;
             if(trashTimer==0 || onBin && trashTimer < 20){
-                trashTimer = 50;
+                trashTimer = 90;
                 activateTimer = false;
                 return true;
             } else {

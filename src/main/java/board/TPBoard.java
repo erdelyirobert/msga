@@ -922,6 +922,8 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 canBuild = false;
 
+
+
                 /*
                  * Road can build built only next to another road
                  */
@@ -943,12 +945,27 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
 
                 /*
+                Can't build roads on each other
+                */
+                int i = 0;
+                canBuildOn = true;
+                while (i < buildings.size()) {
+                    if ((buildings.get(i).getLocation_X() < x && x < (buildings.get(i).sumXA()) && (buildings.get(i).getLocation_Y() < y && y < (buildings.get(i).sumYB())))) {
+                        canBuildOn = false;
+                    }
+                    i++;
+                }
+
+
+
+                /*
                   Can be built only if the user got enough money
                  */
-                if (canBuild && budget - 10 >= 0) {
+                if (canBuild && canBuildOn && budget - 10 >= 0) {
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     roads.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     budget -= 10;
+                    System.out.println("utam uram");
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }
@@ -959,11 +976,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 x = e.getX();
                 y = e.getY();
 
-
                 /*
                  * Can be built only if the user got enough money
                  */
-
 
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("BUSH", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));

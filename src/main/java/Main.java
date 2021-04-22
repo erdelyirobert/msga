@@ -1,3 +1,4 @@
+import board.TPBoard;
 import gui.MainMenu;
 import gui.ThemeParkFrame;
 
@@ -16,5 +17,9 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         MainMenu mainMenu = new MainMenu();
+
+        TPBoard board = new TPBoard();
+        double  distance = board.coordinateDistance(1,4,0,4);
+        System.out.println("FONTOS: " + distance);
     }
 }

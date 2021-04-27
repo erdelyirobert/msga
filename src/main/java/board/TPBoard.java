@@ -2,7 +2,7 @@ package board;
 
 import ThemePark.*;
 import gui.ThemeParkGUI;
-import random.nextInt;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -1572,5 +1572,9 @@ public class TPBoard extends JPanel implements MouseListener {
 
     public int getBudget() {
         return budget;
+    }
+
+    public int getSegmentSize() {
+        return segmentSize;
     }
 }

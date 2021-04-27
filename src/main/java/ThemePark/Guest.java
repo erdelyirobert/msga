@@ -8,7 +8,7 @@ import java.util.Random;
 public class Guest extends Person{
     Random random = new Random();
     int r = random.nextInt(4);
-    private int mood = 6;
+    private int mood = 10;
     public int direction = r;           //actual direction
     private boolean activateTimer = false;
     private int trashTimer = 90;

@@ -14,6 +14,8 @@ public class Building {
     private int usagePrice;
     private int closestPoint_X = -20;
     private int closestPoint_Y = -20;
+    private boolean isWrong = false;
+
 
 
 
@@ -26,6 +28,12 @@ public class Building {
         this.buildingsSizesA = buildingsSizesA;
         this.buildingsSizesB = buildingsSizesB;
     }
+
+
+
+    public boolean getIsWrong() { return isWrong; }
+
+    public void setWrong(boolean wrong) { isWrong = wrong; }
 
     public String getBuildingsImages() {
         return buildingsImages;

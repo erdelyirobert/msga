@@ -2,6 +2,7 @@ package board;
 
 import ThemePark.*;
 import gui.ThemeParkGUI;
+import random.nextInt;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,9 +34,13 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> buildings = new ArrayList<Building>();
     public ArrayList<Guest> guests = new ArrayList<Guest>();
     public ArrayList<Worker> workers = new ArrayList<Worker>();
-    public ArrayList<Connection> connections = new ArrayList<Connection>();
     public ArrayList<Building> roads = new ArrayList<Building>();
     public ArrayList<Trash> trashes = new ArrayList<Trash>();
+    public ArrayList<Building> graphPeaks = new ArrayList<>();
+    public ArrayList<Integer> shortestRoadSteps = new ArrayList<>();
+    public ArrayList<Building> gamePeaks = new ArrayList<>();
+    public ArrayList<Building> games = new ArrayList<>();
+
 
     public Timer timer;
     public int TD = 100;
@@ -53,6 +58,8 @@ public class TPBoard extends JPanel implements MouseListener {
     private int salaryTimer = 50;
     private int targetGameTimer = 200;
     private int generateGuestTimer = 100;
+    private int wrongTimer = 130;
+    public int numberOfWrongGames = 0;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -70,8 +77,8 @@ public class TPBoard extends JPanel implements MouseListener {
 
         timer = new Timer(TD, (ActionEvent e) -> {
             addTargetGameToGuest();
-            setClosestPointsToGames();
             changeMoodByGeneralEquipment();
+            wrongTimer();
             generateGuest();
             generateWorker();
             moveCleaner();
@@ -84,34 +91,335 @@ public class TPBoard extends JPanel implements MouseListener {
             playGuest();
             workerSalary();
             addTargetGameToGuest();
+            moveMaintenance();
+            for (int i = 0; i < workers.size(); i++) {
+                if (workers.get(i).getPersonImages().equals("maintenance") && workers.get(i).getWorkingTimer() == 1) {
+                    fixGame();
+                }
+            }
+            System.out.println(gamePeaks.size());
+
             repaint();
         });
         timer.start();
     }
 
-    //Graph logic
-    /*public void addEdge() {
-        connections.clear();
-        for (int i = 0; i < roads.size() - 1; i += segmentSize) {
-            int j = i + segmentSize;
-            int k = 0;
-            if (i == roads.get(k).getLocation_X() && (j - segmentSize) == roads.get(k).getLocation_Y()
-                && i == roads.get(k).getLocation_X() && j == roads.get(k).getLocation_Y()) {
-                connections.add(new Connection(new Pair(i, j - segmentSize), new Pair(i, j)));
-                System.out.println("beleraktam");
-            }
-            if (j-segmentSize == roads.get(k).getLocation_X() && i == roads.get(k).getLocation_Y()
-                    && j == roads.get(k).getLocation_X() && i == roads.get(k).getLocation_Y()) {
-                connections.add(new Connection(new Pair(j - segmentSize, i), new Pair(j, i)));
-                System.out.println("beleraktam");
+    public int indexOfWrongGame;
+    public void goWrong() {
+        if (numberOfWrongGames == 0) {
+            int i;
+            if (games.size() > 0) {
+
+                do {
+                    Random random = new Random();
+                    i = random.nextInt(buildings.size());
+                    indexOfWrongGame = i;
+                } while (buildings.get(i).getBuildingsImages().equals("ROAD"));
+                System.out.println("ennyiedik játékot sorsoltam elromlásra: " + i);
+
+                if (buildings.get(i).getBuildingsImages().equals("rollercoaster")) {
+                    buildings.get(i).setBuildingsImages("rollercoaster_outoforder");
+                    System.out.println("elrontottam a rc");
+                    numberOfWrongGames++;
+                }
+                if (buildings.get(i).getBuildingsImages().equals("SLIDE")) {
+                    buildings.get(i).setBuildingsImages("slide_outoforder");
+                    System.out.println("elrontottam a slidet");
+                    numberOfWrongGames++;
+                }
+                if (buildings.get(i).getBuildingsImages().equals("TRAIN")) {
+                    buildings.get(i).setBuildingsImages("train_outoforder");
+                    System.out.println("elrontottam traint");
+                    numberOfWrongGames++;
+                }
+                if (buildings.get(i).getBuildingsImages().equals("WATERPARK")) {
+                    buildings.get(i).setBuildingsImages("waterpark_outoforder");
+                    System.out.println("elrontottam wp");
+                    numberOfWrongGames++;
+                }
+                if (buildings.get(i).getBuildingsImages().equals("WHEEL")) {
+                    buildings.get(i).setBuildingsImages("wheel_outoforder");
+                    System.out.println("elrontottam a wheelt");
+                    numberOfWrongGames++;
+                }
+
             }
         }
+    }
 
-        for (int i = 0; i < connections.size(); i++) {
-            System.out.println(i + 1 + ". kapcsolat:  (" + connections.get(i).getFirst().getX() + ", " + connections.get(i).getFirst().getY() + ")  (" + connections.get(i).getSecond().getX() + ", " + connections.get(i).getSecond().getY() + ")");
+
+    public void wrongTimer() {
+        wrongTimer--;
+        if (wrongTimer == 0) {
+            wrongTimer = 130;
+            System.out.println("Rossz játékok száma:" + numberOfWrongGames);
+            goWrong();
         }
-    }*/
+    }
 
+    public void fixGame() {
+
+        for (int i = 0; i < graphPeaks.size(); i++) {
+            for (int j = 0; j < buildings.size(); j++) {
+
+                if (buildings.get(j).getClosestPoint_X() == graphPeaks.get(i).getLocation_X()
+                        && buildings.get(j).getClosestPoint_Y() == graphPeaks.get(i).getLocation_Y()) {
+                    if (buildings.get(j).getBuildingsImages().equals("rollercoaster_outoforder")) {
+                        buildings.get(j).setBuildingsImages("rollercoaster");
+                        System.out.println(buildings.size());
+                        gamePeaks.clear();
+                        numberOfWrongGames = 0;
+                    }
+                    if (buildings.get(j).getBuildingsImages().equals("train_outoforder")) {
+                        buildings.get(j).setBuildingsImages("TRAIN");
+                        System.out.println(buildings.size());
+                        gamePeaks.clear();
+                        numberOfWrongGames = 0;
+                    }
+                    if (buildings.get(j).getBuildingsImages().equals("slide_outoforder")) {
+                        buildings.get(j).setBuildingsImages("SLIDE");
+                        System.out.println(buildings.size());
+                        gamePeaks.clear();
+                        numberOfWrongGames = 0;
+                    }
+                    if (buildings.get(j).getBuildingsImages().equals("waterpark_outoforder")) {
+                        buildings.get(j).setBuildingsImages("WATERPARK");
+                        System.out.println(buildings.size());
+                        gamePeaks.clear();
+                        numberOfWrongGames = 0;
+                    }
+                    if (buildings.get(j).getBuildingsImages().equals("wheel_outoforder")) {
+                        buildings.get(j).setBuildingsImages("WHEEL");
+                        System.out.println(buildings.size());
+                        gamePeaks.clear();
+                        numberOfWrongGames = 0;
+                    }
+                }
+            }
+        }
+    }
+
+
+    public void moveMaintenance() {
+        for (int i = 0; i < workers.size(); i++) {
+            if (workers.get(i).getPersonImages().equals("maintenance") && !workers.get(i).isWorking()) {
+                switch (workers.get(i).getStepForwardOnPathDirection().get(workers.get(i).getStepNo())) {
+                    case 0:
+                        workers.get(i).setLocation_X(workers.get(i).getLocation_X() + segmentSize); // jobbra
+                        break;
+
+                    case 1:
+                        workers.get(i).setLocation_Y(workers.get(i).getLocation_Y() + segmentSize); //lefele
+                        break;
+
+                    case 2:
+                        workers.get(i).setLocation_X(workers.get(i).getLocation_X() - segmentSize); //balra
+                        break;
+
+                    default:
+                        workers.get(i).setLocation_Y(workers.get(i).getLocation_Y() - segmentSize); //felfele
+                        break;
+                }
+                workers.get(i).setRemainSteps(workers.get(i).getRemainSteps() - 1);
+                if (workers.get(i).getRemainSteps() == 0) {
+                    workers.get(i).setStepNo(workers.get(i).getStepNo() + 1);
+                    if (workers.get(i).getStepNo() >= workers.get(i).getStepForwardOnPathStep().size()) {
+                        if (workers.get(i).getLocation_X() == buildings.get(0).getLocation_X() && workers.get(i).getLocation_Y() == buildings.get(0).getLocation_Y()) {
+                            workers.remove(i);
+
+                        } else {
+                            workers.get(i).setInMaintenance(true);
+                                /*if(workers.get(i).getWorkingTimer()==1){
+                                    fixGame();
+                                }*/
+                            shortestRoadSteps = workers.get(i).reverseArrayList();
+                            convertIndexesToSteps(i);
+                        }
+                    } else {
+                        workers.get(i).setRemainSteps(workers.get(i).getStepForwardOnPathStep().get(workers.get(i).getStepNo()));
+                    }
+
+                }
+
+            }
+        }
+    }
+
+    public void convertIndexesToSteps(int index) {
+        int direction, steps;
+        ArrayList<Integer> Directions = new ArrayList<>();
+        ArrayList<Integer> Steps = new ArrayList<>();
+
+        for (int i = 0; i < shortestRoadSteps.size() - 1; i++) {
+            int x = graphPeaks.get(shortestRoadSteps.get(i)).getLocation_X();
+            int y = graphPeaks.get(shortestRoadSteps.get(i)).getLocation_Y();
+            int x1 = graphPeaks.get(shortestRoadSteps.get(i + 1)).getLocation_X();
+            int y1 = graphPeaks.get(shortestRoadSteps.get(i + 1)).getLocation_Y();
+            if (x < x1 && y == y1) {      //jobbra
+                direction = 0;
+                steps = Math.abs(x1 - x) / segmentSize;
+            } else if (x > x1 && y == y1) {     //balra
+                direction = 2;
+                steps = Math.abs(x1 - x) / segmentSize;
+            } else if (x == x1 && y < y1) {        //lefele
+                direction = 1;
+                steps = Math.abs(y1 - y) / segmentSize;
+            } else {                               //felfele
+                direction = 3;
+                steps = Math.abs(y1 - y) / segmentSize;
+            }
+            Directions.add(direction);
+            Steps.add(steps);
+        }
+        workers.get(index).setStepForwardOnPathDirection(Directions);
+        workers.get(index).setStepForwardOnPathStep(Steps);
+        workers.get(index).setRemainSteps(Steps.get(0));
+    }
+
+    public int getDistance(int i, int j) {
+        int x1 = graphPeaks.get(i).getLocation_X();
+        int y1 = graphPeaks.get(i).getLocation_Y();
+        int x2 = graphPeaks.get(j).getLocation_X();
+        int y2 = graphPeaks.get(j).getLocation_Y();
+        int distance = 0;
+
+        if (x1 != x2 && y1 != y2 || x1 == x2 && y1 == y2) {
+            return 0;
+        }
+
+        if (x1 == x2 && y2 > y1) {
+            for (int y = y1 + segmentSize; y <= y2; y += segmentSize) {
+                if (isItRoad(x1, y)) {
+                    distance++;
+                } else {
+                    return 0;
+                }
+            }
+        } else if (x1 == x2 && y2 < y1) {
+            for (int y = y1 - segmentSize; y >= y2; y -= segmentSize) {
+                if (isItRoad(x1, y)) {
+                    distance++;
+                } else {
+                    return 0;
+                }
+            }
+
+        } else if (y1 == y2 && x2 > x1) {
+            for (int x = x1 + segmentSize; x <= x2; x += segmentSize) {
+                if (isItRoad(x, y1)) {
+                    distance++;
+                } else {
+                    return 0;
+                }
+            }
+
+        } else if (y1 == y2 && x2 < x1) {
+            for (int x = x1 - segmentSize; x >= x2; x -= segmentSize) {
+                if (isItRoad(x, y1)) {
+                    distance++;
+                } else {
+                    return 0;
+                }
+            }
+        }
+        return distance;
+    }
+
+    public void givePeaksToGraph(int graph[][]) {
+        for (int i = 0; i < graphPeaks.size(); i++) {
+            System.out.println(i + " x: " + graphPeaks.get(i).getLocation_X() + " y: " + graphPeaks.get(i).getLocation_Y());
+        }
+        for (int i = 0; i < graphPeaks.size(); i++) {
+            for (int j = 0; j < graphPeaks.size(); j++) {
+                graph[i][j] = getDistance(i, j);
+                System.out.print(graph[i][j] + " ");
+            }
+            System.out.println("");
+        }
+
+    }
+
+    public void createGraphPeaks() {                        //csúcsok hozzáadása
+        graphPeaks.clear();
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
+                if (isItRoad(buildings.get(i).getLocation_X() + segmentSize, buildings.get(i).getLocation_Y()) //jobbra és lefele
+                        && isItRoad(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y() + segmentSize)
+
+                        || isItRoad(buildings.get(i).getLocation_X() + segmentSize, buildings.get(i).getLocation_Y()) //jobbra és felfele
+                        && isItRoad(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y() - segmentSize)
+
+                        || isItRoad(buildings.get(i).getLocation_X() - segmentSize, buildings.get(i).getLocation_Y()) //balra és lefele
+                        && isItRoad(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y() - segmentSize)
+
+                        || isItRoad(buildings.get(i).getLocation_X() - segmentSize, buildings.get(i).getLocation_Y()) //balra és felfele
+                        && isItRoad(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y() + segmentSize)
+
+                        || onlyOneNeighbourRoad(buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y())) {
+
+                    graphPeaks.add(buildings.get(i));
+                }
+            }
+        }
+        //String word = "outoforder"
+        //if(buildings.get(i).getBuildingsImages().contains(word))
+
+        String word = "outoforder";
+
+            if (buildings.get(indexOfWrongGame).getBuildingsImages().contains(word)) {
+                gamePeaks.add(buildings.get(indexOfWrongGame));
+            }
+
+        if (gamePeaks.size() > 0) {
+            Building temp = new Building(gamePeaks.get(0).getBuildingsImages(),
+                    gamePeaks.get(0).getConstructionTime(),
+                    gamePeaks.get(0).getBuildPrice(),
+                    gamePeaks.get(0).getLocation_X(),
+                    gamePeaks.get(0).getLocation_Y(),
+                    gamePeaks.get(0).getBuildingsSizesA(),
+                    gamePeaks.get(0).getBuildingsSizesB());
+
+            temp.setLocation_X(gamePeaks.get(0).getClosestPoint_X());
+            temp.setLocation_Y(gamePeaks.get(0).getClosestPoint_Y());
+            graphPeaks.add(temp);
+        }
+
+        /*for (int i = 0; i < graphPeaks.size(); i++) {
+            System.out.println(i + " x: " + graphPeaks.get(i).getLocation_X() + " y: " + graphPeaks.get(i).getLocation_Y());
+        }*/
+    }
+
+    public boolean onlyOneNeighbourRoad(int x, int y) {
+        int db = 0;
+        if (isItRoad(x + segmentSize, y)) { //jobbra
+            db++;
+        }
+
+        if (isItRoad(x - segmentSize, y)) { //balra
+            db++;
+        }
+
+        if (isItRoad(x, y + segmentSize)) { //lefele
+            db++;
+        }
+
+        if (isItRoad(x, y - segmentSize)) { //felfele
+            db++;
+        }
+        return db == 1;
+    }
+
+    public boolean isItRoad(int x, int y) {                 //amig nem egész szám a segment size, addig nem értünk a szélére, tehát léptetjük
+        for (int j = 0; j < buildings.size(); j++) {
+            if (buildings.get(j).getBuildingsImages().equals("ROAD")) {
+                if (x == buildings.get(j).getLocation_X()
+                        && y == buildings.get(j).getLocation_Y()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public void workerSalary() {
         salaryTimer--;
@@ -125,23 +433,23 @@ public class TPBoard extends JPanel implements MouseListener {
     public void playGuest() {
         for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
-                if (!buildings.get(j).getBuildingsImages().equals("ROAD")) {
+                if (!buildings.get(j).getBuildingsImages().equals("ROAD") || !buildings.get(j).getBuildingsImages().contains("outoforder")) {
                     if (guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
                             && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
                             && buildings.get(j).getBuildingsImages().equals(guests.get(i).getTargetGame())
                             && !guests.get(i).getInGame()) {
                         guests.get(i).setInGame(true);
+                        guests.get(i).setMood(guests.get(i).getMood() + 5);
+                        budget += buildings.get(i).getUsagePrice();
                     }
                 }
             }
         }
     }
 
-
-
     public void addTargetGameToGuest() {
         targetGameTimer--;
-        if(targetGameTimer == 0) {
+        if (targetGameTimer == 0) {
             targetGameTimer = 200;
             ArrayList<Integer> gameIndexes = new ArrayList<Integer>();
             for (int i = 0; i < buildings.size(); i++) {
@@ -160,13 +468,12 @@ public class TPBoard extends JPanel implements MouseListener {
                     int r = random.nextInt(gameIndexes.size());
                     if (guests.get(i).getTargetGame().equals("")) {
                         guests.get(i).setTargetGame(buildings.get(gameIndexes.get(r)).getBuildingsImages());
-                        System.out.println("felvettem ezt az imaget: " + buildings.get(gameIndexes.get(r)).getBuildingsImages());
+                        //System.out.println("felvettem ezt az imaget: " + buildings.get(gameIndexes.get(r)).getBuildingsImages());
                     }
                 }
             }
         }
     }
-
 
     public void cleanTrash() {               //ha a takarító koordinátája megegyezik a a szemét koordinátájával, akkor a szemetet eltávolítjuk
         for (int i = 0; i < workers.size(); i++) {
@@ -499,6 +806,13 @@ public class TPBoard extends JPanel implements MouseListener {
         } else if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.MAINTENANCE)) {
             workers.add(new Worker("maintenance", 60, 80, segmentSize, segmentSize));
             ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+            createGraphPeaks();
+            int graph[][] = new int[graphPeaks.size()][graphPeaks.size()];
+            givePeaksToGraph(graph);
+            ShortestPath t = new ShortestPath();
+            shortestRoadSteps = t.dijkstra(graph, 0, graphPeaks.size());
+            convertIndexesToSteps(workers.size() - 1);
+            workers.get(workers.size() - 1).setShortestPath(shortestRoadSteps);
         }
     }
 
@@ -530,56 +844,62 @@ public class TPBoard extends JPanel implements MouseListener {
 
     public void changeMoodByGeneralEquipment() {            //ha elmennek bokor vagy fa mellett a guestek, növeljük a kedvüket
 
-            for (int i = 0; i < guests.size(); i++) {
-                for (int j = 0; j < buildings.size(); ++j) {
-                    if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
-                        if (buildings.get(j).getBuildingsImages().equals("BUSH")) {
-                            guests.get(i).setMood(guests.get(i).getMood() + 1);
-                        }
-                    }
-                    if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize
-                            || buildings.get(j).getLocation_X() + segmentSize * 2 == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() - segmentSize * 2 == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize * 2
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize * 2) {
-                        if (buildings.get(j).getBuildingsImages().equals("TREE")) {
-                            guests.get(i).setMood(guests.get(i).getMood() + 1);
-
-                        }
-                    }
-                    if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                            || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                            && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
-                        if (buildings.get(j).getBuildingsImages().equals("BIN")) {
-                            guests.get(i).setMood(guests.get(i).getMood() - 1);
-                        }
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); ++j) {
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BUSH")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
                     }
                 }
-                //System.out.println(guests.get(i).getMood());
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize
+                        || buildings.get(j).getLocation_X() + segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize * 2
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize * 2) {
+                    if (buildings.get(j).getBuildingsImages().equals("TREE")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
+
+                    }
+                }
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BIN")) {
+                        guests.get(i).setMood(guests.get(i).getMood() - 3);
+                    }
+                }
             }
+            for (int k = 0; k < trashes.size(); k++) {
+                if(guests.get(i).getLocation_X() == trashes.get(k).getLocation_X()
+                && guests.get(i).getLocation_Y() == trashes.get(k).getLocation_Y()){
+                    guests.get(i).setMood(guests.get(i).getMood() - 1);
+                }
+            }
+            //System.out.println(guests.get(i).getMood());
+        }
     }
 
     /**
@@ -850,7 +1170,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     || !buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
                 ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
 
-                Object[] options1 = { "Delete", "Change usage price", "Cancel"};
+                Object[] options1 = {"Delete", "Change usage price", "Cancel"};
 
                 JPanel panel = new JPanel();
                 panel.add(new JLabel("What would you like to do?"));
@@ -858,9 +1178,15 @@ public class TPBoard extends JPanel implements MouseListener {
                 int result = JOptionPane.showOptionDialog(null, panel, "Manage building",
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                         null, options1, null);
-                if (result == JOptionPane.YES_OPTION){
-                    buildings.remove(j);
-                }else if(result == JOptionPane.NO_OPTION){
+                if (result == JOptionPane.YES_OPTION) {
+                    if(!buildings.get(j).getBuildingsImages().contains("outoforder")){
+                        buildings.remove(j);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Your can not remove out of order games.");
+                    }
+
+
+                } else if (result == JOptionPane.NO_OPTION) {
                     JFrame f = new JFrame();
                     String s = JOptionPane.showInputDialog(f, "Change usage price");
                     int newUsagePrice;
@@ -879,12 +1205,25 @@ public class TPBoard extends JPanel implements MouseListener {
                     || buildings.get(j).getBuildingsImages().equals("BUSH") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
                     || buildings.get(j).getBuildingsImages().equals("TREE") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
                     || buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))) {
-                if(ThemeParkGUI.selected_ge != EGeneralEquipment.ROAD) {
+                if (ThemeParkGUI.selected_ge != EGeneralEquipment.ROAD) {
                     JOptionPane.showMessageDialog(null, "You can not build " + ThemeParkGUI.selected_ge + " on " + buildings.get(j).getBuildingsImages() + "!");
                     ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
                 }
             }
 
+        }
+    }
+
+    public void addElementsToGameArrayList() {
+        games.clear();
+        for (int i = 0; i < buildings.size(); i++) {
+            if (!buildings.get(i).getBuildingsImages().equals("ROAD")
+                    && !buildings.get(i).getBuildingsImages().equals("BUSH")
+                    && !buildings.get(i).getBuildingsImages().equals("TREE")
+                    && !buildings.get(i).getBuildingsImages().equals("BIN")
+                    && !buildings.get(i).getBuildingsImages().equals("RESTAURANT")) {
+                games.add(buildings.get(i));
+            }
         }
     }
 
@@ -964,8 +1303,8 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (canBuild && canBuildOn && budget - 10 >= 0) {
                     buildings.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     roads.add(new Building("ROAD", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    setClosestPointsToGames();
                     budget -= 10;
-                    System.out.println("utam uram");
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for ROAD");
                 }
@@ -983,6 +1322,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("BUSH", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
                     budget -= 10;
+                    setClosestPointsToGames();
                     repaint();
                 } else if (budget - 10 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for BUSH");
@@ -1025,6 +1365,7 @@ public class TPBoard extends JPanel implements MouseListener {
                  */
                 if (canBuild && (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY()))) {
                     buildings.add(new Building("BIN", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    setClosestPointsToGames();
                     budget -= 10;
                     repaint();
                 } else if (budget - 10 < 0) {
@@ -1048,6 +1389,7 @@ public class TPBoard extends JPanel implements MouseListener {
                  */
                 if (budget - 10 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("TREE", 0.0, 10, x - (x % segmentSize), y - (y % segmentSize), segmentSize, segmentSize));
+                    setClosestPointsToGames();
                     budget -= 10;
                     repaint();
                 } else if (budget - 10 < 0) {
@@ -1069,6 +1411,8 @@ public class TPBoard extends JPanel implements MouseListener {
                  */
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("rollercoaster_underconstruction", 5.0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
+                    addElementsToGameArrayList();
+                    setClosestPointsToGames();
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
                     budget -= 1000;
                     repaint();
@@ -1091,8 +1435,10 @@ public class TPBoard extends JPanel implements MouseListener {
                  */
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("train_underconstruction", 5.0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
+                    addElementsToGameArrayList();
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
                     budget -= 800;
+                    setClosestPointsToGames();
                     repaint();
                 } else if (budget - 800 < 0) {
                     JOptionPane.showMessageDialog(frame, "There's no enough money for TRAIN");
@@ -1113,7 +1459,9 @@ public class TPBoard extends JPanel implements MouseListener {
                  */
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("waterpark_underconstruction", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
+                    addElementsToGameArrayList();
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    setClosestPointsToGames();
                     budget -= 1000;
                     repaint();
                 } else if (budget - 1000 < 0) {
@@ -1136,7 +1484,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1500 >= 0 && canBuildOn && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
 
                     buildings.add(new Building("wheel_underconstruction", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6));
+                    addElementsToGameArrayList();
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    setClosestPointsToGames();
                     budget -= 1500;
                     repaint();
                 } else if (budget - 1500 < 0) {
@@ -1159,7 +1509,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
 
                     buildings.add(new Building("slide_underconstruction", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
+                    addElementsToGameArrayList();
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    setClosestPointsToGames();
                     budget -= 800;
                     repaint();
                 } else if (budget - 800 < 0) {
@@ -1183,6 +1535,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                     buildings.add(new Building("RESTAURANT", 0.0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2));
                     buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    setClosestPointsToGames();
                     budget -= 600;
                     repaint();
                 } else if (budget - 600 < 0) {

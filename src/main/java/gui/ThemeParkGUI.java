@@ -145,7 +145,6 @@ public class ThemeParkGUI extends JFrame{
          */
         menub.add(moneyLabel);
 
-
         /**
          * ActionListeners
          * Upon clicking on the "Save" option the game will save

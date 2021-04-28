@@ -22,7 +22,6 @@ public class TPBoardTest {
         ArrayList<Building> buildings = new ArrayList<Building>();
         ArrayList<Guest> guests = new ArrayList<Guest>();
         ArrayList<Worker> workers = new ArrayList<Worker>();
-        ArrayList<Connection> connections = new ArrayList<Connection>();
         ArrayList<Building> roads = new ArrayList<Building>();
         ArrayList<Trash> trashes = new ArrayList<Trash>();
 

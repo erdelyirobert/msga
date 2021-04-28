@@ -35,8 +35,6 @@ public class Guest extends Person{
         this.inGame = inGame;
     }
 
-
-
     public boolean canLeaveTrash(boolean onBin){  // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a szemetet
         if(activateTimer){
             trashTimer--;
@@ -62,6 +60,7 @@ public class Guest extends Person{
     public void setPlayingTimer(int playingTimer) {
         this.playingTimer = playingTimer;
     }
+
     public String getTargetGame() {
         return targetGame;
     }
@@ -69,9 +68,11 @@ public class Guest extends Person{
     public void setTargetGame(String targetGame) {
         this.targetGame = targetGame;
     }
+
     public boolean getActivateTimer() {
         return activateTimer;
     }
+
     public int getTrashTimer() {
         return trashTimer;
     }
@@ -79,11 +80,10 @@ public class Guest extends Person{
     public void setTrashTimer(int trashTimer) {
         this.trashTimer = trashTimer;
     }
+
     public void setActivateTimer(boolean activateTimer) {
         this.activateTimer = activateTimer;
     }
-
-
 
     public Guest(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);

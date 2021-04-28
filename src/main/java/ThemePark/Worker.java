@@ -1,31 +1,25 @@
 package ThemePark;
 
-import board.TPBoard;
-
 import java.util.ArrayList;
 
 public class Worker extends Person{
-
 
     private int salary = 200;
     private int direction = 0;
     private int remainSteps;        //hátrlévő lépések száma
     private int stepNo = 0;
     private boolean inMaintenance = false;           //csak akkor mozog a maintenance ha ez true
-    private int workingTimer = 50;
-
+    private int workingTimer = 25;
 
     public ArrayList<Integer> stepForwardOnPathDirection = new ArrayList<>();
     public ArrayList<Integer> stepForwardOnPathStep = new ArrayList<>();
     public ArrayList<Integer> shortestPath = new ArrayList<>();
 
-
-
     public boolean isWorking(){
         if(inMaintenance){
             workingTimer--;
             if(workingTimer==0){
-                workingTimer = 50;
+                workingTimer = 25;
                 stepNo = 0;
                 inMaintenance = false;
                 return false;
@@ -50,9 +44,6 @@ public class Worker extends Person{
         return revArrayList;
     }
 
-
-
-
     public ArrayList<Integer> getShortestPath() {
         return shortestPath;
     }
@@ -60,7 +51,6 @@ public class Worker extends Person{
     public void setShortestPath(ArrayList<Integer> shortestPath) {
         this.shortestPath = shortestPath;
     }
-
 
     public boolean isInMaintenance() {
         return inMaintenance;
@@ -109,9 +99,6 @@ public class Worker extends Person{
     public int getSalary() {
         return salary;
     }
-
-    public void maintain(){};
-    public void clean(){};
 
     public int getDirection() {
         return direction;

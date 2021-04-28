@@ -3,7 +3,6 @@ package board;
 import ThemePark.*;
 import gui.ThemeParkGUI;
 
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
@@ -15,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
 
 /**
  * The type Tp board.
@@ -41,25 +39,25 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> gamePeaks = new ArrayList<>();
     public ArrayList<Building> games = new ArrayList<>();
 
-
     public Timer timer;
-    public int TD = 100;
+    public int TD = 200;
     Random random = new Random();
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     JFrame frame = new JFrame();
-    private int maxGuests = 4;
+    private int maxGuests = 3;
     private int randomTimer;
     private int guestNumber = 0;
     private int segmentSize = 20; //size of one grid
     private int stepsPerSegment = 2;
     public boolean shortTimerActive = false;
     public int shortTimerCounter = 5;
-    private int salaryTimer = 50;
-    private int targetGameTimer = 200;
+    private int salaryTimer = 25;
+    private int targetGameTimer = 100;
     private int generateGuestTimer = 100;
     private int wrongTimer = 130;
     public int numberOfWrongGames = 0;
+    public int indexOfWrongGame;
 
     public TPBoard() throws IOException {
         this.addMouseListener(this);
@@ -98,17 +96,11 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
             }
 
-            /*for (int i = 0; i < buildings.size(); i++) {
-                if(!buildings.get(i).getBuildingsImages().equals("ROAD"))
-                System.out.println(buildings.get(i).getUsagePrice());
-            }*/
-
             repaint();
         });
         timer.start();
     }
 
-    public int indexOfWrongGame;
     public void goWrong() {
         if (numberOfWrongGames == 0) {
             int i;
@@ -140,11 +132,9 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.get(i).setBuildingsImages("wheel_outoforder");
                     numberOfWrongGames++;
                 }
-
             }
         }
     }
-
 
     public void wrongTimer() {
         wrongTimer--;
@@ -155,10 +145,8 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public void fixGame() {
-
         for (int i = 0; i < graphPeaks.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
-
                 if (buildings.get(j).getClosestPoint_X() == graphPeaks.get(i).getLocation_X()
                         && buildings.get(j).getClosestPoint_Y() == graphPeaks.get(i).getLocation_Y()) {
                     if (buildings.get(j).getBuildingsImages().equals("rollercoaster_outoforder")) {
@@ -191,7 +179,6 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-
     public void moveMaintenance() {
         for (int i = 0; i < workers.size(); i++) {
             if (workers.get(i).getPersonImages().equals("maintenance") && !workers.get(i).isWorking()) {
@@ -221,18 +208,13 @@ public class TPBoard extends JPanel implements MouseListener {
 
                         } else {
                             workers.get(i).setInMaintenance(true);
-                                /*if(workers.get(i).getWorkingTimer()==1){
-                                    fixGame();
-                                }*/
                             shortestRoadSteps = workers.get(i).reverseArrayList();
                             convertIndexesToSteps(i);
                         }
                     } else {
                         workers.get(i).setRemainSteps(workers.get(i).getStepForwardOnPathStep().get(workers.get(i).getStepNo()));
                     }
-
                 }
-
             }
         }
     }
@@ -328,7 +310,6 @@ public class TPBoard extends JPanel implements MouseListener {
             }
             System.out.println("");
         }
-
     }
 
     public void createGraphPeaks() {                        //csúcsok hozzáadása
@@ -353,14 +334,12 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
             }
         }
-        //String word = "outoforder"
-        //if(buildings.get(i).getBuildingsImages().contains(word))
 
         String word = "outoforder";
 
-            if (buildings.get(indexOfWrongGame).getBuildingsImages().contains(word)) {
-                gamePeaks.add(buildings.get(indexOfWrongGame));
-            }
+        if (buildings.get(indexOfWrongGame).getBuildingsImages().contains(word)) {
+            gamePeaks.add(buildings.get(indexOfWrongGame));
+        }
 
         if (gamePeaks.size() > 0) {
             Building temp = new Building(gamePeaks.get(0).getBuildingsImages(),
@@ -414,14 +393,14 @@ public class TPBoard extends JPanel implements MouseListener {
 
         if (salaryTimer == 0) {
             budget -= 20;
-            salaryTimer = 50;
+            salaryTimer = 25;
         }
     }
 
-    public void raiseMoney(){
+    public void raiseMoney() {
         for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
-                if(guests.get(i).getInGame()){
+                if (guests.get(i).getInGame()) {
                     budget += buildings.get(j).getUsagePrice();
                 }
             }
@@ -449,7 +428,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public void addTargetGameToGuest() {
         targetGameTimer--;
         if (targetGameTimer == 0) {
-            targetGameTimer = 200;
+            targetGameTimer = 100;
             ArrayList<Integer> gameIndexes = new ArrayList<Integer>();
             for (int i = 0; i < buildings.size(); i++) {
                 if (buildings.get(i).getBuildingsImages().equals("SLIDE")
@@ -493,7 +472,6 @@ public class TPBoard extends JPanel implements MouseListener {
                         && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
                         && buildings.get(j).getBuildingsImages().equals("RESTAURANT")) {
                     guests.get(i).setActivateTimer(true);
-
                 }
             }
         }
@@ -508,7 +486,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (onBin) {
                     shortTimerActive = true;
                 }
-
             }
         }
     }
@@ -517,7 +494,7 @@ public class TPBoard extends JPanel implements MouseListener {
         if (shortTimerActive) {
             shortTimerCounter--;
             if (shortTimerCounter == 0) {
-                shortTimerCounter = 10;
+                shortTimerCounter = 5;
                 shortTimerActive = false;
                 return true;
             } else {
@@ -538,7 +515,6 @@ public class TPBoard extends JPanel implements MouseListener {
             if (buildings.get(i).getBuildingsImages().equals("BIN")
                     && buildings.get(i).getClosestPoint_X() == x
                     && buildings.get(i).getClosestPoint_Y() == y) {
-
                 return true;
             }
         }
@@ -549,14 +525,11 @@ public class TPBoard extends JPanel implements MouseListener {
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).getConstructionTime() >= 0) {
                 buildings.get(i).setConstructionTime((buildings.get(i).getConstructionTime() - 0.1));
-
             }
-
             if (buildings.get(i).getConstructionTime() <= 0) {
                 if (buildings.get(i).getBuildingsImages().equals("slide_underconstruction")) {
                     buildings.get(i).setBuildingsImages("SLIDE");
                     addTargetGameToGuest();
-
                 }
                 if (buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")) {
                     buildings.get(i).setBuildingsImages("WATERPARK");
@@ -621,7 +594,6 @@ public class TPBoard extends JPanel implements MouseListener {
     }
 
     public int checkIntersection(int x, int y, int originalDirection, int direction1, int direction2) { //van-e kereszteződés ebben a pontban és ha igen véletlenszerűen választ irányt
-
         if (x % segmentSize != 0 || y % segmentSize != 0) {   // csak a segmentSize végén teszteli az irányt, addig tartja az irányt
             return originalDirection;
         }
@@ -682,7 +654,6 @@ public class TPBoard extends JPanel implements MouseListener {
             } else {
                 guests.get(iGuest).setDirection(tempDirection);
             }
-
         } else {
             Random random = new Random();
             int r;
@@ -713,7 +684,6 @@ public class TPBoard extends JPanel implements MouseListener {
                         moveOneStep(i, 3, 0, 2, 0, -segmentSize); //felfele
                     }
                     break;
-
                 }
             }
         }
@@ -749,7 +719,6 @@ public class TPBoard extends JPanel implements MouseListener {
             } else {
                 workers.get(iCleaner).setDirection(tempDirection);
             }
-
         } else {
             Random random = new Random();
             int r;
@@ -780,7 +749,6 @@ public class TPBoard extends JPanel implements MouseListener {
                         moveOneStepCleaner(i, 3, 0, 2, 0, -segmentSize);
                     }
                     break;
-
                 }
             }
         }
@@ -891,8 +859,8 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
             }
             for (int k = 0; k < trashes.size(); k++) {
-                if(guests.get(i).getLocation_X() == trashes.get(k).getLocation_X()
-                && guests.get(i).getLocation_Y() == trashes.get(k).getLocation_Y()){
+                if (guests.get(i).getLocation_X() == trashes.get(k).getLocation_X()
+                        && guests.get(i).getLocation_Y() == trashes.get(k).getLocation_Y()) {
                     guests.get(i).setMood(guests.get(i).getMood() - 1);
                 }
             }
@@ -912,11 +880,9 @@ public class TPBoard extends JPanel implements MouseListener {
      */
     public boolean PointIsWithinCircle(double mouse_X, double mouse_Y) {
         boolean joe = false;
-
         for (int i = 0; i < buildings.size(); i++) {
 
             if (buildings.get(i).getBuildingsImages().equals("ROAD")) {
-
                 int pointToCheckX = buildings.get(i).getLocation_X();
                 int pointToCheckY = buildings.get(i).getLocation_Y();
 
@@ -947,7 +913,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-
                 //3. if TREEre
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {
                     double circleRadius_A = (double) segmentSize * 2 * 1.5;
@@ -974,7 +939,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                 }
 
-
                 //5. if TRAIN
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TRAIN)) {
                     double circleRadius_A = (double) segmentSize * 4 * 1.5;
@@ -987,7 +951,6 @@ public class TPBoard extends JPanel implements MouseListener {
                         joe = false;
                     }
                 }
-
 
                 //6. if WATERPARK
                 if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.WATERPARK)) {
@@ -1058,9 +1021,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
             }
         }
-
         return raepit;
-
     }
 
     @Override
@@ -1097,10 +1058,9 @@ public class TPBoard extends JPanel implements MouseListener {
                 img = ImageIO.read(new File("data\\images\\" + buildings.get(i).getBuildingsImages() + ".png"));
                 Graphics2D g3d = (Graphics2D) g;
                 g3d.drawImage(img, buildings.get(i).getLocation_X(), buildings.get(i).getLocation_Y(), buildings.get(i).getBuildingsSizesA(), buildings.get(i).getBuildingsSizesB(), null);
-                //budget -= buildings.get(i).getBuildPrice();
 
-                g.setColor(Color.BLACK);
-                g.fillRect(buildings.get(i).getClosestPoint_X(), buildings.get(i).getClosestPoint_Y(), segmentSize, segmentSize);
+                //g.setColor(Color.GRAY);
+                //g.fillRect(buildings.get(i).getClosestPoint_X(), buildings.get(i).getClosestPoint_Y(), segmentSize, segmentSize);
             } catch (IOException f) {
                 System.out.println("error");
                 f.printStackTrace();
@@ -1142,7 +1102,6 @@ public class TPBoard extends JPanel implements MouseListener {
             }
         }
 
-
         /*
          * Redraw images
          * trashes
@@ -1176,7 +1135,7 @@ public class TPBoard extends JPanel implements MouseListener {
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
                         null, options1, null);
                 if (result == JOptionPane.YES_OPTION) {
-                    if(!buildings.get(j).getBuildingsImages().contains("outoforder")){
+                    if (!buildings.get(j).getBuildingsImages().contains("outoforder")) {
                         buildings.remove(j);
                     } else {
                         JOptionPane.showMessageDialog(frame, "Your can not remove out of order games.");
@@ -1207,7 +1166,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
                 }
             }
-
         }
     }
 
@@ -1258,8 +1216,6 @@ public class TPBoard extends JPanel implements MouseListener {
 
                 canBuild = false;
 
-
-
                 /*
                  * Road can build built only next to another road
                  */
@@ -1291,8 +1247,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                     i++;
                 }
-
-
 
                 /*
                   Can be built only if the user got enough money
@@ -1375,7 +1329,6 @@ public class TPBoard extends JPanel implements MouseListener {
 
             }
 
-
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.TREE)) {  // If the selected GeneralEquipment is tree
                 // builds tree
                 x = e.getX();
@@ -1398,7 +1351,6 @@ public class TPBoard extends JPanel implements MouseListener {
                 }
             }
 
-
             if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.ROLLERCOASTER)) {
                 x = e.getX();
                 y = e.getY();
@@ -1410,7 +1362,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     buildings.add(new Building("rollercoaster_underconstruction", 5.0, 1000, x - (x % segmentSize) - 3 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
                     addElementsToGameArrayList();
                     setClosestPointsToGames();
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(455);
                     budget -= 1000;
                     repaint();
                 } else if (budget - 1000 < 0) {
@@ -1433,7 +1385,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 800 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("train_underconstruction", 5.0, 800, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
                     addElementsToGameArrayList();
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(355);
                     budget -= 800;
                     setClosestPointsToGames();
                     repaint();
@@ -1457,7 +1409,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 1000 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
                     buildings.add(new Building("waterpark_underconstruction", 5.0, 1000, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 4));
                     addElementsToGameArrayList();
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(465);
                     setClosestPointsToGames();
                     budget -= 1000;
                     repaint();
@@ -1482,7 +1434,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                     buildings.add(new Building("wheel_underconstruction", 5.0, 1500, x - (x % segmentSize) - 2 * segmentSize, y - (y % segmentSize) - 2 * segmentSize, segmentSize * 6, segmentSize * 6));
                     addElementsToGameArrayList();
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(468);
                     setClosestPointsToGames();
                     budget -= 1500;
                     repaint();
@@ -1507,7 +1459,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
                     buildings.add(new Building("slide_underconstruction", 5.0, 800, x - (x % segmentSize) - segmentSize, y - (y % segmentSize) - segmentSize, segmentSize * 4, segmentSize * 4));
                     addElementsToGameArrayList();
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(366);
                     setClosestPointsToGames();
                     budget -= 800;
                     repaint();
@@ -1531,7 +1483,7 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (budget - 600 >= 0 && PointIsWithinCircle(e.getX(), e.getY()) && isCanBuildOn(e.getX(), e.getY())) {
 
                     buildings.add(new Building("RESTAURANT", 0.0, 600, x - (x % segmentSize), y - (y % segmentSize), segmentSize * 3, segmentSize * 2));
-                    buildings.get(buildings.size() - 1).setUsagePrice(15);
+                    buildings.get(buildings.size() - 1).setUsagePrice(55);
                     setClosestPointsToGames();
                     budget -= 600;
                     repaint();
@@ -1550,7 +1502,6 @@ public class TPBoard extends JPanel implements MouseListener {
     public void mouseClicked(MouseEvent e) {
 
     }
-
 
     @Override
     public void mouseReleased(MouseEvent e) {

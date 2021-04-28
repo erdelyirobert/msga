@@ -97,7 +97,11 @@ public class TPBoard extends JPanel implements MouseListener {
                     fixGame();
                 }
             }
-            System.out.println(gamePeaks.size());
+
+            /*for (int i = 0; i < buildings.size(); i++) {
+                if(!buildings.get(i).getBuildingsImages().equals("ROAD"))
+                System.out.println(buildings.get(i).getUsagePrice());
+            }*/
 
             repaint();
         });
@@ -115,31 +119,25 @@ public class TPBoard extends JPanel implements MouseListener {
                     i = random.nextInt(buildings.size());
                     indexOfWrongGame = i;
                 } while (buildings.get(i).getBuildingsImages().equals("ROAD"));
-                System.out.println("ennyiedik játékot sorsoltam elromlásra: " + i);
 
                 if (buildings.get(i).getBuildingsImages().equals("rollercoaster")) {
                     buildings.get(i).setBuildingsImages("rollercoaster_outoforder");
-                    System.out.println("elrontottam a rc");
                     numberOfWrongGames++;
                 }
                 if (buildings.get(i).getBuildingsImages().equals("SLIDE")) {
                     buildings.get(i).setBuildingsImages("slide_outoforder");
-                    System.out.println("elrontottam a slidet");
                     numberOfWrongGames++;
                 }
                 if (buildings.get(i).getBuildingsImages().equals("TRAIN")) {
                     buildings.get(i).setBuildingsImages("train_outoforder");
-                    System.out.println("elrontottam traint");
                     numberOfWrongGames++;
                 }
                 if (buildings.get(i).getBuildingsImages().equals("WATERPARK")) {
                     buildings.get(i).setBuildingsImages("waterpark_outoforder");
-                    System.out.println("elrontottam wp");
                     numberOfWrongGames++;
                 }
                 if (buildings.get(i).getBuildingsImages().equals("WHEEL")) {
                     buildings.get(i).setBuildingsImages("wheel_outoforder");
-                    System.out.println("elrontottam a wheelt");
                     numberOfWrongGames++;
                 }
 
@@ -152,7 +150,6 @@ public class TPBoard extends JPanel implements MouseListener {
         wrongTimer--;
         if (wrongTimer == 0) {
             wrongTimer = 130;
-            System.out.println("Rossz játékok száma:" + numberOfWrongGames);
             goWrong();
         }
     }
@@ -166,31 +163,26 @@ public class TPBoard extends JPanel implements MouseListener {
                         && buildings.get(j).getClosestPoint_Y() == graphPeaks.get(i).getLocation_Y()) {
                     if (buildings.get(j).getBuildingsImages().equals("rollercoaster_outoforder")) {
                         buildings.get(j).setBuildingsImages("rollercoaster");
-                        System.out.println(buildings.size());
                         gamePeaks.clear();
                         numberOfWrongGames = 0;
                     }
                     if (buildings.get(j).getBuildingsImages().equals("train_outoforder")) {
                         buildings.get(j).setBuildingsImages("TRAIN");
-                        System.out.println(buildings.size());
                         gamePeaks.clear();
                         numberOfWrongGames = 0;
                     }
                     if (buildings.get(j).getBuildingsImages().equals("slide_outoforder")) {
                         buildings.get(j).setBuildingsImages("SLIDE");
-                        System.out.println(buildings.size());
                         gamePeaks.clear();
                         numberOfWrongGames = 0;
                     }
                     if (buildings.get(j).getBuildingsImages().equals("waterpark_outoforder")) {
                         buildings.get(j).setBuildingsImages("WATERPARK");
-                        System.out.println(buildings.size());
                         gamePeaks.clear();
                         numberOfWrongGames = 0;
                     }
                     if (buildings.get(j).getBuildingsImages().equals("wheel_outoforder")) {
                         buildings.get(j).setBuildingsImages("WHEEL");
-                        System.out.println(buildings.size());
                         gamePeaks.clear();
                         numberOfWrongGames = 0;
                     }
@@ -383,10 +375,6 @@ public class TPBoard extends JPanel implements MouseListener {
             temp.setLocation_Y(gamePeaks.get(0).getClosestPoint_Y());
             graphPeaks.add(temp);
         }
-
-        /*for (int i = 0; i < graphPeaks.size(); i++) {
-            System.out.println(i + " x: " + graphPeaks.get(i).getLocation_X() + " y: " + graphPeaks.get(i).getLocation_Y());
-        }*/
     }
 
     public boolean onlyOneNeighbourRoad(int x, int y) {
@@ -430,6 +418,16 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+    public void raiseMoney(){
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); j++) {
+                if(guests.get(i).getInGame()){
+                    budget += buildings.get(j).getUsagePrice();
+                }
+            }
+        }
+    }
+
     public void playGuest() {
         for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
@@ -440,7 +438,8 @@ public class TPBoard extends JPanel implements MouseListener {
                             && !guests.get(i).getInGame()) {
                         guests.get(i).setInGame(true);
                         guests.get(i).setMood(guests.get(i).getMood() + 5);
-                        budget += buildings.get(i).getUsagePrice();
+                        raiseMoney();
+                        System.out.println("budget" + budget);
                     }
                 }
             }
@@ -468,7 +467,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     int r = random.nextInt(gameIndexes.size());
                     if (guests.get(i).getTargetGame().equals("")) {
                         guests.get(i).setTargetGame(buildings.get(gameIndexes.get(r)).getBuildingsImages());
-                        //System.out.println("felvettem ezt az imaget: " + buildings.get(gameIndexes.get(r)).getBuildingsImages());
                     }
                 }
             }
@@ -898,7 +896,6 @@ public class TPBoard extends JPanel implements MouseListener {
                     guests.get(i).setMood(guests.get(i).getMood() - 1);
                 }
             }
-            //System.out.println(guests.get(i).getMood());
         }
     }
 

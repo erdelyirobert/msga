@@ -88,14 +88,12 @@ public class TPBoard extends JPanel implements MouseListener {
             cleanTrash();
             playGuest();
             workerSalary();
-            addTargetGameToGuest();
             moveMaintenance();
             for (int i = 0; i < workers.size(); i++) {
                 if (workers.get(i).getPersonImages().equals("maintenance") && workers.get(i).getWorkingTimer() == 1) {
                     fixGame();
                 }
             }
-
             repaint();
         });
         timer.start();
@@ -392,7 +390,7 @@ public class TPBoard extends JPanel implements MouseListener {
         salaryTimer--;
 
         if (salaryTimer == 0) {
-            budget -= 20;
+            budget -= workers.size()*10;
             salaryTimer = 25;
         }
     }
@@ -780,6 +778,7 @@ public class TPBoard extends JPanel implements MouseListener {
             convertIndexesToSteps(workers.size() - 1);
             workers.get(workers.size() - 1).setShortestPath(shortestRoadSteps);
         }
+        removeCleaner();
     }
 
     public double coordinateDistance(int x1, int x2, int y1, int y2) {      //pitagorasz tétel
@@ -1164,6 +1163,18 @@ public class TPBoard extends JPanel implements MouseListener {
                 if (ThemeParkGUI.selected_ge != EGeneralEquipment.ROAD) {
                     JOptionPane.showMessageDialog(null, "You can not build " + ThemeParkGUI.selected_ge + " on " + buildings.get(j).getBuildingsImages() + "!");
                     ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+                }
+            }
+        }
+    }
+    public void removeCleaner() {
+        if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.KICKCLEANER)) {
+            for (int i = 0; i < workers.size(); i++) {
+                System.out.println(workers.get(i).getPersonImages());
+                if (workers.get(i).getPersonImages().equals("cleaner")) {
+                    workers.remove(i);
+                    ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+                    break;
                 }
             }
         }

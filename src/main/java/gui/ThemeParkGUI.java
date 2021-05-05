@@ -14,6 +14,7 @@ public class ThemeParkGUI extends JFrame{
     public static EGeneralEquipment selected_ge = EGeneralEquipment.NOTHING;
     public Container c = getContentPane();
     JLabel moneyLabel = new JLabel();
+    JLabel workerLabel = new JLabel();
 
     /**
      * Instantiates a new Theme park gui.
@@ -25,6 +26,7 @@ public class ThemeParkGUI extends JFrame{
         super(title);
 
         ImageIcon coinIcon = new ImageIcon(new ImageIcon("data\\images\\coin.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
+        ImageIcon cleanerIcon = new ImageIcon(new ImageIcon("data\\images\\cleaner.png").getImage().getScaledInstance(20, 20, Image.SCALE_DEFAULT));
 
         /**
          * Menu bar creation
@@ -38,6 +40,7 @@ public class ThemeParkGUI extends JFrame{
         JMenu buildGame = new JMenu("Game");
         JMenu buildGeneralEquipment = new JMenu("General Equipment");
         JMenu callStaff = new JMenu("Call Staff");
+        JMenu kickStaff = new JMenu("Kick Staff");
 
         /**
          * Adding the menus to the menubar
@@ -46,6 +49,7 @@ public class ThemeParkGUI extends JFrame{
         menub.add(buildGame);
         menub.add(buildGeneralEquipment);
         menub.add(callStaff);
+        menub.add(kickStaff);
 
         /**
          * Settings menuitems creation
@@ -101,6 +105,15 @@ public class ThemeParkGUI extends JFrame{
         callStaff.add(callMaintenance);
 
         /**
+         * Kick Staff menuitems creation
+         * Kick staffs to Kick Staff dropdown
+         */
+
+        JMenuItem kickCleaner = new JMenuItem("  0 | Fire Cleaner", coinIcon);
+
+        kickStaff.add(kickCleaner);
+
+        /**
          * Button to stop building
          * And adding it to the menubar
          */
@@ -116,11 +129,17 @@ public class ThemeParkGUI extends JFrame{
 
         /**
          * Moneylabel to show the current budget
+         * Workerlabel to show the current number of workers
          */
         moneyLabel.setIcon(coinIcon);
-        moneyLabel.setFont(new Font("Serif", Font.BOLD, 16));
+        moneyLabel.setFont(new Font("Serif", Font.BOLD, 12));
         moneyLabel.setHorizontalTextPosition(JLabel.RIGHT);
         moneyLabel.setVerticalTextPosition(JLabel.CENTER);
+
+        workerLabel.setIcon(cleanerIcon);
+        workerLabel.setFont(new Font("Serif", Font.BOLD, 12));
+        workerLabel.setHorizontalTextPosition(JLabel.RIGHT);
+        workerLabel.setVerticalTextPosition(JLabel.CENTER);
 
         c.add(board);
         c.revalidate();
@@ -135,15 +154,17 @@ public class ThemeParkGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                moneyLabel.setText("  Money: " + String.valueOf(board.getBudget()));
+                moneyLabel.setText(" Money: " + String.valueOf(board.getBudget() + " "));
+                workerLabel.setText(" Workers: " + String.valueOf(board.workers.size()));
             }
         });
         timer.start();
 
         /**
-         * Adding the moneylabel to the menubar
+         * Adding the moneylabel and workerLabel to the menubar
          */
         menub.add(moneyLabel);
+        menub.add(workerLabel);
 
         /**
          * ActionListeners
@@ -288,6 +309,13 @@ public class ThemeParkGUI extends JFrame{
                 stopBuild.setEnabled(false);
                 System.out.println("kikapcsolva");
                 selected_ge = EGeneralEquipment.NOTHING;
+            }
+        });
+
+        kickCleaner.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selected_ge = EGeneralEquipment.KICKCLEANER;
             }
         });
     }

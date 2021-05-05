@@ -17,5 +17,6 @@ public enum EGeneralEquipment{
     SLIDE,
     RESTAURANT,
     CLEANER,
-    MAINTENANCE
+    MAINTENANCE,
+    KICKCLEANER
 }

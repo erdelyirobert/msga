@@ -53,8 +53,8 @@ public class TPBoard extends JPanel implements MouseListener {
     public boolean shortTimerActive = false;
     public int shortTimerCounter = 5;
     private int salaryTimer = 25;
-    private int targetGameTimer = 100;
-    private int generateGuestTimer = 100;
+    private int targetGameTimer = 25;
+    private int generateGuestTimer = 50;
     private int wrongTimer = 130;
     public int numberOfWrongGames = 0;
     public int indexOfWrongGame;
@@ -76,7 +76,7 @@ public class TPBoard extends JPanel implements MouseListener {
         timer = new Timer(TD, (ActionEvent e) -> {
             addTargetGameToGuest();
             changeMoodByGeneralEquipment();
-            wrongTimer();
+            //wrongTimer();
             generateGuest();
             generateWorker();
             moveCleaner();
@@ -89,6 +89,9 @@ public class TPBoard extends JPanel implements MouseListener {
             playGuest();
             workerSalary();
             moveMaintenance();
+            putBackToGuest();
+
+
             for (int i = 0; i < workers.size(); i++) {
                 if (workers.get(i).getPersonImages().equals("maintenance") && workers.get(i).getWorkingTimer() == 1) {
                     fixGame();
@@ -390,7 +393,7 @@ public class TPBoard extends JPanel implements MouseListener {
         salaryTimer--;
 
         if (salaryTimer == 0) {
-            budget -= workers.size()*10;
+            budget -= workers.size() * 10;
             salaryTimer = 25;
         }
     }
@@ -413,20 +416,60 @@ public class TPBoard extends JPanel implements MouseListener {
                             && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
                             && buildings.get(j).getBuildingsImages().equals(guests.get(i).getTargetGame())
                             && !guests.get(i).getInGame()) {
-                        guests.get(i).setInGame(true);
                         guests.get(i).setMood(guests.get(i).getMood() + 5);
                         raiseMoney();
-                        System.out.println("budget" + budget);
+                        if(buildings.get(j).getMaxCapacity() > buildings.get(j).players.size()){        //van elég hely - játékra ül egyenesen
+                            if(buildings.get(j).queue.isEmpty()){
+                                guests.get(i).setInGame(true);
+                                guestToGame(guests.get(i),j);
+                            }
+                            else {
+                                guests.get(i).setInGame(true);
+                                queueToPlayers(buildings.get(j).queue.get(0),j);
+                            }
+                        }
+                        else {   //nincs hely a játékon - taka a sorba
+                            guestToQueue(guests.get(i),j);
+                            System.out.println("sorba alltam");
+                        }
                     }
                 }
             }
         }
     }
 
+    public void putBackToGuest(){
+        for (int i = 0; i < buildings.size(); i++) {
+                for (int j = 0; j < buildings.get(i).players.size(); j++) {
+                    if(!buildings.get(i).players.get(j).isInGame()){
+                        guests.add(buildings.get(i).players.get(j));
+                        buildings.get(i).players.remove(j);
+                        System.out.println("vegeztem");
+                    }
+                }
+        }
+    }
+
+    public void guestToGame(Guest guest, int indexOfBuilding){ //van hely, egyből felül, ha a sor üres
+            buildings.get(indexOfBuilding).players.add(guest);
+            guests.remove(guest);
+    }
+
+
+    public void queueToPlayers(Guest guest, int indexOfBuilding){ //ha van hely és áll valaki a sorban, akkor a sorból menjen fel a játékra a guest
+            buildings.get(indexOfBuilding).players.add(guest);
+            buildings.get(indexOfBuilding).queue.remove(guest);
+    }
+
+    public void guestToQueue(Guest guest, int indexOfBuilding){ //players.size() = az éppen használók száma ha nincs hely, akkor a sorba megy és nem a játékra
+            buildings.get(indexOfBuilding).queue.add(guest);
+            guests.remove(guest);
+    }
+
     public void addTargetGameToGuest() {
         targetGameTimer--;
         if (targetGameTimer == 0) {
-            targetGameTimer = 100;
+            targetGameTimer = 25;
             ArrayList<Integer> gameIndexes = new ArrayList<Integer>();
             for (int i = 0; i < buildings.size(); i++) {
                 if (buildings.get(i).getBuildingsImages().equals("SLIDE")
@@ -444,6 +487,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     int r = random.nextInt(gameIndexes.size());
                     if (guests.get(i).getTargetGame().equals("")) {
                         guests.get(i).setTargetGame(buildings.get(gameIndexes.get(r)).getBuildingsImages());
+                        System.out.println(guests.get(i).getTargetGame());
                     }
                 }
             }
@@ -664,7 +708,7 @@ public class TPBoard extends JPanel implements MouseListener {
 
     public void moveGuest() {           //guest léptetése iránytól függően
         for (int i = 0; i < guests.size(); i++) {
-            if (!guests.get(i).isInGame()) {
+            //if (!guests.get(i).isInGame()) {
                 switch (guests.get(i).getDirection()) {
                     case 0: {
                         moveOneStep(i, 0, 1, 3, segmentSize, 0);  //jobbra
@@ -683,7 +727,7 @@ public class TPBoard extends JPanel implements MouseListener {
                     }
                     break;
                 }
-            }
+           // }
         }
     }
 
@@ -758,7 +802,7 @@ public class TPBoard extends JPanel implements MouseListener {
             if (generateGuestTimer == 0) {
                 guests.add(new Guest("guest", 60, 80, segmentSize, segmentSize));
                 guestNumber++;
-                generateGuestTimer = 100;
+                generateGuestTimer = 50;
             }
         }
     }
@@ -1115,6 +1159,28 @@ public class TPBoard extends JPanel implements MouseListener {
                 f.printStackTrace();
             }
         }
+
+        /*
+         * Redraw images
+         * queues for games
+         */
+        for (int i = 0; i < buildings.size(); i++) {
+            for (int j = 0; j < buildings.get(i).queue.size(); j++) {
+                try {
+                    if (buildings.get(i).queue.get(j).getMood() <= 5) {
+                        buildings.get(i).queue.get(j).setPersonImages("guest_angeri");
+                    } else {
+                        buildings.get(i).queue.get(j).setPersonImages("guest");
+                    }
+                    img = ImageIO.read(new File("data\\images\\" + buildings.get(i).queue.get(j).getPersonImages() + ".png"));
+                    Graphics2D g3d = (Graphics2D) g;
+                    g3d.drawImage(img, buildings.get(i).queue.get(j).getLocation_X(), (int) (buildings.get(i).queue.get(j).getLocation_Y() + j * (0.5 * segmentSize)), buildings.get(i).queue.get(j).getBuildingsSizesA(), buildings.get(i).queue.get(j).getBuildingsSizesB(), null);
+                } catch (IOException f) {
+                    System.out.println("error");
+                    f.printStackTrace();
+                }
+            }
+        }
     }
 
     public void editUsagePrice(int x, int y) {
@@ -1167,6 +1233,7 @@ public class TPBoard extends JPanel implements MouseListener {
             }
         }
     }
+
     public void removeCleaner() {
         if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.KICKCLEANER)) {
             for (int i = 0; i < workers.size(); i++) {

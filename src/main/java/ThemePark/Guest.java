@@ -14,13 +14,13 @@ public class Guest extends Person{
     private int trashTimer = 90;
     private String targetGame = "";
     private boolean inGame = false;
-    private int playingTimer = 50;
+    private int playingTimer = 150;
 
     public boolean isInGame(){
         if(inGame){
             playingTimer--;
             if(playingTimer==0){
-                playingTimer = 50;
+                playingTimer = 150;
                 inGame = false;
                 targetGame="";
                 return false;

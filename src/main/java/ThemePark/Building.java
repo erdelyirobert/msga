@@ -1,5 +1,7 @@
 package ThemePark;
 
+import java.util.ArrayList;
+
 /**
  * The type Building.
  */
@@ -15,6 +17,9 @@ public class Building {
     private int closestPoint_X = -20;
     private int closestPoint_Y = -20;
     private boolean isWrong = false;
+    private int maxCapacity = 3;
+    private ArrayList<Guest> players = new ArrayList<>();
+    private ArrayList<Guest> queue = new ArrayList<>();
 
     public Building(String buildingsImages, double constructionTime, int buildPrice, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         this.buildingsImages = buildingsImages;
@@ -25,6 +30,31 @@ public class Building {
         this.buildingsSizesA = buildingsSizesA;
         this.buildingsSizesB = buildingsSizesB;
     }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
+    }
+
+    public void setMaxCapacity(int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+    }
+
+    public ArrayList<Guest> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(ArrayList<Guest> players) {
+        this.players = players;
+    }
+
+    public ArrayList<Guest> getQueue() {
+        return queue;
+    }
+
+    public void setQueue(ArrayList<Guest> queue) {
+        this.queue = queue;
+    }
+
 
     public boolean getIsWrong() { return isWrong; }
 

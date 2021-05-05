@@ -38,7 +38,7 @@ public class MainMenu extends JFrame{
      */
     JFrame Menu = new JFrame("Main menu");
     JButton Start = new JButton("Start game");
-    JButton ScoreBoard = new JButton("Scoreboard");
+    JButton ScoreBoard = new JButton("Exit");
 
     BufferedImage img = null;
     JLabel imageLabel = new JLabel();
@@ -99,8 +99,7 @@ public class MainMenu extends JFrame{
         ScoreBoard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // todo: Scoreboard
-                throw new UnsupportedOperationException("Not yet");
+                System.exit(0);
             }
         });
 

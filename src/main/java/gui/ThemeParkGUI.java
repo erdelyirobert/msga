@@ -53,12 +53,11 @@ public class ThemeParkGUI extends JFrame{
 
         /**
          * Settings menuitems creation
-         * Adding Save and exit option to Settings dropdown
+         * Adding exit option to Settings dropdown
          */
-        JMenuItem saveMenuItem = new JMenuItem("Save");
+
         JMenuItem exitMenuItem = new JMenuItem("Exit");
 
-        settingsMenu.add(saveMenuItem);
         settingsMenu.add(exitMenuItem);
 
         /**
@@ -166,17 +165,7 @@ public class ThemeParkGUI extends JFrame{
         menub.add(moneyLabel);
         menub.add(workerLabel);
 
-        /**
-         * ActionListeners
-         * Upon clicking on the "Save" option the game will save
-         */
-        saveMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent ae) {
-                //todo
-                throw new UnsupportedOperationException("Not defined");
-            }
-        });
+
 
         /**
          * ActionListeners

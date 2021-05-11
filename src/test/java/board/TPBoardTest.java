@@ -53,8 +53,33 @@ public class TPBoardTest {
         Assert.assertNotNull(buildings);
         Assert.assertEquals("Not good vale for segment", segmentSize, 20);
 
+    }
+
+
+
+    @Test
+    public void onlyOneNeighbourRoad() throws IOException {
+        TPBoard board = new TPBoard();
+        ArrayList<Building> buildings = new ArrayList<Building>();
+        boolean test1onlyOneNeighbourRoad = board.onlyOneNeighbourRoad(1,1);
+        Assert.assertFalse("No Neighbour road",test1onlyOneNeighbourRoad);
+
+        Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
+        buildings.add(starterRoad);
+
+        boolean test2onlyOneNeighbourRoad = board.onlyOneNeighbourRoad(buildings.get(0).getLocation_X(),buildings.get(0).getLocation_Y());
+        Assert.assertFalse("Neighbour road",test2onlyOneNeighbourRoad);
+
+
+        Building road2 = new Building("ROAD", 0, 0, 100, 100, segmentSize, segmentSize);
+        buildings.add(road2);
+
+        boolean test3onlyOneNeighbourRoad = board.onlyOneNeighbourRoad(buildings.get(1).getLocation_X(),buildings.get(1).getLocation_Y());
+        Assert.assertFalse("Neighbour road",test3onlyOneNeighbourRoad);
 
     }
+
+
     @Test
     public void isItRoadTest() throws IOException {
         TPBoard board = new TPBoard();
@@ -76,11 +101,8 @@ public class TPBoardTest {
         Assert.assertFalse("ROAD ON ROAD",test3);
 
 
-
-
-
-
     }
+
     @Test
     public void MoneyTest() throws IOException {
 

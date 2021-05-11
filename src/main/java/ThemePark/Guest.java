@@ -14,7 +14,27 @@ public class Guest extends Person{
     private int trashTimer = 90;
     private String targetGame = "";
     private boolean inGame = false;
+    private boolean wasOnGame = false;
     private int playingTimer = 150;
+    private int lastPlayingTimer = 40;
+
+
+
+    public boolean canIGetTargetGame(){
+        if(wasOnGame){
+            lastPlayingTimer--;
+            if(lastPlayingTimer==0){
+                lastPlayingTimer = 40;
+                wasOnGame = false;
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     public boolean isInGame(){
         if(inGame){
@@ -30,6 +50,10 @@ public class Guest extends Person{
         }
         return false;
     }
+
+
+
+
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
@@ -47,6 +71,23 @@ public class Guest extends Person{
             }
         }
         return false;
+    }
+
+
+    public boolean isWasOnGame() {
+        return wasOnGame;
+    }
+
+    public void setWasOnGame(boolean wasOnGame) {
+        this.wasOnGame = wasOnGame;
+    }
+
+    public int getLastPlayingTimer() {
+        return lastPlayingTimer;
+    }
+
+    public void setLastPlayingTimer(int lastPlayingTimer) {
+        this.lastPlayingTimer = lastPlayingTimer;
     }
 
     public boolean getInGame() {

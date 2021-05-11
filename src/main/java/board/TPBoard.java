@@ -45,7 +45,7 @@ public class TPBoard extends JPanel implements MouseListener {
     Color clr1 = new Color(0, 153, 0);
     Image img = null;
     JFrame frame = new JFrame();
-    private int maxGuests = 3;
+    private int maxGuests = 4;
     private int randomTimer;
     private int guestNumber = 0;
     private int segmentSize = 20; //size of one grid
@@ -86,7 +86,7 @@ public class TPBoard extends JPanel implements MouseListener {
             leaveTrash();
             removeLastTrash();
             cleanTrash();
-            playGuest();
+            playGuest2();
             workerSalary();
             moveMaintenance();
             putBackToGuest();
@@ -408,29 +408,35 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void playGuest() {
+
+
+    public void playGuest2() {
         for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
                 if (!buildings.get(j).getBuildingsImages().equals("ROAD") || !buildings.get(j).getBuildingsImages().contains("outoforder")) {
-                    if (guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
-                            && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()
-                            && buildings.get(j).getBuildingsImages().equals(guests.get(i).getTargetGame())
-                            && !guests.get(i).getInGame()) {
+                    if (i < guests.size() && guests.get(i).getLocation_X() == buildings.get(j).getClosestPoint_X()
+                            && guests.get(i).getLocation_Y() == buildings.get(j).getClosestPoint_Y()    //guest és a játék koordinátája egyezik és a
+                            && buildings.get(j).getBuildingsImages().equals(guests.get(i).getTargetGame())  //guest nem játszik, és célja az adott  játék vagy que nem empty
+                            && !guests.get(i).getInGame()
+                            || !buildings.get(j).queue.isEmpty()) {
                         guests.get(i).setMood(guests.get(i).getMood() + 5);
                         raiseMoney();
-                        if(buildings.get(j).getMaxCapacity() > buildings.get(j).players.size()){        //van elég hely - játékra ül egyenesen
-                            if(buildings.get(j).queue.isEmpty()){
+
+                        if (buildings.get(j).getMaxCapacity() > buildings.get(j).players.size()){
+                            if (buildings.get(j).queue.isEmpty()) {                                       // és nincs sor
                                 guests.get(i).setInGame(true);
-                                guestToGame(guests.get(i),j);
+                                guestToGame(guests.get(i), j);
+                                System.out.println("egyből játékra ültem, sorbanállás nélkül");
+                            } else {
+                                buildings.get(j).queue.get(0).setInGame(true);
+                                queueToPlayers(buildings.get(j).queue.get(0), j);
+                                System.out.println("sorból játékra ültem");
                             }
-                            else {
-                                guests.get(i).setInGame(true);
-                                queueToPlayers(buildings.get(j).queue.get(0),j);
-                            }
-                        }
-                        else {   //nincs hely a játékon - taka a sorba
-                            guestToQueue(guests.get(i),j);
-                            System.out.println("sorba alltam");
+
+                        } else {   //nincs hely a játékon - taka a sorba
+                                guestToQueue(guests.get(i), j, buildings.get(j).getClosestPoint_X(), buildings.get(j).getClosestPoint_Y());
+                                System.out.println("sorba alltam");
+
                         }
                     }
                 }
@@ -438,32 +444,48 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void putBackToGuest(){
+
+    public void putBackToGuest() {
+        /*for (int i = 0; i < buildings.size(); i++) {
+            for (int j = 0; j < buildings.get(i).players.size(); j++) {
+                System.out.println((j+1) + ".player:  " + buildings.get(i).players.get(j).getPlayingTimer());
+            }
+        }*/
+
         for (int i = 0; i < buildings.size(); i++) {
-                for (int j = 0; j < buildings.get(i).players.size(); j++) {
-                    if(!buildings.get(i).players.get(j).isInGame()){
-                        guests.add(buildings.get(i).players.get(j));
-                        buildings.get(i).players.remove(j);
-                        System.out.println("vegeztem");
-                    }
+            for (int j = 0; j < buildings.get(i).players.size(); j++) {
+                if (!buildings.get(i).players.get(j).isInGame()) {
+                    buildings.get(i).players.get(j).setWasOnGame(true);
+                    guests.add(buildings.get(i).players.get(j));
+                    buildings.get(i).players.remove(j);
+                    System.out.println("vegeztem");
+
                 }
+            }
+        }
+
+        for (int i = 0; i < guests.size(); i++) {
+            guests.get(i).canIGetTargetGame();
+            System.out.println(guests.get(i).getLastPlayingTimer());
         }
     }
 
-    public void guestToGame(Guest guest, int indexOfBuilding){ //van hely, egyből felül, ha a sor üres
-            buildings.get(indexOfBuilding).players.add(guest);
-            guests.remove(guest);
+    public void guestToGame(Guest guest, int indexOfBuilding) { //van hely, egyből felül, ha a sor üres
+        buildings.get(indexOfBuilding).players.add(guest);
+        guests.remove(guest);
     }
 
 
-    public void queueToPlayers(Guest guest, int indexOfBuilding){ //ha van hely és áll valaki a sorban, akkor a sorból menjen fel a játékra a guest
-            buildings.get(indexOfBuilding).players.add(guest);
-            buildings.get(indexOfBuilding).queue.remove(guest);
+    public void queueToPlayers(Guest guest, int indexOfBuilding) { //ha van hely és áll valaki a sorban, akkor a sorból menjen fel a játékra a guest
+        buildings.get(indexOfBuilding).players.add(guest);
+        buildings.get(indexOfBuilding).queue.remove(guest);
     }
 
-    public void guestToQueue(Guest guest, int indexOfBuilding){ //players.size() = az éppen használók száma ha nincs hely, akkor a sorba megy és nem a játékra
+    public void guestToQueue(Guest guest, int indexOfBuilding, int buildingOfClosestPointX, int buildingOfClosestPointY) { //players.size() = az éppen használók száma ha nincs hely, akkor a sorba megy és nem a játékra
+        if(guest.getLocation_X() == buildingOfClosestPointX && guest.getLocation_Y() == buildingOfClosestPointY && !guest.getTargetGame().equals("")) {
             buildings.get(indexOfBuilding).queue.add(guest);
             guests.remove(guest);
+        }
     }
 
     public void addTargetGameToGuest() {
@@ -483,11 +505,14 @@ public class TPBoard extends JPanel implements MouseListener {
             }
             if (gameIndexes.size() > 0) {
                 for (int i = 0; i < guests.size(); i++) {
-                    Random random = new Random();
-                    int r = random.nextInt(gameIndexes.size());
-                    if (guests.get(i).getTargetGame().equals("")) {
-                        guests.get(i).setTargetGame(buildings.get(gameIndexes.get(r)).getBuildingsImages());
-                        System.out.println(guests.get(i).getTargetGame());
+                    for (int j = 0; j < buildings.size(); j++) {
+                        Random random = new Random();
+                        int r = random.nextInt(gameIndexes.size());
+                        if (guests.get(i).getTargetGame().equals("")
+                                && !guests.get(i).isWasOnGame()) {
+                            guests.get(i).setTargetGame(buildings.get(gameIndexes.get(r)).getBuildingsImages());
+                            System.out.println(guests.get(i).getTargetGame());
+                        }
                     }
                 }
             }
@@ -709,25 +734,25 @@ public class TPBoard extends JPanel implements MouseListener {
     public void moveGuest() {           //guest léptetése iránytól függően
         for (int i = 0; i < guests.size(); i++) {
             //if (!guests.get(i).isInGame()) {
-                switch (guests.get(i).getDirection()) {
-                    case 0: {
-                        moveOneStep(i, 0, 1, 3, segmentSize, 0);  //jobbra
-                    }
-                    break;
-                    case 1: {
-                        moveOneStep(i, 1, 0, 2, 0, segmentSize);  //lefele
-                    }
-                    break;
-                    case 2: {
-                        moveOneStep(i, 2, 1, 3, -segmentSize, 0); //balra
-                    }
-                    break;
-                    default: {
-                        moveOneStep(i, 3, 0, 2, 0, -segmentSize); //felfele
-                    }
-                    break;
+            switch (guests.get(i).getDirection()) {
+                case 0: {
+                    moveOneStep(i, 0, 1, 3, segmentSize, 0);  //jobbra
                 }
-           // }
+                break;
+                case 1: {
+                    moveOneStep(i, 1, 0, 2, 0, segmentSize);  //lefele
+                }
+                break;
+                case 2: {
+                    moveOneStep(i, 2, 1, 3, -segmentSize, 0); //balra
+                }
+                break;
+                default: {
+                    moveOneStep(i, 3, 0, 2, 0, -segmentSize); //felfele
+                }
+                break;
+            }
+            // }
         }
     }
 

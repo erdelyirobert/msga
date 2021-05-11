@@ -10,6 +10,20 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/*
+Methods to be tested:
+-isItRoad() tesztelve
+-onlyOneNeighbourRoad() testelve
+-checkBin()
+-checkRoad()
+-testDirection()
+-checkIntersection()
+-pointsWithinCircle()
+-isCanBuildOn() tesztelve
+-changeMoodByGeneralEquipment()
+-workerSalary() testelve
+
+*/
 
 public class TPBoardTest {
     int x = 0;
@@ -41,8 +55,32 @@ public class TPBoardTest {
 
 
     }
+    @Test
+    public void isItRoadTest() throws IOException {
+        TPBoard board = new TPBoard();
+        ArrayList<Building> buildings = new ArrayList<Building>();
+        boolean test1 = board.isItRoad(1,1);
+        Assert.assertFalse("No road",test1);
+
+        Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
+        buildings.add(starterRoad);
+
+        boolean test2 = board.isItRoad(buildings.get(0).getLocation_X(),buildings.get(0).getLocation_Y());
+        Assert.assertTrue("ROAD ON ROAD",test2);
 
 
+        Building road2 = new Building("ROAD", 0, 0, 100, 100, segmentSize, segmentSize);
+        buildings.add(road2);
+
+        boolean test3 = board.isItRoad(buildings.get(1).getLocation_X(),buildings.get(1).getLocation_Y());
+        Assert.assertFalse("ROAD ON ROAD",test3);
+
+
+
+
+
+
+    }
     @Test
     public void MoneyTest() throws IOException {
 

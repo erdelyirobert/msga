@@ -134,7 +134,6 @@ public class TPBoardTest {
     }
 
 
-
     @Test
     public void MoneyTest() throws IOException {
 
@@ -165,8 +164,6 @@ public class TPBoardTest {
 
     @Test
     public void testDirection() throws IOException {
-        int segmentSize = 20;
-
         TPBoard board = new TPBoard();
         boolean firstTestDir = board.testDirection(1, 1, 0);
         Assert.assertTrue("firstTestDir", firstTestDir);
@@ -174,6 +171,19 @@ public class TPBoardTest {
         boolean wrongDirection = board.testDirection(1, 1, 66);
         Assert.assertTrue("wrongDirection", firstTestDir);
 
+    }
+
+    @Test
+    public void checkIntersectionTest() {
+
+    }
+
+    @Test
+    public void PointIsWithinCircleTest() throws IOException {
+        TPBoard board = new TPBoard();
+
+        boolean CheckFalsePoint = board.PointIsWithinCircle(0,0);
+        Assert.assertFalse("check zero false cehck",CheckFalsePoint);
     }
 
     @Test

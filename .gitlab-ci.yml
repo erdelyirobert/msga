@@ -16,24 +16,7 @@ test-job2:
     - echo "which simulates a test that runs 20 seconds longer than test-job1"
     - sleep 20
 
-rspec:
-  stage: test
-  script:
-    - bundle install
-    - rspec --format RspecJunitFormatter --out rspec.xml
-  artifacts:
-    reports:
-      junit: rspec.xml
 
-java:
-  stage: test
-  script:
-    - mvn verify
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - target/pom.xml
 
 
 deploy-prod:

@@ -16,16 +16,7 @@ test-job2:
     - echo "which simulates a test that runs 20 seconds longer than test-job1"
     - sleep 20
 
-java:
-  stage: test
-  script:
-    - mvn verify
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
+
 
 deploy-prod:
   stage: deploy

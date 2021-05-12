@@ -33,7 +33,7 @@ java:
     when: always
     reports:
       junit:
-        - target/TEST-*.xml
+        - target/pom.xml
 
 
 deploy-prod:

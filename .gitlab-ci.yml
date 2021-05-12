@@ -17,6 +17,16 @@ test-job2:
     - sleep 20
 
 
+java:
+  stage: test
+  script:
+    - mvn verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - target/TEST-*.xml
+
 
 deploy-prod:
   stage: deploy

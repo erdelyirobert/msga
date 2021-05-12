@@ -18,8 +18,21 @@ public class Guest extends Person{
     private int playingTimer = 150;
     private int lastPlayingTimer = 40;
 
+    /**
+     * Constructor
+     * @param personImages
+     * @param location_X
+     * @param location_Y
+     * @param buildingsSizesA
+     * @param buildingsSizesB
+     */
+    public Guest(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
+        super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);
+    }
 
-
+    /**
+     * Timers
+     */
     public boolean canIGetTargetGame(){
         if(wasOnGame){
             lastPlayingTimer--;
@@ -33,8 +46,6 @@ public class Guest extends Person{
         }
         return false;
     }
-
-
 
     public boolean isInGame(){
         if(inGame){
@@ -51,14 +62,6 @@ public class Guest extends Person{
         return false;
     }
 
-
-
-
-
-    public void setInGame(boolean inGame) {
-        this.inGame = inGame;
-    }
-
     public boolean canLeaveTrash(boolean onBin){  // ha aktiv a timer, akkor csökkenti a trashTimert, ha pedig 0, akkor leteheti a szemetet
         if(activateTimer){
             trashTimer--;
@@ -73,6 +76,12 @@ public class Guest extends Person{
         return false;
     }
 
+    /**
+     * Getters and setters
+     */
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
+    }
 
     public boolean isWasOnGame() {
         return wasOnGame;
@@ -86,20 +95,8 @@ public class Guest extends Person{
         return lastPlayingTimer;
     }
 
-    public void setLastPlayingTimer(int lastPlayingTimer) {
-        this.lastPlayingTimer = lastPlayingTimer;
-    }
-
     public boolean getInGame() {
         return inGame;
-    }
-
-    public int getPlayingTimer() {
-        return playingTimer;
-    }
-
-    public void setPlayingTimer(int playingTimer) {
-        this.playingTimer = playingTimer;
     }
 
     public String getTargetGame() {
@@ -110,27 +107,9 @@ public class Guest extends Person{
         this.targetGame = targetGame;
     }
 
-    public boolean getActivateTimer() {
-        return activateTimer;
-    }
-
-    public int getTrashTimer() {
-        return trashTimer;
-    }
-
-    public void setTrashTimer(int trashTimer) {
-        this.trashTimer = trashTimer;
-    }
-
     public void setActivateTimer(boolean activateTimer) {
         this.activateTimer = activateTimer;
     }
-
-    public Guest(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
-        super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);
-    }
-
-    /* ChangeMood*/
 
     public void setMood(int mood) {
         this.mood = mood;

@@ -15,6 +15,14 @@ public class Worker extends Person{
     public ArrayList<Integer> stepForwardOnPathStep = new ArrayList<>();
     public ArrayList<Integer> shortestPath = new ArrayList<>();
 
+    public Worker(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
+        super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);
+    }
+
+
+    /**
+     * Timer to set maintenance service time
+     */
     public boolean isWorking(){
         if(inMaintenance){
             workingTimer--;
@@ -30,6 +38,9 @@ public class Worker extends Person{
         return false;
     }
 
+    /**
+     * The way back to the entrance
+     */
     public ArrayList<Integer> reverseArrayList()
     {
         // Arraylist for storing reversed elements
@@ -44,16 +55,12 @@ public class Worker extends Person{
         return revArrayList;
     }
 
-    public ArrayList<Integer> getShortestPath() {
-        return shortestPath;
-    }
 
+    /**
+     * Getter and setters
+     */
     public void setShortestPath(ArrayList<Integer> shortestPath) {
         this.shortestPath = shortestPath;
-    }
-
-    public boolean isInMaintenance() {
-        return inMaintenance;
     }
 
     public void setInMaintenance(boolean inMaintenance) {
@@ -62,10 +69,6 @@ public class Worker extends Person{
 
     public int getWorkingTimer() {
         return workingTimer;
-    }
-
-    public void setWorkingTimer(int workingTimer) {
-        this.workingTimer = workingTimer;
     }
 
     public ArrayList<Integer> getStepForwardOnPathStep() {
@@ -90,10 +93,6 @@ public class Worker extends Person{
 
     public void setStepForwardOnPathDirection(ArrayList<Integer> stepForwardOnPathDirection) {
         this.stepForwardOnPathDirection = stepForwardOnPathDirection;
-    }
-
-    public Worker(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
-        super(personImages, location_X, location_Y, buildingsSizesA, buildingsSizesB);
     }
 
     public int getSalary() {

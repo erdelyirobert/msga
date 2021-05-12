@@ -19,14 +19,6 @@ import java.util.concurrent.ThreadLocalRandom;
  * The type Tp board.
  */
 public class TPBoard extends JPanel implements MouseListener {
-    private final int WIDTH = 700; //width of the park
-    private final int HEIGHT = 700; //height of the park
-    public int budget = 10000;
-    /*
-     * Building informations
-     */
-    public int x;
-    public int y;
     public boolean canBuild; // Can we build next to the road
     public boolean canBuildOn; //Not to build an object to antoher object
     public ArrayList<Building> buildings = new ArrayList<Building>();
@@ -39,6 +31,14 @@ public class TPBoard extends JPanel implements MouseListener {
     public ArrayList<Building> gamePeaks = new ArrayList<>();
     public ArrayList<Building> games = new ArrayList<>();
 
+    private final int WIDTH = 700; //width of the park
+    private final int HEIGHT = 700; //height of the park
+    public int budget = 10000;
+    /*
+     * Building informations
+     */
+    public int x;
+    public int y;
     public Timer timer;
     public int TD = 200;
     Random random = new Random();
@@ -55,7 +55,7 @@ public class TPBoard extends JPanel implements MouseListener {
     private int salaryTimer = 25;
     private int targetGameTimer = 25;
     private int generateGuestTimer = 50;
-    private int wrongTimer = 130;
+    private int wrongTimer = 200;
     public int numberOfWrongGames = 0;
     public int indexOfWrongGame;
 
@@ -67,6 +67,9 @@ public class TPBoard extends JPanel implements MouseListener {
         this.startGame();
     }
 
+    /**
+     * main timer that calls the main functions every 0.2 seconds
+     */
     public void startGame() {
         randomTimer = ThreadLocalRandom.current().nextInt(500, 1000);
         Building starterRoad = new Building("ROAD", 0, 0, 60, 80, segmentSize, segmentSize);
@@ -91,7 +94,6 @@ public class TPBoard extends JPanel implements MouseListener {
             moveMaintenance();
             putBackToGuest();
 
-
             for (int i = 0; i < workers.size(); i++) {
                 if (workers.get(i).getPersonImages().equals("maintenance") && workers.get(i).getWorkingTimer() == 1) {
                     fixGame();
@@ -102,6 +104,10 @@ public class TPBoard extends JPanel implements MouseListener {
         timer.start();
     }
 
+
+    /**
+     * Functions that makes the game out of order and function that fixes them
+     */
     public void goWrong() {
         if (numberOfWrongGames == 0) {
             int i;
@@ -140,7 +146,7 @@ public class TPBoard extends JPanel implements MouseListener {
     public void wrongTimer() {
         wrongTimer--;
         if (wrongTimer == 0) {
-            wrongTimer = 130;
+            wrongTimer = 200;
             goWrong();
         }
     }
@@ -180,6 +186,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+
+    /**
+     * Maintenance shortes pathfinding algorithm helper functions (Dijkstra algorithm)
+     */
     public void moveMaintenance() {
         for (int i = 0; i < workers.size(); i++) {
             if (workers.get(i).getPersonImages().equals("maintenance") && !workers.get(i).isWorking()) {
@@ -389,6 +399,23 @@ public class TPBoard extends JPanel implements MouseListener {
         return false;
     }
 
+    public void addElementsToGameArrayList() {
+        games.clear();
+        for (int i = 0; i < buildings.size(); i++) {
+            if (!buildings.get(i).getBuildingsImages().equals("ROAD")
+                    && !buildings.get(i).getBuildingsImages().equals("BUSH")
+                    && !buildings.get(i).getBuildingsImages().equals("TREE")
+                    && !buildings.get(i).getBuildingsImages().equals("BIN")
+                    && !buildings.get(i).getBuildingsImages().equals("RESTAURANT")) {
+                games.add(buildings.get(i));
+            }
+        }
+    }
+
+
+    /**
+     * Budget financing
+     */
     public void workerSalary() {
         salaryTimer--;
 
@@ -398,18 +425,46 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void raiseMoney() {
-        for (int i = 0; i < guests.size(); i++) {
-            for (int j = 0; j < buildings.size(); j++) {
-                if (guests.get(i).getInGame()) {
-                    budget += buildings.get(j).getUsagePrice();
+    public void editUsagePrice(int x, int y) {
+        for (int j = 0; j < buildings.size(); j++) {
+            if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
+                    || !buildings.get(j).getBuildingsImages().equals("BUSH") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
+                    || !buildings.get(j).getBuildingsImages().equals("TREE") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
+                    || !buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
+                ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+
+                Object[] options1 = {"Delete", "Change usage price", "Cancel"};
+
+                JPanel panel = new JPanel();
+                panel.add(new JLabel("What would you like to do?"));
+
+                int result = JOptionPane.showOptionDialog(null, panel, "Manage building",
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
+                        null, options1, null);
+                if (result == JOptionPane.YES_OPTION) {
+                    if (!buildings.get(j).getBuildingsImages().contains("outoforder")) {
+                        buildings.remove(j);
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Your can not remove out of order games.");
+                    }
+
+
+                } else if (result == JOptionPane.NO_OPTION) {
+                    JFrame f = new JFrame();
+                    String s = JOptionPane.showInputDialog(f, "Change usage price");
+                    int newUsagePrice;
+
+                    newUsagePrice = Integer.parseInt(s);
+
+                    buildings.get(j).setUsagePrice(newUsagePrice);
                 }
             }
         }
     }
 
-
-
+    /**
+     * Queue and playing
+     */
     public void playGuest2() {
         for (int i = 0; i < guests.size(); i++) {
             for (int j = 0; j < buildings.size(); j++) {
@@ -420,30 +475,26 @@ public class TPBoard extends JPanel implements MouseListener {
                             && !guests.get(i).getInGame()
                             || !buildings.get(j).queue.isEmpty()) {
                         guests.get(i).setMood(guests.get(i).getMood() + 5);
-                        raiseMoney();
 
                         if (buildings.get(j).getMaxCapacity() > buildings.get(j).players.size()){
                             if (buildings.get(j).queue.isEmpty()) {                                       // és nincs sor
                                 guests.get(i).setInGame(true);
+                                budget += buildings.get(j).getUsagePrice();
                                 guestToGame(guests.get(i), j);
-                                System.out.println("egyből játékra ültem, sorbanállás nélkül");
                             } else {
                                 buildings.get(j).queue.get(0).setInGame(true);
+                                budget += buildings.get(j).getUsagePrice();
                                 queueToPlayers(buildings.get(j).queue.get(0), j);
-                                System.out.println("sorból játékra ültem");
                             }
 
                         } else {   //nincs hely a játékon - taka a sorba
                                 guestToQueue(guests.get(i), j, buildings.get(j).getClosestPoint_X(), buildings.get(j).getClosestPoint_Y());
-                                System.out.println("sorba alltam");
-
                         }
                     }
                 }
             }
         }
     }
-
 
     public void putBackToGuest() {
         /*for (int i = 0; i < buildings.size(); i++) {
@@ -474,7 +525,6 @@ public class TPBoard extends JPanel implements MouseListener {
         buildings.get(indexOfBuilding).players.add(guest);
         guests.remove(guest);
     }
-
 
     public void queueToPlayers(Guest guest, int indexOfBuilding) { //ha van hely és áll valaki a sorban, akkor a sorból menjen fel a játékra a guest
         buildings.get(indexOfBuilding).players.add(guest);
@@ -519,6 +569,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+
+    /**
+     * Functions to manage trash
+     */
     public void cleanTrash() {               //ha a takarító koordinátája megegyezik a a szemét koordinátájával, akkor a szemetet eltávolítjuk
         for (int i = 0; i < workers.size(); i++) {
             if (workers.get(i).getPersonImages().equals("cleaner")) {
@@ -588,37 +642,10 @@ public class TPBoard extends JPanel implements MouseListener {
         return false;
     }
 
-    public void reduceConstructionTime() {
-        for (int i = 0; i < buildings.size(); i++) {
-            if (buildings.get(i).getConstructionTime() >= 0) {
-                buildings.get(i).setConstructionTime((buildings.get(i).getConstructionTime() - 0.1));
-            }
-            if (buildings.get(i).getConstructionTime() <= 0) {
-                if (buildings.get(i).getBuildingsImages().equals("slide_underconstruction")) {
-                    buildings.get(i).setBuildingsImages("SLIDE");
-                    addTargetGameToGuest();
-                }
-                if (buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")) {
-                    buildings.get(i).setBuildingsImages("WATERPARK");
-                    addTargetGameToGuest();
-                }
-                if (buildings.get(i).getBuildingsImages().equals("rollercoaster_underconstruction")) {
-                    buildings.get(i).setBuildingsImages("rollercoaster");
-                    addTargetGameToGuest();
-                }
-                if (buildings.get(i).getBuildingsImages().equals("wheel_underconstruction")) {
-                    buildings.get(i).setBuildingsImages("WHEEL");
-                    addTargetGameToGuest();
-                }
-                if (buildings.get(i).getBuildingsImages().equals("train_underconstruction")) {
-                    buildings.get(i).setBuildingsImages("TRAIN");
-                    addTargetGameToGuest();
-                }
 
-            }
-        }
-    }
-
+    /**
+     * Guest moving functions
+     */
     public boolean checkRoad(int x, int y) {                 //amig nem egész szám a segment size, addig nem értünk a szélére, tehát léptetjük
         if (x % segmentSize != 0 || y % segmentSize != 0) {   // check for whole segment size stepped
             return true;                                    // if not continue stepping the same segment
@@ -756,7 +783,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    //move Cleaner functions
+
+    /**
+     * Cleaner moving functions
+     */
     public void doStepCleaner(int cleaner, int Direction, int stepLength) {                  // itt léptetjük a a guestet az adott(direction) irányba egy stepLengthet
         switch (Direction) {
             case 0: {
@@ -821,6 +851,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
+
+    /**
+     * Manage staffs and generate guests
+     */
     public void generateGuest() {
         generateGuestTimer--;
         if (guestNumber < maxGuests) {
@@ -850,6 +884,24 @@ public class TPBoard extends JPanel implements MouseListener {
         removeCleaner();
     }
 
+    public void removeCleaner() {
+        if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.KICKCLEANER)) {
+            for (int i = 0; i < workers.size(); i++) {
+                System.out.println(workers.get(i).getPersonImages());
+                if (workers.get(i).getPersonImages().equals("cleaner")) {
+                    workers.remove(i);
+                    ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+                    break;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Set closest roads to buildings
+     * Building placement
+     */
     public double coordinateDistance(int x1, int x2, int y1, int y2) {      //pitagorasz tétel
         double first = Math.abs(x1 - x2);
         double second = Math.abs(y1 - y2);
@@ -876,76 +928,6 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void changeMoodByGeneralEquipment() {            //ha elmennek bokor vagy fa mellett a guestek, növeljük a kedvüket
-
-        for (int i = 0; i < guests.size(); i++) {
-            for (int j = 0; j < buildings.size(); ++j) {
-                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
-                    if (buildings.get(j).getBuildingsImages().equals("BUSH")) {
-                        guests.get(i).setMood(guests.get(i).getMood() + 1);
-                    }
-                }
-                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize
-                        || buildings.get(j).getLocation_X() + segmentSize * 2 == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() - segmentSize * 2 == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize * 2
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize * 2) {
-                    if (buildings.get(j).getBuildingsImages().equals("TREE")) {
-                        guests.get(i).setMood(guests.get(i).getMood() + 1);
-
-                    }
-                }
-                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
-                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
-                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
-                    if (buildings.get(j).getBuildingsImages().equals("BIN")) {
-                        guests.get(i).setMood(guests.get(i).getMood() - 3);
-                    }
-                }
-            }
-            for (int k = 0; k < trashes.size(); k++) {
-                if (guests.get(i).getLocation_X() == trashes.get(k).getLocation_X()
-                        && guests.get(i).getLocation_Y() == trashes.get(k).getLocation_Y()) {
-                    guests.get(i).setMood(guests.get(i).getMood() - 1);
-                }
-            }
-        }
-    }
-
-    /**
-     * @param mouse_X x coordinate of clicked mouse
-     * @param mouse_Y y coordinate of clicked mouse
-     * @return does the building near the road
-     * <br>
-     * Checks if a road near if you try to make a building.
-     * Input mause X coordiante, and mause Y coordianate
-     * <br>
-     * return true if you can build
-     * return false if no road near
-     */
     public boolean PointIsWithinCircle(double mouse_X, double mouse_Y) {
         boolean joe = false;
         for (int i = 0; i < buildings.size(); i++) {
@@ -1092,6 +1074,114 @@ public class TPBoard extends JPanel implements MouseListener {
         return raepit;
     }
 
+    public void changeMoodByGeneralEquipment() {            //ha elmennek bokor vagy fa mellett a guestek, növeljük a kedvüket
+
+        for (int i = 0; i < guests.size(); i++) {
+            for (int j = 0; j < buildings.size(); ++j) {
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BUSH")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
+                    }
+                }
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize
+                        || buildings.get(j).getLocation_X() + segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize * 2 == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize * 2
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize * 2) {
+                    if (buildings.get(j).getBuildingsImages().equals("TREE")) {
+                        guests.get(i).setMood(guests.get(i).getMood() + 1);
+
+                    }
+                }
+                if (buildings.get(j).getLocation_X() + segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() - segmentSize == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y()
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() + segmentSize
+                        || buildings.get(j).getLocation_X() == guests.get(i).getLocation_X()
+                        && buildings.get(j).getLocation_Y() == guests.get(i).getLocation_Y() - segmentSize) {
+                    if (buildings.get(j).getBuildingsImages().equals("BIN")) {
+                        guests.get(i).setMood(guests.get(i).getMood() - 3);
+                    }
+                }
+            }
+            for (int k = 0; k < trashes.size(); k++) {
+                if (guests.get(i).getLocation_X() == trashes.get(k).getLocation_X()
+                        && guests.get(i).getLocation_Y() == trashes.get(k).getLocation_Y()) {
+                    guests.get(i).setMood(guests.get(i).getMood() - 1);
+                }
+            }
+        }
+    }
+
+    public void reduceConstructionTime() {
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).getConstructionTime() >= 0) {
+                buildings.get(i).setConstructionTime((buildings.get(i).getConstructionTime() - 0.1));
+            }
+            if (buildings.get(i).getConstructionTime() <= 0) {
+                if (buildings.get(i).getBuildingsImages().equals("slide_underconstruction")) {
+                    buildings.get(i).setBuildingsImages("SLIDE");
+                    addTargetGameToGuest();
+                }
+                if (buildings.get(i).getBuildingsImages().equals("waterpark_underconstruction")) {
+                    buildings.get(i).setBuildingsImages("WATERPARK");
+                    addTargetGameToGuest();
+                }
+                if (buildings.get(i).getBuildingsImages().equals("rollercoaster_underconstruction")) {
+                    buildings.get(i).setBuildingsImages("rollercoaster");
+                    addTargetGameToGuest();
+                }
+                if (buildings.get(i).getBuildingsImages().equals("wheel_underconstruction")) {
+                    buildings.get(i).setBuildingsImages("WHEEL");
+                    addTargetGameToGuest();
+                }
+                if (buildings.get(i).getBuildingsImages().equals("train_underconstruction")) {
+                    buildings.get(i).setBuildingsImages("TRAIN");
+                    addTargetGameToGuest();
+                }
+
+            }
+        }
+    }
+
+    public void canNotBuildOnBuilding(int x, int y) {
+        for (int j = 0; j < buildings.size(); j++) {
+            if (buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
+                    || buildings.get(j).getBuildingsImages().equals("BUSH") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
+                    || buildings.get(j).getBuildingsImages().equals("TREE") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
+                    || buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))) {
+                if (ThemeParkGUI.selected_ge != EGeneralEquipment.ROAD) {
+                    JOptionPane.showMessageDialog(null, "You can not build " + ThemeParkGUI.selected_ge + " on " + buildings.get(j).getBuildingsImages() + "!");
+                    ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Graphics
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -1208,87 +1298,10 @@ public class TPBoard extends JPanel implements MouseListener {
         }
     }
 
-    public void editUsagePrice(int x, int y) {
-        for (int j = 0; j < buildings.size(); j++) {
-            if (!buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
-                    || !buildings.get(j).getBuildingsImages().equals("BUSH") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
-                    || !buildings.get(j).getBuildingsImages().equals("TREE") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))
-                    || !buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() < x && x < (buildings.get(j).sumXA()) && (buildings.get(j).getLocation_Y() < y && y < (buildings.get(j).sumYB())))) {
-                ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-
-                Object[] options1 = {"Delete", "Change usage price", "Cancel"};
-
-                JPanel panel = new JPanel();
-                panel.add(new JLabel("What would you like to do?"));
-
-                int result = JOptionPane.showOptionDialog(null, panel, "Manage building",
-                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE,
-                        null, options1, null);
-                if (result == JOptionPane.YES_OPTION) {
-                    if (!buildings.get(j).getBuildingsImages().contains("outoforder")) {
-                        buildings.remove(j);
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Your can not remove out of order games.");
-                    }
-
-
-                } else if (result == JOptionPane.NO_OPTION) {
-                    JFrame f = new JFrame();
-                    String s = JOptionPane.showInputDialog(f, "Change usage price");
-                    int newUsagePrice;
-
-                    newUsagePrice = Integer.parseInt(s);
-
-                    buildings.get(j).setUsagePrice(newUsagePrice);
-                }
-            }
-        }
-    }
-
-    public void canNotBuildOnBuilding(int x, int y) {
-        for (int j = 0; j < buildings.size(); j++) {
-            if (buildings.get(j).getBuildingsImages().equals("ROAD") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
-                    || buildings.get(j).getBuildingsImages().equals("BUSH") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
-                    || buildings.get(j).getBuildingsImages().equals("TREE") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))
-                    || buildings.get(j).getBuildingsImages().equals("BIN") && (buildings.get(j).getLocation_X() == x && (buildings.get(j).getLocation_Y() == y))) {
-                if (ThemeParkGUI.selected_ge != EGeneralEquipment.ROAD) {
-                    JOptionPane.showMessageDialog(null, "You can not build " + ThemeParkGUI.selected_ge + " on " + buildings.get(j).getBuildingsImages() + "!");
-                    ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-                }
-            }
-        }
-    }
-
-    public void removeCleaner() {
-        if (ThemeParkGUI.selected_ge.equals(EGeneralEquipment.KICKCLEANER)) {
-            for (int i = 0; i < workers.size(); i++) {
-                System.out.println(workers.get(i).getPersonImages());
-                if (workers.get(i).getPersonImages().equals("cleaner")) {
-                    workers.remove(i);
-                    ThemeParkGUI.selected_ge = EGeneralEquipment.NOTHING;
-                    break;
-                }
-            }
-        }
-    }
-
-    public void addElementsToGameArrayList() {
-        games.clear();
-        for (int i = 0; i < buildings.size(); i++) {
-            if (!buildings.get(i).getBuildingsImages().equals("ROAD")
-                    && !buildings.get(i).getBuildingsImages().equals("BUSH")
-                    && !buildings.get(i).getBuildingsImages().equals("TREE")
-                    && !buildings.get(i).getBuildingsImages().equals("BIN")
-                    && !buildings.get(i).getBuildingsImages().equals("RESTAURANT")) {
-                games.add(buildings.get(i));
-            }
-        }
-    }
 
     /**
      * Mouselistener for everything the user can do with mouse
-     *
-     * @param e
+     * Insert staff and building
      */
     @Override
     public void mousePressed(MouseEvent e) {
@@ -1621,6 +1634,10 @@ public class TPBoard extends JPanel implements MouseListener {
 
     }
 
+
+    /**
+     * Getters and setters
+     */
     public int getBudget() {
         return budget;
     }

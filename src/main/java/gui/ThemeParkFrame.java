@@ -10,6 +10,11 @@ import java.io.IOException;
 public class ThemeParkFrame {
     JFrame frame = new ThemeParkGUI("Theme Park");
 
+    /**
+     * Frame for the game map
+     * @param title
+     * @throws IOException
+     */
     public ThemeParkFrame(String title) throws IOException {
         frame.setSize(700, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

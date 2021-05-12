@@ -16,7 +16,6 @@ public class Building {
     private int usagePrice;
     private int closestPoint_X = -20;
     private int closestPoint_Y = -20;
-    private boolean isWrong = false;
     private int maxCapacity = 1;
     public ArrayList<Guest> players = new ArrayList<>();
     public ArrayList<Guest> queue = new ArrayList<>();
@@ -34,14 +33,6 @@ public class Building {
     public int getMaxCapacity() {
         return maxCapacity;
     }
-
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public boolean getIsWrong() { return isWrong; }
-
-    public void setWrong(boolean wrong) { isWrong = wrong; }
 
     public String getBuildingsImages() {
         return buildingsImages;
@@ -61,10 +52,6 @@ public class Building {
 
     public int getBuildPrice() {
         return buildPrice;
-    }
-
-    public void setBuildPrice(int buildPrice) {
-        this.buildPrice = buildPrice;
     }
 
     public int getLocation_X() {
@@ -87,25 +74,12 @@ public class Building {
         return buildingsSizesA;
     }
 
-    public void setBuildingsSizesA(int buildingsSizesA) {
-        this.buildingsSizesA = buildingsSizesA;
-    }
-
     public int getBuildingsSizesB() {
         return buildingsSizesB;
     }
 
-    public void setBuildingsSizesB(int buildingsSizesB) {
-        this.buildingsSizesB = buildingsSizesB;
-    }
-
-
-
     /**
-     * Terület kiszámitási logika
-     * Kiszámítja az adott területet
-     * x-hez hozzáadja az épület A méretét (szélességét)
-     * y-hoz hozzáadja az épület B méretét (magasságát)
+     * Area calculations of buildings
      */
     public int sumXA() {
         return (location_X - (location_X % 20)) + buildingsSizesA;

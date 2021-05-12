@@ -7,6 +7,14 @@ public class Person {
     private int buildingsSizesA;
     private int buildingsSizesB;
 
+    /**
+     * Constructor
+     * @param personImages
+     * @param location_X
+     * @param location_Y
+     * @param buildingsSizesA
+     * @param buildingsSizesB
+     */
     public Person(String personImages, int location_X, int location_Y, int buildingsSizesA, int buildingsSizesB) {
         this.personImages = personImages;
         this.location_X = location_X;
@@ -15,6 +23,10 @@ public class Person {
         this.buildingsSizesB = buildingsSizesB;
     }
 
+
+    /**
+     * Getters and setters
+     */
     public String getPersonImages() {
         return personImages;
     }
